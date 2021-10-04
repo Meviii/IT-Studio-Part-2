@@ -1,43 +1,38 @@
 class Program:
-    def __init__(self, name, mobile = '',landline = ''):
-        self.name = name
-        self.mobile = mobile
-        self.landline = landline
-    
+    def __init__(self, prg_code, prg_credit_points, prg_courses):
+        self.code = prg_code
+        self.title = prg_credit_points
+        self.credit = prg_courses
+
     def default(self, o):
         return o.__dict__  
 
-    def set_name(self, name):
-        self.name = name
+    def set_code(self, prg_code):
+        self.code = prg_code
 
-    def get_name(self):
-        return self.name
+    def get_code(self):
+        return self.code
 
-    def set_mobile(self,new_num):
-        self.mobile =  new_num
+    def set_title(self, prg_credit_points):
+        self.credit_points = prg_credit_points
 
-    def get_mobile(self):
-        return self.mobile
+    def get_title(self):
+        return self.credit_points
 
-    def set_landline(self,new_num):
-        self.landline =  new_num
+    def set_credit(self, prg_courses):
+        self.courses = prg_courses
 
-    def get_landline(self):
-        return self.landline
+    def get_credit(self):
+        return self.courses
 
     def __eq__(self, other):
-        return (self.name.lower() == other.name.lower())
+        return (self.code.lower() == other.code.lower())
       
-    def __lt__(self, other):
-        return (self.name.lower() < other.name.lower())
-        
-    def __gt__(self, other):
-        return (self.name.lower() > other.name.lower())
-
     def __str__(self):
-        formatted_str = "Name: " + self.name + "\n"
-        if not self.mobile == '':
-            formatted_str += "Mobile: " + self.mobile + "\n"
-        if not self.landline == '':
-            formatted_str += "Landline: " + self.landline + "\n"
-        return formatted_str
+        # formatted_str = "Name: " + self.name + "\n"
+        # if not self.mobile == '':
+        #     formatted_str += "Mobile: " + self.mobile + "\n"
+        # if not self.landline == '':
+        #     formatted_str += "Landline: " + self.landline + "\n"
+        # return formatted_str
+        return None

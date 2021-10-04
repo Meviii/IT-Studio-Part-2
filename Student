@@ -1,43 +1,73 @@
 class Student:
-    def __init__(self, name, mobile = '',landline = ''):
-        self.name = name
-        self.mobile = mobile
-        self.landline = landline
-    
+    def __init__(self, stu_id, stu_name, stu_birth, stu_gender, stu_program, stu_acad_history, stu_curr_enrol, stu_study_plan):
+        self.id = stu_id
+        self.name = stu_name
+        self.birth = stu_birth
+        self.gender = stu_gender
+        self.program = stu_program
+        self.acad_history = stu_acad_history
+        self.curr_enrol = stu_curr_enrol
+        self.study_plan = stu_study_plan
+
     def default(self, o):
         return o.__dict__  
 
-    def set_name(self, name):
-        self.name = name
+    def set_id(self, stu_id):
+        self.id = stu_id
+
+    def get_id(self):
+        return self.id
+
+    def set_name(self, stu_name):
+        self.name = stu_name
 
     def get_name(self):
         return self.name
 
-    def set_mobile(self,new_num):
-        self.mobile =  new_num
+    def set_birth(self, stu_birth):
+        self.birth = stu_birth
 
-    def get_mobile(self):
-        return self.mobile
+    def get_birth(self):
+        return self.birth
+    
+    def set_gender(self, stu_gender):
+        self.gender = stu_gender
 
-    def set_landline(self,new_num):
-        self.landline =  new_num
+    def get_gender(self):
+        return self.gender
 
-    def get_landline(self):
-        return self.landline
+    def set_program(self, stu_program):
+        self.program = stu_program
+
+    def get_program(self):
+        return self.program
+    
+    def set_acad_history(self, stu_acad_history):
+        self.acad_history = stu_acad_history
+
+    def get_acad_history(self):
+        return self.acad_history
+    
+    def set_curr_enrol(self, stu_curr_enrol):
+        self.curr_enrol = stu_curr_enrol
+
+    def get_curr_enrol(self):
+        return self.curr_enrol
+    
+    def set_study_plan(self, stu_study_plan):
+        self.study_plan = stu_study_plan
+
+    def get_study_plan(self):
+        return self.study_plan
 
     def __eq__(self, other):
         return (self.name.lower() == other.name.lower())
       
-    def __lt__(self, other):
-        return (self.name.lower() < other.name.lower())
-        
-    def __gt__(self, other):
-        return (self.name.lower() > other.name.lower())
-
     def __str__(self):
-        formatted_str = "Name: " + self.name + "\n"
-        if not self.mobile == '':
-            formatted_str += "Mobile: " + self.mobile + "\n"
-        if not self.landline == '':
-            formatted_str += "Landline: " + self.landline + "\n"
-        return formatted_str
+        # formatted_str = "Name: " + self.name + "\n"
+        # if not self.mobile == '':
+        #     formatted_str += "Mobile: " + self.mobile + "\n"
+        # if not self.landline == '':
+        #     formatted_str += "Landline: " + self.landline + "\n"
+        # return formatted_str
+        return None
