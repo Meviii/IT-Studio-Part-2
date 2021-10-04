@@ -1,0 +1,43 @@
+class Course:
+    def __init__(self, name, mobile = '',landline = ''):
+        self.name = name
+        self.mobile = mobile
+        self.landline = landline
+    
+    def default(self, o):
+        return o.__dict__  
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def set_mobile(self,new_num):
+        self.mobile =  new_num
+
+    def get_mobile(self):
+        return self.mobile
+
+    def set_landline(self,new_num):
+        self.landline =  new_num
+
+    def get_landline(self):
+        return self.landline
+
+    def __eq__(self, other):
+        return (self.name.lower() == other.name.lower())
+      
+    def __lt__(self, other):
+        return (self.name.lower() < other.name.lower())
+        
+    def __gt__(self, other):
+        return (self.name.lower() > other.name.lower())
+
+    def __str__(self):
+        formatted_str = "Name: " + self.name + "\n"
+        if not self.mobile == '':
+            formatted_str += "Mobile: " + self.mobile + "\n"
+        if not self.landline == '':
+            formatted_str += "Landline: " + self.landline + "\n"
+        return formatted_str
