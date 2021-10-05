@@ -61,13 +61,12 @@ class Student:
         return self.study_plan
 
     def __eq__(self, other):
-        return (self.name.lower() == other.name.lower())
+        return (self.id == other.id)
       
     def __str__(self):
-        # formatted_str = "Name: " + self.name + "\n"
-        # if not self.mobile == '':
-        #     formatted_str += "Mobile: " + self.mobile + "\n"
-        # if not self.landline == '':
-        #     formatted_str += "Landline: " + self.landline + "\n"
-        # return formatted_str
-        return None
+        formatted_str = "Student ID: " + str(self.id) + "\n"
+        if not self.name == '':
+            formatted_str += "Name: " + self.name + "\n"
+        if not self.program == '':
+            formatted_str += "Program: " + self.program + "\n"
+        return formatted_str

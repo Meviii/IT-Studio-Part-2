@@ -33,7 +33,7 @@ class Admin:
         return self.gender
     
     def __eq__(self, other):
-        return (self.name.lower() == other.name.lower())
+        return (self.id == other.id)
       
     def __str__(self):
         # formatted_str = "Name: " + self.name + "\n"
