@@ -1,11 +1,10 @@
 import Program as prg
 import Course as crs
 import Semester as sem
-import Student as stu
-import Admin as adm
 import csv
+from User import User, Student, Admin
 
-stu1 = stu.Student(123, 'Tom Tommy', '20/02/2000', 'Male', 'Program1', 'Acad history', 'some courses', 'b312')
+stu1 = Student(123, 'Tom Tommy', '20/02/2000', 'Male', 'Program1', 'Acad history', 'some courses', 'b312')
 
 def student_list():
         with open('data/students.csv') as csv_file:
@@ -22,7 +21,7 @@ def login():
         if login_type == 'Admin'.lower():
             id = int(input('Please enter your Admin ID: '))
             print('==================================')
-            if adm.Admin.get_id() == id:
+            if Admin.get_id() == id:
                 print('Welcome', stu1.__dict__.get('name'), '\n')
                 admin_menu(id)
         elif login_type == 'Student'.lower():
