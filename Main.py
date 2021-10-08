@@ -8,6 +8,8 @@ from User import User, Student, Admin
 import main_func 
 
 if __name__ == '__main__':
+    #TEST CHANGE FOR GIT
+
     u1 = User('u3717232', 'test1', '042312320', '02/10/20', 'Male')
     s1 = Student('s3717232', 'test2', '042312322', '02/10/20', 'Male', 'stu_program', 'stu_acad_history', 'stu_curr_enrol', 'stu_study_plan')
     a1 = Admin('a3717232', 'test3', '042312324', '02/10/20', 'Male', 'Admin')
