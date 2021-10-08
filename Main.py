@@ -1,8 +1,7 @@
 import Program as prg
 import Course as crs
 import Semester as sem
-import Student as stu
-import Admin as adm
+
 import csv
 from User import User, Student, Admin
 import main_func 
