@@ -18,27 +18,35 @@ from User import User, Student, Admin
 def open_students_for_id(id):
     with open('data/students.csv', 'r') as f:
         reader = csv.reader(f)
-        student = []
+
         for lines in reader:
             if str(lines[0]) == str(id):
                 return True
             else:
                 return False
+    f.close()
 
-def create_student_object(id):
+def student_info_list(id):
     with open('data/students.csv', 'r') as f:
         reader = csv.reader(f)
         #student_lst = []
         for lines in reader:
             if lines[0] == id:
                 student_lst = [i.strip() for i in lines]
-                #student_lst.append(lines)
             else:
                 print('Error')
-        #student = Student([i for i in student_lst])
+        f.close()
         return student_lst
+        
+def student_object(id):
+    
+    student = Student(student_info_list(id)[0], student_info_list(id)[1], student_info_list(id)[2],
+               student_info_list(id)[3], student_info_list(id)[4], student_info_list(id)[5], student_info_list(id)[6])
+    return student
+
 def login():
     try:
+    
         login_type = str(input('Login as Admin or Student? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
@@ -55,10 +63,9 @@ def login():
             
             print('==================================')
             if open_students_for_id(id):
-                student = Student(create_student_object(id)[0], create_student_object(id)[1], create_student_object(id)[3],
-                create_student_object(id)[4], create_student_object(id)[5], create_student_object(id)[6], create_student_object(id)[7])
-                
-                print(f'Welcome {student.name} \n')
+                student = student_object(id)
+
+                print(f'        Welcome {student.name} \n')
                 student_menu(id)
             else:
                 print('Incorrect Student User')
@@ -66,6 +73,10 @@ def login():
             raise ValueError
     except ValueError:
         print('Incorrect selection')
+        return False
+
+def student_information():
+    return False
 
 def student_menu(id):
     print('     *STUDENT MENU*      ')
@@ -73,29 +84,30 @@ def student_menu(id):
     print('1. View your Academic History')
     print('2. View available courses')
     print('3. Enrol/UnEnrol in an Offering')
-    print('4. View your Academic History')
+    print('4. Get all information')
     print('5. View your Academic History')
     print('0. Exit')
-    print('=========================')
+    print('==================================')
     try:
-        input = int('Please pick by index:')
-        if 0 > input > 5:
+        choice = int(input('Please pick by index: '))
+        if 0 > choice > 5:
             raise ValueError
-        elif input == 1:
-            print(input)
-        elif input == 2:
-            print(input)
-        elif input == 3:
-            print(input)
-        elif input == 4:
-            print(input)
-        elif input == 5:
-            print(input)
+        elif choice == 1:
+            print(choice)
+        elif choice == 2:
+            print(choice)
+        elif choice == 3:
+            print(choice)
+        elif choice == 4:
+            s = student_object(id)
+            print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
+        elif choice == 5:
+            print(choice)
         else:
-            print('Error')
+            return -1
     except ValueError:
         print('Invalid index') 
-        
+
 def admin_menu(id):
     print('     *ADMIN MENU*      ')
     print('=======================')

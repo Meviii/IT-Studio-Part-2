@@ -58,4 +58,4 @@ if __name__ == '__main__':
     s2 = Student('s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
     #s1.get_acad_history(id)
 
-    main_func.login()
+main_func.login()
