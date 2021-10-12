@@ -1,3 +1,6 @@
+import csv
+
+
 class User:
     def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender):
         self.id = user_id
@@ -47,16 +50,22 @@ class User:
             formatted_str += "Mobile: " + self.mobile + "\n"
         return formatted_str
 class Student(User):
-    def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender, stu_program, stu_acad_history, stu_curr_enrol, stu_study_plan):
+    def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender, stu_program= '', stu_acad_history='', stu_curr_enrol='', stu_study_plan=''):
 
         User.__init__(self, user_id, user_name, user_mobile, user_birth, user_gender)
+        self.user_id = user_id
         self.program = stu_program
         self.acad_history = stu_acad_history
         self.curr_enrol = stu_curr_enrol
         self.study_plan = stu_study_plan
 
     def set_program(self, stu_program):
-        self.program = stu_program
+        with open('data/programs.csv') as pro_file:
+            reader = csv.reader(pro_file)
+            for lines in reader:
+                if stu_program in lines:
+                    self.program = stu_program
+                    print(f'Student program set to {stu_program} \n')
 
     def get_program(self):
         return self.program
@@ -64,7 +73,13 @@ class Student(User):
     def set_acad_history(self, stu_acad_history):
         self.acad_history = stu_acad_history
 
-    def get_acad_history(self):
+    def get_acad_history(self, id):
+        with open('data/students.csv') as pro_file:
+            reader = csv.reader(pro_file, delimiter=';')
+            if str(self.get_id()) == str(id):
+                for lines in reader:
+                    if id in lines:
+                        print(id)
         return self.acad_history
     
     def set_curr_enrol(self, stu_curr_enrol):
@@ -81,6 +96,12 @@ class Student(User):
 
     def __eq__(self, other):
         return (self.id == other.id)
+
+    def is_program_true(self):
+        if self.get_program() != '':
+            return True
+        else:
+            return False
       
     def __str__(self):
         formatted_str = "Student ID: " + str(self.id) + "\n"
