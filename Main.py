@@ -20,31 +20,42 @@ if __name__ == '__main__':
     #print(a1)
 
     student1 = (['s1234567','Tom Tommy3','22/02/2000','Male','BP094', [('COSC1243', 10),('COSC8569', 30),('COSC7895', 20)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543']])
-    student2 = [('s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])]
+    student2 = (['s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543']])
     def get_list_history_csv(id):
         
         with open('data/students.csv', 'w+',newline='') as f:
             write = csv.writer(f)
             write.writerow(student1)
-            
+
         with open('data/students.csv', 'r') as f:
             reader = csv.reader(f)
             student = []
             for lines in reader:
+                print(lines[0])
                 student.append(lines)
             for i in student:
                 history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
             print(history)
+            f.close()
 
     def add_student_history(id): # fix to csv and student to new line
         
-        with open('data/students.json', 'w') as f:
-            json.dump(student2, f)#, indent=2)
-            f.write('\n')
-        with open('data/students.json', 'r') as f:
-            history = [tuple(x) for x in json.load(f)]
-            print(f'History 2: {history}')
+        with open('data/students.csv', 'a+',newline='') as f:
+            write = csv.writer(f)
+            write.writerow(student2)
+        with open('data/students.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                print(lines)
 
     id = 's1234567'
+    # Test with actual student variables
+    #get_list_history_csv(id)
     #add_student_history(id)
-    get_list_history_csv(id)
+
+    # Test with student objects
+    s1 = Student('s1234567','Tom Tommy3','22/02/2000','Male','BP094', [('COSC1243', 10),('COSC8569', 30),('COSC7895', 20)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
+    s2 = Student('s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
+    #s1.get_acad_history(id)
+
+    main_func.login()
