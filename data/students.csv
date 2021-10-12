@@ -1,3 +1,1 @@
-123, 'Tom Tommy', '20/02/2000', 'Male', 'Program1', 'Acad history1', 'some courses1', 'b3121'
-1234, 'Tom Tommy2', '21/02/2000', 'Male', 'Program2', 'Acad history2', 'some courses2', 'b3122'
-12345, 'Tom Tommy3', '22/02/2000', 'Male', 'Program3', 'Acad history3', 'some courses3', 'b3123'
+s1234567,Tom Tommy3,22/02/2000,Male,BP094,"[('COSC1243', 10), ('COSC8569', 30), ('COSC7895', 20)]","['COSC12434', 'COSC85694', 'COSC78954']","['COSC124341', 'COSC856942', 'COSC789543']"
