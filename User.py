@@ -1,11 +1,11 @@
+import ast
 import csv
 
 
 class User:
-    def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender):
+    def __init__(self, user_id, user_name, user_birth, user_gender):
         self.id = user_id
         self.name = user_name
-        self.mobile = user_mobile
         self.birth = user_birth
         self.gender = user_gender
 
@@ -19,12 +19,6 @@ class User:
         self.name = user_name
 
     def get_name(self):
-        return self.name
-    
-    def set_mobile(self, user_mobile):
-        self.name = user_mobile
-
-    def get_mobile(self):
         return self.name
 
     def set_birth(self, user_birth):
@@ -50,10 +44,9 @@ class User:
             formatted_str += "Mobile: " + self.mobile + "\n"
         return formatted_str
 class Student(User):
-    def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender, stu_program= '', stu_acad_history='', stu_curr_enrol='', stu_study_plan=''):
+    def __init__(self, user_id, user_name, user_birth, user_gender, stu_program= '', stu_acad_history=[], stu_curr_enrol=[], stu_study_plan=[]):
 
-        User.__init__(self, user_id, user_name, user_mobile, user_birth, user_gender)
-        self.user_id = user_id
+        User.__init__(self, user_id, user_name, user_birth, user_gender)
         self.program = stu_program
         self.acad_history = stu_acad_history
         self.curr_enrol = stu_curr_enrol
@@ -70,16 +63,24 @@ class Student(User):
     def get_program(self):
         return self.program
     
-    def set_acad_history(self, stu_acad_history):
-        self.acad_history = stu_acad_history
+    def set_acad_history(self, stu_acad_history):# fix
+        self.acad_history = self.acad_history.append(stu_acad_history)
 
     def get_acad_history(self, id):
-        with open('data/students.csv') as pro_file:
-            reader = csv.reader(pro_file, delimiter=';')
-            if str(self.get_id()) == str(id):
-                for lines in reader:
-                    if id in lines:
-                        print(id)
+        with open('data/students.csv', 'r') as f:
+            reader = csv.reader(f)
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student.append(lines)
+                else:
+                    print('Incorrect User')
+            for i in student:
+                history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
+            print('Academic History: ')
+            for c in history:
+                print(f'        Course: {c[0]}, Mark: {c[1]}')
+            f.close()
         return self.acad_history
     
     def set_curr_enrol(self, stu_curr_enrol):
