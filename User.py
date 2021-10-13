@@ -113,8 +113,8 @@ class Student(User):
         return formatted_str
 
 class Admin(User):
-    def __init__(self, user_id, user_name, user_mobile, user_birth, user_gender, adm_role = 'Admin'):
-        User.__init__(self, user_id, user_name, user_mobile, user_birth, user_gender)
+    def __init__(self, user_id, user_name, user_birth, user_gender, adm_role = 'Admin'):
+        User.__init__(self, user_id, user_name, user_birth, user_gender)
         self.role = adm_role
     
     def set_admin_role(self, adm_role):
