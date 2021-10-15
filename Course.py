@@ -13,12 +13,13 @@ class UserInputError(Exception):
         return self.msg
 
 class Course:
-    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail):
+    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail, crs_fee):
         self.code = crs_code
         self.title = crs_title
         self.cred_points = crs_cred_points
         self.prereq = crs_prereq
         self.avail = crs_avail
+        self.fee = crs_fee
 
     def default(self, o):
         return o.__dict__  
@@ -98,6 +99,11 @@ class Course:
 
     def get_avail(self):
         return self.crs_avail
+    
+    def set_fee(self, fee):
+        self.fee = fee
+    def get_fee(self):
+        return self.crs_fee
 
     def __eq__(self, other):
         return (self.title.lower() == other.title.lower())
@@ -116,32 +122,32 @@ class Course:
         return formatted_str
         
 
-It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2' )
-print(It_Studio2)
+# It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2' )
+# print(It_Studio2)
 
-# test set_title
-crs_title = str(input("Name of Course Code. (Cannot be blank): "))
-It_Studio2.set_title(crs_title)
-print('\nName of course is:', It_Studio2.get_title(), ' \n')
+# # test set_title
+# crs_title = str(input("Name of Course Code. (Cannot be blank): "))
+# It_Studio2.set_title(crs_title)
+# print('\nName of course is:', It_Studio2.get_title(), ' \n')
 
-# test set_code
-crs_code = str(input("Set Course Code. (Four letters then Four numbers): "))
-It_Studio2.set_code(crs_code)
-print('\nName of course is:', It_Studio2.get_code(), ' \n')
+# # test set_code
+# crs_code = str(input("Set Course Code. (Four letters then Four numbers): "))
+# It_Studio2.set_code(crs_code)
+# print('\nName of course is:', It_Studio2.get_code(), ' \n')
 
-# test set_cred_points
-crs_cred_points = str(input("Set Credit Points. (Please enter either 12 or 24): "))
-It_Studio2.set_cred_points(crs_cred_points)
-print('\nCourse is now set to:', It_Studio2.get_cred_points(), 'pts \n')
+# # test set_cred_points
+# crs_cred_points = str(input("Set Credit Points. (Please enter either 12 or 24): "))
+# It_Studio2.set_cred_points(crs_cred_points)
+# print('\nCourse is now set to:', It_Studio2.get_cred_points(), 'pts \n')
 
-# test set_prereq
-crs_prereq = str(input("Set Prerequisite for Course. (Seperate by comma or NA for none): "))
-It_Studio2.set_prereq(crs_prereq)
-print('\nPrereqs for course are:', It_Studio2.get_prereq(),'\n')
+# # test set_prereq
+# crs_prereq = str(input("Set Prerequisite for Course. (Seperate by comma or NA for none): "))
+# It_Studio2.set_prereq(crs_prereq)
+# print('\nPrereqs for course are:', It_Studio2.get_prereq(),'\n')
 
-# test set_avail
-crs_avail = str(input("Semester Availability of course: (Semester 1 'S1', Semester 2 'S2' or both 'S1 & S2'):"))
-It_Studio2.set_avail(crs_avail)
-print('\nAvailability for course are:', It_Studio2.get_prereq(), '\n')
+# # test set_avail
+# crs_avail = str(input("Semester Availability of course: (Semester 1 'S1', Semester 2 'S2' or both 'S1 & S2'):"))
+# It_Studio2.set_avail(crs_avail)
+# print('\nAvailability for course are:', It_Studio2.get_prereq(), '\n')
 
-print(It_Studio2)
+# print(It_Studio2)
