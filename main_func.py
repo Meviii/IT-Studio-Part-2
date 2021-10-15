@@ -71,7 +71,6 @@ def student_object(id):
 
 def login():
     try:
-    
         login_type = str(input('Login as Admin or Student? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
