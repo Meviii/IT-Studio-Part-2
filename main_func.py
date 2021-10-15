@@ -115,16 +115,21 @@ def student_menu(id):
     print('==================================')
     try:
         choice = int(input('Please pick by index: '))
+        s = student_object(id)
         if 0 > choice > 5:
             raise ValueError
         elif choice == 1:
-            print(choice)
+            s.get_acad_history(id)
         elif choice == 2:
             print(choice)
         elif choice == 3:
-            print(choice)
+            if not s.get_curr_enrol() is None:
+                print(f'Would you like to un-enrol from {s.get_curr_enrol}')
+            elif s.get_curr_enrol() is None:
+                print(f'Please pick the courses you would like to enrol into: ')
+                
+
         elif choice == 4:
-            s = student_object(id)
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
         elif choice == 5:
             print(choice)

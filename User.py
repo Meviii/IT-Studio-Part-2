@@ -74,7 +74,7 @@ class Student(User):
                 if lines[0] == id:
                     student.append(lines)
                 else:
-                    print('Incorrect User')
+                    continue
             for i in student:
                 history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
             print('Academic History: ')
