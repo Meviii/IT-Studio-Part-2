@@ -78,6 +78,7 @@ class Student(User):
             for i in student:
                 history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
             print('Academic History: ')
+            print(f'    {self.get_program()}: ')
             for c in history:
                 print(f'        Course: {c[0]}, Mark: {c[1]}')
             f.close()

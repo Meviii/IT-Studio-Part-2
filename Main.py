@@ -1,5 +1,5 @@
 import Program as prg
-import Course as crs
+from Course import Course
 import Semester as sem
 
 import csv
@@ -54,8 +54,19 @@ if __name__ == '__main__':
     #add_student_history(id)
 
     # Test with student objects
-    s1 = Student('s1234567','Tom Tommy3','22/02/2000','Male','BP094', [('COSC1243', 10),('COSC8569', 30),('COSC7895', 20)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
-    s2 = Student('s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
+    s1 = Student('s1234567','Tom Tommy3','22/02/2000','Male','BP094', [('COSC1243', 10),('COSC8569', 30),('COSC7895', 20)],['COSC2800','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
+    s2 = Student('s1334527','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC2800','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543'])
     #s1.get_acad_history(id)
 
-main_func.login()
+    # Test for Course object
+    # def courses_list():
+    #     with open('data/courses.csv', 'r') as f:
+    #         reader = csv.reader(f)
+    #         course_lst = []
+    #         for lines in reader:
+    #             course_lst.append(lines[0])
+    #     f.close()
+    #     return course_lst
+    # print(courses_list())
+    
+    main_func.login()
