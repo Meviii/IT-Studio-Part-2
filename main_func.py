@@ -146,3 +146,23 @@ def admin_menu(id):
     print('9. View all students achievements of course')
     print('0. Exit')
     print('=======================')
+    
+    try:
+        choice = int(input('Please pick by index: '))
+        if 0 > choice > 5:
+            raise ValueError
+        elif choice == 1:
+            print(choice)
+        elif choice == 2:
+            print(choice)
+        elif choice == 3:
+            print(choice)
+        elif choice == 4:
+            s = student_object(id)
+            print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
+        elif choice == 5:
+            print(choice)
+        else:
+            return -1
+    except ValueError:
+        print('Invalid index') 
