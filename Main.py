@@ -1,11 +1,9 @@
 import Program as prg
 from Course import Course
 import Semester as sem
-
 import csv
 from User import User, Student, Admin
-import main_func 
-import json
+import main_func
 import ast
 
 if __name__ == '__main__':
@@ -68,5 +66,5 @@ if __name__ == '__main__':
     #     f.close()
     #     return course_lst
     # print(courses_list())
-    
+
     main_func.login()

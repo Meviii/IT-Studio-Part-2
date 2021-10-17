@@ -103,7 +103,7 @@ class Course:
     def set_fee(self, fee):
         self.fee = fee
     def get_fee(self):
-        return self.crs_fee
+        return self.fee
 
     def __eq__(self, other):
         return (self.title.lower() == other.title.lower())

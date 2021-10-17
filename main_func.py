@@ -75,7 +75,7 @@ def courses_list():
         for lines in reader:
             course_lst.append(lines)
     f.close()
-    return course_lst
+    return sorted(course_lst)
 
 def login():
     try:
@@ -99,7 +99,7 @@ def login():
                 student = student_object(id)
 
                 print(f'        Welcome {student.name} \n')
-                student_menu(id)
+                return student_menu(id)
             else:
                 print('Incorrect Student ID')
         else:
@@ -107,6 +107,7 @@ def login():
     except ValueError:
         print('Incorrect selection')
         return False
+
 
 def student_information():
     return False
@@ -120,7 +121,7 @@ def student_menu_option(id):
 
 def student_menu(id):
     print('     *STUDENT MENU*      ')
-    
+    print()
     print('1. View your Academic History')
     print('2. View available courses')
     print('3. View and enrol in an offering')
@@ -131,18 +132,21 @@ def student_menu(id):
     print('8. Cancel Program')
     print('0. Exit')
     print('==================================')
+
     try:
-        choice = int(input('Please pick by index: '))
         s = student_object(id)
+
+        choice = int(input('Please pick by index: '))
         res = set(ast.literal_eval(s.get_curr_enrol()))
         all_courses = set(courses_name_list())
-        stu_courses = res.intersection(all_courses)
+        stu_courses = sorted(res.intersection(all_courses))
+        s.set_curr_enrol(stu_courses)
 
         if 0 > choice > 8:
             raise ValueError
         elif choice == 1:
             s.get_acad_history(id)
-            student_menu_option()
+            student_menu_option(id)
         elif choice == 2:
             print('All available courses for you are: ')
             print()
@@ -151,7 +155,7 @@ def student_menu(id):
                 if not s.get_curr_enrol() is None:
                     print('You are currently enrolled in: \n')
                     for i in courses_list():
-                        if i[0] in stu_courses:
+                        if i[0] in s.get_curr_enrol():
                             print(f'{i[0]}: {i[1]}')
                     print()
                     student_menu_option(id)
@@ -160,30 +164,38 @@ def student_menu(id):
                     for i in courses_list():
                         print(f'{i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
         elif choice == 4:
-            print('Please pick the course you would like to drop: \n')
-            for count, i in enumerate(courses_list(), 1):
-                if i[0] in stu_courses:
+            print('Enrolled courses: \n')
+            count = 1
+            for i in courses_list():
+                if i[0] in s.get_curr_enrol():
                     print(f'{count}. {i[0]}: {i[1]}')
+                    count += 1
             print()
-            print("Enter the index('s) you would like to drop. 0 to exit")
-            # selection input
-            # save input(1 2 3) into list
-            # if selection > len(stu_courses) <= 0 : false, else:
-            # for list(1 2 3), if count enum(stu_courses, 1) == list[i], remove from student object if i == coursecode
-            sel_list = []
-            for i in range(len(stu_courses)):
-                selection = int(input(''))
-                if not selection in range(len(stu_courses)+1):
-                    print('Selection not in list')
-                elif selection in range(len(stu_courses)+1):
-                    sel_list.append(selection)
-                else:
-                    continue
+            
+            selection = int(input(("Enter the index you would like to drop. 0 to exit ")))
+            for x, value in enumerate(sorted(stu_courses),1):
+                if selection == int(x):
+                    print(f'{value} dropped.')
+                    print(s.get_curr_enrol())
+                    curr_enrolment = s.get_curr_enrol()
+                    for i in curr_enrolment:
+                        if str(i) == str(value):
+                            curr_enrolment.remove(i)
+                    s.set_curr_enrol(curr_enrolment)
+                    print(s.get_curr_enrol())
+                    
+                    student_menu_option(id)
+                elif selection == 0:
+                    return student_menu(id)
+            
         elif choice == 5:
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
+            print()
             student_menu_option(id)
         elif choice == 6:
-            print(choice)
+            update_sel = str(input('Which detail would you like to update?'))
+            print('Please enter one of the following: ')
+            print('1. Name\n2. Birth\n3. Gender')
             student_menu_option(id)
         elif choice == 7:
             print()
@@ -191,7 +203,7 @@ def student_menu(id):
             if not s.get_curr_enrol() is None:
                 fees_total = 0
                 for i in courses_list():
-                    if i[0] in stu_courses:
+                    if i[0] in s.get_curr_enrol():
                         print(f'{i[0]}: {i[1]} Fee: ${i[5]}')
                         fees_total += int(i[5])
                 print()

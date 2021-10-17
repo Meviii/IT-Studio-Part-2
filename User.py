@@ -44,7 +44,7 @@ class User:
             formatted_str += "Mobile: " + self.mobile + "\n"
         return formatted_str
 class Student(User):
-    def __init__(self, user_id, user_name, user_birth, user_gender, stu_program= '', stu_acad_history=[], stu_curr_enrol=[], stu_study_plan=[]):
+    def __init__(self, user_id, user_name, user_birth, user_gender, stu_program='', stu_acad_history=[], stu_curr_enrol=[], stu_study_plan=[]):
 
         User.__init__(self, user_id, user_name, user_birth, user_gender)
         self.program = stu_program
@@ -84,7 +84,7 @@ class Student(User):
             f.close()
         return self.acad_history
     
-    def set_curr_enrol(self, stu_curr_enrol):
+    def set_curr_enrol(self, stu_curr_enrol=[]):
         self.curr_enrol = stu_curr_enrol
 
     def get_curr_enrol(self):
@@ -111,6 +111,12 @@ class Student(User):
             formatted_str += "Name: " + self.name + "\n"
         if not self.program == '':
             formatted_str += "Program: " + self.program + "\n"
+        if not self.acad_history == '':
+            formatted_str += "Academic History: " + self.acad_history + "\n"
+        if not self.curr_enrol == '':
+            formatted_str += "Enrollment: " + self.curr_enrol + "\n"
+        if not self.study_plan == '':
+            formatted_str += "Study Plan: " + self.study_plan + "\n"
         return formatted_str
 
 class Admin(User):
