@@ -29,10 +29,5 @@ class Program:
         return (self.code.lower() == other.code.lower())
       
     def __str__(self):
-        # formatted_str = "Name: " + self.name + "\n"
-        # if not self.mobile == '':
-        #     formatted_str += "Mobile: " + self.mobile + "\n"
-        # if not self.landline == '':
-        #     formatted_str += "Landline: " + self.landline + "\n"
-        # return formatted_str
         return None
+

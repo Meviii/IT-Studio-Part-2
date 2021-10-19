@@ -106,3 +106,9 @@ if __name__ == '__main__':
         os.rename('test_temp.csv', 'test.csv')
     #add_student_history()
     #test_edit_value()
+
+    # check if acad history course in prereq + score is > 50
+
+    # Study plan = [COSC, SCIENCE, MATH]
+    # Academic H = [COSC, 58]
+    
