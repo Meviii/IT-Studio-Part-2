@@ -5,7 +5,8 @@ import csv
 from User import User, Student, Admin
 import main_func
 import ast
-
+import fileinput
+import os
 if __name__ == '__main__':
     #TEST CHANGE FOR GIT
 
@@ -21,11 +22,11 @@ if __name__ == '__main__':
     student2 = (['s123','Tom Tommy5','22/02/2000','Male','BP094', [('COSC1243',89),('COSC8569',56),('COSC7895',60)],['COSC12434','COSC85694','COSC78954'],['COSC124341','COSC856942','COSC789543']])
     def get_list_history_csv(id):
         
-        with open('data/students.csv', 'w+',newline='') as f:
+        with open('test.csv', 'w+',newline='') as f:
             write = csv.writer(f)
             write.writerow(student1)
 
-        with open('data/students.csv', 'r') as f:
+        with open('test.csv', 'r') as f:
             reader = csv.reader(f)
             student = []
             for lines in reader:
@@ -36,12 +37,12 @@ if __name__ == '__main__':
             #print(history)
             f.close()
 
-    def add_student_history(id): # fix to csv and student to new line
+    def add_student_history(): # fix to csv and student to new line
         
-        with open('data/students.csv', 'a+',newline='') as f:
+        with open('test.csv', 'a+',newline='') as f:
             write = csv.writer(f)
             write.writerow(student2)
-        with open('data/students.csv', 'r') as f:
+        with open('test.csv', 'r') as f:
             reader = csv.reader(f)
             for lines in reader:
                 print(lines)
@@ -68,3 +69,40 @@ if __name__ == '__main__':
     # print(courses_list())
 
     main_func.login()
+
+    # find student id from reading lines
+    # add lines to list
+    # edit the list where course = list element
+    # append new list to students file
+    # remove line of student id
+    def test_edit_value(id='s123'):
+        with open('test.csv', 'r+') as f:
+            reader = csv.reader(f)
+            final = ''
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+                    if not lines[4] == '':
+                        program = ''
+                    else:
+                        print('You are not a part of any program')
+                        return False
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program)+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"')
+            f.close()
+
+        with open('test.csv', 'r') as inf, open('test_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('test.csv')
+        os.rename('test_temp.csv', 'test.csv')
+    #add_student_history()
+    #test_edit_value()

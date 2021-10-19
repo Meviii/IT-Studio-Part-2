@@ -4,6 +4,7 @@ from Course import Course
 import Semester as sem
 import csv
 from User import User, Student, Admin
+import os
 
 def open_admins_for_id(id):
     with open('data/admins.csv', 'r') as f:
@@ -77,6 +78,66 @@ def courses_list():
     f.close()
     return sorted(course_lst)
 
+def remove_course(id, stu_course):
+
+    with open('data/students.csv', 'r+') as f:
+        reader = csv.reader(f)
+        final = ''
+        student = []
+        for lines in reader:
+            if lines[0] == id:
+                student = [i.strip() for i in lines]
+                if stu_course in lines[6]:
+                    courses = ast.literal_eval(lines[6])
+        courses.remove(stu_course)
+        final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(courses)+'"'+','+ '"' +str(student[7])+'"')
+        f.close()
+
+    with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[0] == id:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/students.csv')
+    os.rename('data/students_temp.csv', 'data/students.csv')
+
+def remove_program(id):
+
+    with open('data/students.csv', 'r+') as f:
+        reader = csv.reader(f)
+        final = ''
+        student = []
+        for lines in reader:
+            if lines[0] == id:
+                student = [i.strip() for i in lines]
+                if not lines[4] == '':
+                    program = ''
+                else:
+                    print('You are not a part of any program')
+                    return student_menu_option(id)
+        final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program)+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"')
+        f.close()
+
+    with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[0] == id:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/students.csv')
+    os.rename('data/students_temp.csv', 'data/students.csv')
+
 def login():
     try:
         login_type = str(input('Login as Admin or Student? ')).lower()
@@ -107,7 +168,6 @@ def login():
     except ValueError:
         print('Incorrect selection')
         return False
-
 
 def student_information():
     return False
@@ -170,23 +230,23 @@ def student_menu(id):
                 if i[0] in s.get_curr_enrol():
                     print(f'{count}. {i[0]}: {i[1]}')
                     count += 1
+                    selection = int(input(("Enter the index you would like to drop. 0 to exit ")))
+                    for x, value in enumerate(sorted(stu_courses),1):
+                        if selection == int(x):
+                            print(f'{value} dropped.')
+                            curr_enrolment = s.get_curr_enrol()
+                            for i in curr_enrolment:
+                                if str(i) == str(value):
+                                    curr_enrolment.remove(i)
+                                    remove_course(id, i)
+                                    student_menu_option(id)
+                        elif selection == 0:
+                            return student_menu(id)
+                        else:
+                            print('Error')
+                else:
+                    print('You are corrently not enrolled into any courses')
             print()
-            
-            selection = int(input(("Enter the index you would like to drop. 0 to exit ")))
-            for x, value in enumerate(sorted(stu_courses),1):
-                if selection == int(x):
-                    print(f'{value} dropped.')
-                    print(s.get_curr_enrol())
-                    curr_enrolment = s.get_curr_enrol()
-                    for i in curr_enrolment:
-                        if str(i) == str(value):
-                            curr_enrolment.remove(i)
-                    s.set_curr_enrol(curr_enrolment)
-                    print(s.get_curr_enrol())
-                    
-                    student_menu_option(id)
-                elif selection == 0:
-                    return student_menu(id)
             
         elif choice == 5:
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
@@ -241,6 +301,7 @@ def student_menu(id):
         print('Invalid selection') 
 
 def admin_menu(id):
+
     print('     *ADMIN MENU*      ')
     print('1. Add/Remove/Amend Student')
     print('2. Add/Remove/Amend Course')
