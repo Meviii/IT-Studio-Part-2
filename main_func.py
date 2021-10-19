@@ -204,14 +204,29 @@ def student_menu(id):
 
         if 0 > choice > 8:
             raise ValueError
-        elif choice == 1:
-            s.get_acad_history(id)
+        elif choice == 1: # Academic History
+            with open('data/students.csv', 'r') as f:
+                reader = csv.reader(f)
+                student = []
+                for lines in reader:
+                    if lines[0] == id:
+                        student.append(lines)
+                    else:
+                        continue
+                for i in student:
+                    history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
+                print('Academic History: ')
+                print(f'    {s.get_program()}: ')
+                for c in history:
+                    print(f'        Course: {c[0]}, Mark: {c[1]}')
+                f.close()
             student_menu_option(id)
-        elif choice == 2:
+        elif choice == 2: # Available Courses to enroll into
             print('All available courses for you are: ')
             print()
+            print()
             student_menu_option(id)
-        elif choice == 3: # possible option to add more courses
+        elif choice == 3: # View current enrollments, add course
                 if not s.get_curr_enrol() is None:
                     print('You are currently enrolled in: \n')
                     for i in courses_list():
@@ -223,7 +238,7 @@ def student_menu(id):
                     print(f'Please pick the courses you would like to enrol into: ')
                     for i in courses_list():
                         print(f'{i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
-        elif choice == 4:
+        elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
             count = 1
             for i in courses_list():
@@ -246,18 +261,17 @@ def student_menu(id):
                             print('Error')
                 else:
                     print('You are corrently not enrolled into any courses')
-            print()
-            
-        elif choice == 5:
+            print()            
+        elif choice == 5: # View all personal information
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
             print()
             student_menu_option(id)
-        elif choice == 6:
+        elif choice == 6: # Update personal information
             update_sel = str(input('Which detail would you like to update?'))
             print('Please enter one of the following: ')
             print('1. Name\n2. Birth\n3. Gender')
             student_menu_option(id)
-        elif choice == 7:
+        elif choice == 7: # View Fees
             print()
             print('The fees for your current enrollment is: \n')
             if not s.get_curr_enrol() is None:
@@ -272,7 +286,7 @@ def student_menu(id):
                 student_menu_option(id)
             else:
                 return student_menu(id)
-        elif choice == 8:
+        elif choice == 8: # Cancel program
             print(f'You are currently a student of {s.get_program()}. Do you want to cancel this? Y/N')
             program_update = str(input())
             if program_update.lower() == 'y':

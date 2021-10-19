@@ -66,22 +66,7 @@ class Student(User):
     def set_acad_history(self, stu_acad_history):# fix
         self.acad_history = self.acad_history.append(stu_acad_history)
 
-    def get_acad_history(self, id):
-        with open('data/students.csv', 'r') as f:
-            reader = csv.reader(f)
-            student = []
-            for lines in reader:
-                if lines[0] == id:
-                    student.append(lines)
-                else:
-                    continue
-            for i in student:
-                history = ast.literal_eval(i[5]) # or [i.strip() for i[5] in student]
-            print('Academic History: ')
-            print(f'    {self.get_program()}: ')
-            for c in history:
-                print(f'        Course: {c[0]}, Mark: {c[1]}')
-            f.close()
+    def get_acad_history(self):
         return self.acad_history
     
     def set_curr_enrol(self, stu_curr_enrol=[]):
