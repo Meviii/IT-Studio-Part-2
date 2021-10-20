@@ -13,13 +13,13 @@ class UserInputError(Exception):
         return self.msg
 
 class Course:
-    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail, crs_fee):
+    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail, crs_program):
         self.code = crs_code
         self.title = crs_title
         self.cred_points = crs_cred_points
         self.prereq = crs_prereq
         self.avail = crs_avail
-        self.fee = crs_fee
+        self.program = crs_program
 
     def default(self, o):
         return o.__dict__  
@@ -73,7 +73,7 @@ class Course:
         # Prerequisites to be seperated by a comma ',' else raise execption
         try:
             if crs_prereq == '':
-                raise UserInputError ('Please enter a course title. Cannot be blank')
+                raise UserInputError ('Please enter a course title as a prerequisite. Cannot be blank')
             elif crs_prereq.upper() == 'NA':
                 self.prereq = 'No Prerequisites'
             else:
@@ -86,6 +86,18 @@ class Course:
     def get_prereq(self):
         return self.prereq
     
+    def remove_prereq(self):
+        try:
+            if self.prereq == 'No Prerequisites':
+                raise UserInputError ('There are no prerequisites to remove.')
+            elif self.prereq == '':
+                raise UserInputError ('No prerequisites have been set. Unable to remove')
+            else:
+                self.set_prereq('NA')
+        except UserInputError as error:
+            print(error)
+        
+
     def set_avail(self, crs_avail):
         # Course can be available in either Semester 1 'S1', Semester 2 'S2' or both 'S1 & S2'
         avail_sems = ['S1', 'S2', 'S1 & S2']
@@ -98,12 +110,18 @@ class Course:
             print(error)
 
     def get_avail(self):
-        return self.crs_avail
-    
-    def set_fee(self, fee):
-        self.fee = fee
-    def get_fee(self):
-        return self.fee
+        return self.avail
+
+    def remove_avail(self):
+        avail_sems = ['S1', 'S2', 'S1 & S2']
+        try:
+            if self.avail not in avail_sems:
+                raise UserInputError ('Course is not currently available')
+            else:
+                self.avail = 'Not available'
+        except UserInputError as error:
+            print(error)
+        
 
     def __eq__(self, other):
         return (self.title.lower() == other.title.lower())
@@ -122,8 +140,8 @@ class Course:
         return formatted_str
         
 
-# It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2' )
-# print(It_Studio2)
+It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924' )
+print(It_Studio2)
 
 # # test set_title
 # crs_title = str(input("Name of Course Code. (Cannot be blank): "))
@@ -140,14 +158,23 @@ class Course:
 # It_Studio2.set_cred_points(crs_cred_points)
 # print('\nCourse is now set to:', It_Studio2.get_cred_points(), 'pts \n')
 
-# # test set_prereq
+# test set_prereq
 # crs_prereq = str(input("Set Prerequisite for Course. (Seperate by comma or NA for none): "))
 # It_Studio2.set_prereq(crs_prereq)
 # print('\nPrereqs for course are:', It_Studio2.get_prereq(),'\n')
 
-# # test set_avail
+# test remove_prereq
+# It_Studio2.remove_prereq()
+# print('\nPrereq removed:', It_Studio2.get_prereq(),'\n')
+
+# test set_avail
 # crs_avail = str(input("Semester Availability of course: (Semester 1 'S1', Semester 2 'S2' or both 'S1 & S2'):"))
 # It_Studio2.set_avail(crs_avail)
-# print('\nAvailability for course are:', It_Studio2.get_prereq(), '\n')
+# print('\nAvailability for course are:', It_Studio2.get_avail(), '\n')
+
+# test remove_avail
+# print('Availability for course are:', It_Studio2.get_avail(), '\n')
+# It_Studio2.remove_avail()
+# print('Availability removed:', It_Studio2.get_avail(),'\n')
 
 # print(It_Studio2)
