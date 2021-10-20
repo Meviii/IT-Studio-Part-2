@@ -6,7 +6,7 @@ import csv
 from User import User, Student, Admin
 import os
 
-def add_course(code, title, credits, sem, fee, prereq=[]):
+def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
     final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
         
     with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
@@ -19,7 +19,7 @@ def add_course(code, title, credits, sem, fee, prereq=[]):
     os.remove('data/courses.csv')
     os.rename('data/courses_temp.csv', 'data/courses.csv')
 
-def add_prereq(code, prereq):
+def add_prereq(code, prereq): # Adds a prereq for a course in courses.csv
     with open('data/courses.csv', 'r+') as f:
         reader = csv.reader(f)
         final = ''
@@ -52,7 +52,7 @@ def add_prereq(code, prereq):
     os.remove('data/courses.csv')
     os.rename('data/courses_temp.csv', 'data/courses.csv')
 
-def open_admins_for_id(id):
+def open_admins_for_id(id): # Returns if id exists in admins.csv
     with open('data/admins.csv', 'r') as f:
         reader = csv.reader(f)
         for lines in reader:
@@ -63,18 +63,18 @@ def open_admins_for_id(id):
         f.close()
         return False
 
-def admin_info_list(id):
+def admin_info_list(id): # Returns all info of a specific line by id from admins.csv
     with open('data/admins.csv', 'r') as f:
         reader = csv.reader(f)
         for lines in reader:
             if lines[0] == id:
-                student_lst = [i.strip() for i in lines]
+                admin_lst = [i.strip() for i in lines]
             else:
                 continue
         f.close()
-        return student_lst
+        return admin_lst
 
-def open_students_for_id(id):
+def open_students_for_id(id): # Returns if id exists in students.csv
     with open('data/students.csv', 'r') as f:
         reader = csv.reader(f)
         for lines in reader:
@@ -85,7 +85,7 @@ def open_students_for_id(id):
         f.close()
         return False
 
-def student_info_list(id):
+def student_info_list(id): # Returns all info of a specific line by id from students.csv
     with open('data/students.csv', 'r') as f:
         reader = csv.reader(f)
         for lines in reader:
@@ -96,17 +96,17 @@ def student_info_list(id):
         f.close()
         return student_lst
 
-def admin_object(id):
+def admin_object(id): # Creates an Admin object using per info from admin_info_list(id)
     admin = Admin(admin_info_list(id)[0], admin_info_list(id)[1], admin_info_list(id)[2],
                admin_info_list(id)[3])
     return admin
 
-def student_object(id):
+def student_object(id): # Creates an Student object using per info from student_info_list(id)
     student = Student(student_info_list(id)[0], student_info_list(id)[1], student_info_list(id)[2],
                student_info_list(id)[3], student_info_list(id)[4], student_info_list(id)[5], student_info_list(id)[6])
     return student
 
-def courses_name_list():
+def courses_name_list(): # Returns only course codes from all courses in courses.csv
     with open('data/courses.csv', 'r') as f:
         reader = csv.reader(f)
         course_name_lst = []
@@ -115,7 +115,7 @@ def courses_name_list():
     f.close()
     return course_name_lst
 
-def courses_list():
+def courses_list(): # Returns all info from each line in courses.csv (Sorted)
     with open('data/courses.csv', 'r') as f:
         reader = csv.reader(f)
         course_lst = []
@@ -124,7 +124,7 @@ def courses_list():
     f.close()
     return sorted(course_lst)
 
-def add_student_course(id, stu_course):
+def add_student_course(id, stu_course): # Adds a course to a student line by id in students.csv
 
     with open('data/students.csv', 'r+') as f:
         reader = csv.reader(f)
@@ -157,7 +157,7 @@ def add_student_course(id, stu_course):
     os.remove('data/students.csv')
     os.rename('data/students_temp.csv', 'data/students.csv')
 
-def remove_course(id, stu_course):
+def remove_course(id, stu_course): # Removes a course to a student line by id in students.csv
 
     with open('data/students.csv', 'r+') as f:
         reader = csv.reader(f)
@@ -186,7 +186,7 @@ def remove_course(id, stu_course):
     os.remove('data/students.csv')
     os.rename('data/students_temp.csv', 'data/students.csv')
 
-def remove_program(id):
+def remove_program(id): # Resets program of student to '' in students.csv. Cancels program
 
     with open('data/students.csv', 'r+') as f:
         reader = csv.reader(f)
@@ -217,7 +217,7 @@ def remove_program(id):
     os.remove('data/students.csv')
     os.rename('data/students_temp.csv', 'data/students.csv')
 
-def login():
+def login(): # Login function for Admin or Student login BY ID
     try:
         login_type = str(input('Login as Admin or Student? ')).lower()
 
@@ -248,17 +248,14 @@ def login():
         print('Incorrect selection')
         return False
 
-def student_information():
-    return False
-
-def student_menu_option(id):
+def student_menu_option(id): # Allows student to return to student_menu() without ending program
     return_main = str(input('Return to main menu? Y/N \n'))
     if return_main.lower() == 'y':
         return student_menu(id)
     else:
         return False
 
-def student_menu(id):
+def student_menu(id): # Student menu with choices and inner functions
     print('     *STUDENT MENU*      ')
     print()
     print('1. View your Academic History')
@@ -434,7 +431,7 @@ def student_menu(id):
         print('Invalid selection') 
         return False
 
-def admin_menu(id):
+def admin_menu(id): # Admin menu with choices and inner functions
 
     print('     *ADMIN MENU*      ')
     print('1. Add/Remove/Amend Student')
