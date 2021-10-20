@@ -85,45 +85,25 @@ if __name__ == '__main__':
     # edit the list where course = list element
     # append new list to students file
     # remove line of student id
-    def test_edit_value(id='s123', stu_course = 'COSC1233'):
-        with open('test.csv', 'r+') as f:
-            reader = csv.reader(f)
-            final = ''
-            student = []
-            courses = []
-            for lines in reader:
-                if str(lines[0]) == str(id):
-                    student = [i.strip() for i in lines]
-                    if not stu_course in lines[6]:
-                        courses = ast.literal_eval(lines[6])
-                        courses.append(str(stu_course))
-                        break
-                    else:
-                        print('Already enrolled')
-                        return False
-                        
-            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(courses)+'"'+','+ '"' +str(student[7])+'"')
-            f.close()
-
-        with open('test.csv', 'r') as inf, open('test_temp.csv', 'w+', newline='') as outf:
+    def test_edit_value(code='COSC123', title='Comp Title', credits='12', prereq=['SCI123','MATH123'], sem='S1', fee='5000'):
+        final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
+            
+        with open('test_courses.csv', 'r') as inf, open('test_courses_temp.csv', 'w+', newline='') as outf:
             reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
             writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
-            for lines in reader:
-                if lines[0] == id:
-                    writer.writerow(final.split(','))
-                    break
-                else:
-                    writer.writerow(lines)
+
+            writer.writerow(final.split(','))
             writer.writerows(reader)
 
-        os.remove('test.csv')
-        os.rename('test_temp.csv', 'test.csv')
+        os.remove('test_courses.csv')
+        os.rename('test_courses_temp.csv', 'test_courses.csv')
     # #add_student_history()
     #test_edit_value()
+    main_func.add_prereq()
 
     # check if acad history course in prereq + score is > 50
 
     # Study plan = [COSC, SCIENCE, MATH]
     # Academic H = [COSC, 58]
     
-    main_func.login()
+    #main_func.login()

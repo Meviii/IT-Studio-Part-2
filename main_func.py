@@ -6,6 +6,52 @@ import csv
 from User import User, Student, Admin
 import os
 
+def add_course(code, title, credits, sem, fee, prereq=[]):
+    final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
+        
+    with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+
+        writer.writerow(final.split(','))
+        writer.writerows(reader)
+
+    os.remove('data/courses.csv')
+    os.rename('data/courses_temp.csv', 'data/courses.csv')
+
+def add_prereq(code, prereq):
+    with open('data/courses.csv', 'r+') as f:
+        reader = csv.reader(f)
+        final = ''
+        prereq_courses = []
+        for lines in reader:
+            if str(lines[0]) == str(code):
+                courses = [i.strip() for i in lines]
+                if not prereq in lines[3]:
+                    prereq_courses = ast.literal_eval(lines[3])
+                    prereq_courses.append(str(prereq))
+                else:
+                    print('Already a prereq')
+                    #return admin_menu(id)
+                    return False
+                    
+        final = str(str(courses[0]) +','+ str(courses[1]) +','+ str(courses[2]) +',' + '"'+str(prereq_courses)+'"'+','+ str(courses[4]) +','+ str(courses[5]))
+        f.close()
+
+    with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[0] == str(code):
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/courses.csv')
+    os.rename('data/courses_temp.csv', 'data/courses.csv')
+
 def open_admins_for_id(id):
     with open('data/admins.csv', 'r') as f:
         reader = csv.reader(f)
