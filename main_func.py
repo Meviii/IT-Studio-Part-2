@@ -6,6 +6,43 @@ import csv
 from User import User, Student, Admin
 import os
 
+def check_prereqs(id, course):
+    with open('data/courses.csv', 'r') as cf:
+        cfreader = csv.reader(cf)
+        courses = []
+        for lines in cfreader:
+            if lines[0] == course:
+                courses.append(lines[3]) #appends prereqs of course 
+        for i in courses:
+            course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+
+
+    with open('data/students.csv', 'r') as sf:
+        sfreader = csv.reader(sf)
+        stu_history = []
+        temp = []
+
+        for lines in sfreader:
+            if str(lines[0]) == str(id):
+                temp.append(lines[5])
+                
+        for i in temp:
+            stu_history = ast.literal_eval(i) # makes student academic history a list
+        
+        course_name_history = []
+        for i in stu_history:
+            course_name_history.append(i[0]) # makes a list for only names of courses in academic history
+
+        z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
+        
+        if z is None:
+            return False
+        elif not z is None:
+            if len(course_prereqs) == len(z):
+                return True
+            else:
+                return False
+
 def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
     final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
         
@@ -315,7 +352,7 @@ def student_menu(id): # Student menu with choices and inner functions
                     elif selection.lower() == 'y':
                         count = 1
                         for i in courses_list():
-                            print(f'{count}. {i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
+                            print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
                             count += 1
                         selection = int(input('Enter the index you would like to add. 0 to exit\n'))
                         if selection == 0:
@@ -324,6 +361,31 @@ def student_menu(id): # Student menu with choices and inner functions
                             for x, value in enumerate(sorted(courses_list()),1):
                                 if selection == int(x):
                                     curr_enrolment = s.get_curr_enrol()
+                                    if check_prereqs(id, value) == True:
+                                        for i in curr_enrolment:
+                                            if str(i) != str(value[0]):
+                                                print(f'{value[0]} added.')
+                                                add_student_course(id, value[0])
+                                                return student_menu_option(id)
+                                            else:
+                                                print('Already Enrolled\n')
+                                                return student_menu(id)
+                                    elif check_prereqs(id, value) == False:
+                                        print('You do not meet the requirments')
+                                        return student_menu(id)
+                elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
+                    selection = int(input('Enter the index you would like to add. 0 to exit \n'))
+                    count = 1
+                    for i in courses_list():
+                        print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
+                        count += 1
+                    if selection == 0:
+                        return student_menu(id)
+                    else:
+                        for x, value in enumerate(sorted(courses_list()),1):
+                            if selection == int(x):
+                                curr_enrolment = s.get_curr_enrol()
+                                if check_prereqs(id, value) == True:
                                     for i in curr_enrolment:
                                         if str(i) != str(value[0]):
                                             print(f'{value[0]} added.')
@@ -332,25 +394,8 @@ def student_menu(id): # Student menu with choices and inner functions
                                         else:
                                             print('Already Enrolled\n')
                                             return student_menu(id)
-                elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
-                    selection = int(input('Enter the index you would like to add. 0 to exit '))
-                    count = 1
-                    for i in courses_list():
-                        print(f'{count}. {i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
-                        count += 1
-                    if selection == 0:
-                        return student_menu(id)
-                    else:
-                        for x, value in enumerate(sorted(courses_list()),1):
-                            if selection == int(x):
-                                curr_enrolment = s.get_curr_enrol()
-                                for i in curr_enrolment:
-                                    if str(i) != str(value[0]):
-                                        print(f'{value[0]} added.')
-                                        add_student_course(id, value[0])
-                                        return student_menu_option(id)
-                                    else:
-                                        print('Already Enrolled\n')
+                                elif check_prereqs(id, value) == False:
+                                        print('You do not meet the requirments')
                                         return student_menu(id)
         elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
