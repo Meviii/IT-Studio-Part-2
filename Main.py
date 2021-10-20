@@ -47,6 +47,18 @@ if __name__ == '__main__':
             for lines in reader:
                 print(lines)
 
+    # FOR ADDING STUDENT 
+    # def add_student_history(): # fix to csv and student to new line
+        
+    #     with open('test.csv', 'a+',newline='') as f:
+    #         write = csv.writer(f)
+    #         final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(courses)+'"'+','+ '"' +str(student[7])+'"')
+    #         write.writerow(final.strip(','))
+    #     with open('test.csv', 'r') as f:
+    #         reader = csv.reader(f)
+    #         for lines in reader:
+    #             print(lines)
+
     #id = 's1234567'
     # Test with actual student variables
     #get_list_history_csv(id)
@@ -68,27 +80,29 @@ if __name__ == '__main__':
     #     return course_lst
     # print(courses_list())
 
-    main_func.login()
-
     # find student id from reading lines
     # add lines to list
     # edit the list where course = list element
     # append new list to students file
     # remove line of student id
-    def test_edit_value(id='s123'):
+    def test_edit_value(id='s123', stu_course = 'COSC1233'):
         with open('test.csv', 'r+') as f:
             reader = csv.reader(f)
             final = ''
             student = []
+            courses = []
             for lines in reader:
-                if lines[0] == id:
+                if str(lines[0]) == str(id):
                     student = [i.strip() for i in lines]
-                    if not lines[4] == '':
-                        program = ''
+                    if not stu_course in lines[6]:
+                        courses = ast.literal_eval(lines[6])
+                        courses.append(str(stu_course))
+                        break
                     else:
-                        print('You are not a part of any program')
+                        print('Already enrolled')
                         return False
-            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program)+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"')
+                        
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(courses)+'"'+','+ '"' +str(student[7])+'"')
             f.close()
 
         with open('test.csv', 'r') as inf, open('test_temp.csv', 'w+', newline='') as outf:
@@ -104,7 +118,7 @@ if __name__ == '__main__':
 
         os.remove('test.csv')
         os.rename('test_temp.csv', 'test.csv')
-    #add_student_history()
+    # #add_student_history()
     #test_edit_value()
 
     # check if acad history course in prereq + score is > 50
@@ -112,3 +126,4 @@ if __name__ == '__main__':
     # Study plan = [COSC, SCIENCE, MATH]
     # Academic H = [COSC, 58]
     
+    main_func.login()
