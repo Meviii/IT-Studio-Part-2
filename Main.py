@@ -80,30 +80,64 @@ if __name__ == '__main__':
     #     return course_lst
     # print(courses_list())
 
-    # find student id from reading lines
-    # add lines to list
-    # edit the list where course = list element
-    # append new list to students file
-    # remove line of student id
-    def test_edit_value(code='COSC123', title='Comp Title', credits='12', prereq=['SCI123','MATH123'], sem='S1', fee='5000'):
-        final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
+    # get course
+    # for i in reader, if COSC2801 = i[0], append the preqs to list, preqs
+    # check if pres is NA, or course preq is in academic history of student, add course
+
+    def check_prereqs(id='s1234', course='COSC123'):
+        with open('test_courses.csv', 'r') as cf:
+            cfreader = csv.reader(cf)
+            courses = []
+            matches = []
+            for lines in cfreader:
+                if lines[0] == course:
+                    courses.append(lines[3]) #appends prereqs of course 
+            for i in courses:
+                course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+
+
+        with open('test.csv', 'r') as sf:
+            sfreader = csv.reader(sf)
+            stu_history = []
+            temp = []
+
+            for lines in sfreader:
+                if str(lines[0]) == str(id):
+                    temp.append(lines[5])
+
+            for i in temp:
+                stu_history = ast.literal_eval(i) # makes student academic history a list
             
-        with open('test_courses.csv', 'r') as inf, open('test_courses_temp.csv', 'w+', newline='') as outf:
-            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
-            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            course_name_history = []
+            for i in stu_history:
+                course_name_history.append(i[0]) # makes a list for only names of courses in academic history
 
-            writer.writerow(final.split(','))
-            writer.writerows(reader)
+            z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
+            
+            if z is None:
+                return False
+            elif not z is None:
+                if len(course_prereqs) == len(z):
+                    return True
+                else:
+                    print('You do not meet the requirements')
+                    return False
 
-        os.remove('test_courses.csv')
-        os.rename('test_courses_temp.csv', 'test_courses.csv')
+            # if z is not none, if INT stu_history[1] is >= 50, add course ## Might need to check if this compliments >1 prereq courses 
+            # else if z is none, return false                              # maybe check len(pre reqs) with len(set) for >1 prereq courses
+
+            # COSC123 has preq SCIE2411, ACAD DOES NOT HAVE(s123)
+            # COSC123 has preq SCIE2411, ACAD HAS(s1234)
+
+    #check_prereqs()
+
     # #add_student_history()
     #test_edit_value()
-    main_func.add_prereq()
+    #main_func.add_prereq()
 
     # check if acad history course in prereq + score is > 50
 
     # Study plan = [COSC, SCIENCE, MATH]
-    # Academic H = [COSC, 58]
+    # Academic H = [(COSC, 58)]
     
     #main_func.login()
