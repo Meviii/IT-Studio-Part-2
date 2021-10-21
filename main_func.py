@@ -7,6 +7,55 @@ import csv
 from User import User, Student, Admin
 import os
 
+def check_prereqs(id, course):
+    with open('data/courses.csv', 'r') as cf:
+        cfreader = csv.reader(cf)
+        courses = []
+        course_prereqs = []
+        for lines in cfreader:
+            if lines[0] == course:
+                courses.append(lines[3]) #appends prereqs of course 
+        for i in courses:
+            course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+        
+        if courses is []:
+            print('empty')
+            return True
+
+
+    with open('data/students.csv', 'r') as sf:
+        sfreader = csv.reader(sf)
+        stu_history = []
+        temp = []
+
+        for lines in sfreader:
+            if str(lines[0]) == str(id):
+                temp.append(lines[5])
+                
+        for i in temp:
+            stu_history = ast.literal_eval(i) # makes student academic history a list
+        
+        course_name_history = []
+        for i in stu_history:
+            course_name_history.append(i[0]) # makes a list for only names of courses in academic history
+
+        z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
+        
+        if z is None:
+            return False
+        elif not z is None:
+            if len(course_prereqs) == len(z):
+                for i in stu_history:
+                    for x in course_prereqs:
+                        if str(i[0]) == str(x):
+                            if i[1] >= 50:
+                                return True
+                            else:
+                                return False
+            else:
+                print('len false')
+                return False
+
 def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
     final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
         
@@ -304,27 +353,29 @@ def student_menu(id): # Student menu with choices and inner functions
             print()
             student_menu_option(id)
         elif choice == 3: # View current enrollments, add course
-                if not s.get_curr_enrol() is None:
-                    print('You are currently enrolled in: \n')
+
+            if not s.get_curr_enrol() is None:
+                print('You are currently enrolled in: \n')
+                for i in courses_list():
+                    if i[0] in s.get_curr_enrol():
+                        print(f'{i[0]}: {i[1]}')
+                print()
+                selection = str(input('Would you like to add a course? Y/N \n'))
+                if selection.lower() == 'n':
+                    student_menu_option(id)
+                elif selection.lower() == 'y':
+                    count = 1
                     for i in courses_list():
-                        if i[0] in s.get_curr_enrol():
-                            print(f'{i[0]}: {i[1]}')
-                    print()
-                    selection = str(input('Would you like to add a course? Y/N '))
-                    if selection.lower() == 'n':
-                        student_menu_option(id)
-                    elif selection.lower() == 'y':
-                        count = 1
-                        for i in courses_list():
-                            print(f'{count}. {i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
-                            count += 1
-                        selection = int(input('Enter the index you would like to add. 0 to exit\n'))
-                        if selection == 0:
-                            return student_menu(id)
-                        else:
-                            for x, value in enumerate(sorted(courses_list()),1):
-                                if selection == int(x):
-                                    curr_enrolment = s.get_curr_enrol()
+                        print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
+                        count += 1
+                    selection = int(input('Enter the index you would like to add. 0 to exit\n'))
+                    if selection == 0:
+                        return student_menu(id)
+                    else:
+                        curr_enrolment = s.get_curr_enrol()
+                        for x, value in enumerate(sorted(courses_list()),1):
+                            if int(selection) == int(x):
+                                if check_prereqs(id, value[0]) == True:
                                     for i in curr_enrolment:
                                         if str(i) != str(value[0]):
                                             print(f'{value[0]} added.')
@@ -333,26 +384,35 @@ def student_menu(id): # Student menu with choices and inner functions
                                         else:
                                             print('Already Enrolled\n')
                                             return student_menu(id)
-                elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
-                    selection = int(input('Enter the index you would like to add. 0 to exit '))
-                    count = 1
-                    for i in courses_list():
-                        print(f'{count}. {i[0]}: {i[1]}, Sem: {i[4]}, Credit: {i[2]}, Pre-req: {i[3]}\n')
-                        count += 1
-                    if selection == 0:
-                        return student_menu(id)
-                    else:
-                        for x, value in enumerate(sorted(courses_list()),1):
-                            if selection == int(x):
-                                curr_enrolment = s.get_curr_enrol()
+                                elif check_prereqs(id, value[0]) == False:
+                                    print('You do not meet the requirments\n')
+                                    return student_menu(id)
+                                else:
+                                    print('error')
+            elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
+                selection = int(input('Enter the index you would like to add. 0 to exit \n'))
+                count = 1
+                for i in courses_list():
+                    print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
+                    count += 1
+                if selection == 0:
+                    return student_menu(id)
+                else:
+                    for x, value in enumerate(sorted(courses_list()),1):
+                        if selection == int(x):
+                            curr_enrolment = s.get_curr_enrol()
+                            if check_prereqs(id, value) == True:
                                 for i in curr_enrolment:
                                     if str(i) != str(value[0]):
                                         print(f'{value[0]} added.')
                                         add_student_course(id, value[0])
-                                        return student_menu_option(id)
+                                        student_menu_option(id)
                                     else:
                                         print('Already Enrolled\n')
-                                        return student_menu(id)
+                                        student_menu(id)
+                            elif check_prereqs(id, value) == False:
+                                    print('You do not meet the requirments\n')
+                                    student_menu(id)
         elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
             count = 1
@@ -461,6 +521,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     new_studentName = input("Enter Student Name: ")
                     new_studentDOB = input("Enter Student Date of Birth: ")
                     new_studentGender = input("Enter Student Gender: ")
+<<<<<<< HEAD
                     new_studentProgram = input("Enter Student Program: ")
                     new_studentEnrolled = input("Enter Course Enrolled: ")
                     writer = csv.writer(f)
@@ -523,6 +584,43 @@ def admin_menu(id): # Admin menu with choices and inner functions
                                 print("Please Enter Valid Choice (Student ID / Student Name / Student DOB / Student Gender / Student Program / Student History / Student Enrolled Course / Student Study Plan)")
 
 
+=======
+                    new_studentCourse = input("Enter Student Course: ")
+                    writer = csv.writer(f)
+                    writer.writerow([new_studentID, new_studentName, new_studentDOB, new_studentGender, new_studentCourse, [], []])
+                f.close()
+            elif student_choice.lower() == "remove":
+                deleted_studentID = input("Enter Student ID to be Removed: ")
+                with open('data/student.csv', 'r+') as f:
+                    reader = csv.reader(f)
+                    final = ''
+                    students = []
+                    for lines in reader:
+                        for i in lines:
+                            if i[0] != deleted_studentID:
+                                students.append(lines)
+
+                    final = ",".join(str(students[e]) for e in range(len(students)))
+                f.close()
+
+                with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    for lines in reader:
+                        if lines[0] == id:
+                            writer.writerow(final.split(','))
+                            break
+                        else:
+                            writer.writerow(lines)
+                    writer.writerows(reader)
+
+                os.remove('data/students.csv')
+                os.rename('data/students_temp.csv', 'data/students.csv')
+                #remove student
+            elif student_choice.lower() == "ammend":
+                #ammend student
+                print(3)
+>>>>>>> 51319a548611d8dd4f54734b3de072fd6767f8a2
             else:
                 unknown_choice
 
@@ -545,6 +643,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 deleted_course = input("Enter Course Code of Course to be deleted: ")
                 with open('data/courses.csv', 'r+') as f:
                     reader = csv.reader(f)
+<<<<<<< HEAD
                     courses = []
                     for lines in reader:
                         if lines[0] != deleted_course:
@@ -592,6 +691,33 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             else:
                                 print("Please Enter Valid Choice (Course Code / Course Name / Course Credit / Course Prerequisites / Course Availability / Course Fees)")
 
+=======
+                    final = ''
+                    courses = []
+                    for lines in reader:
+                        for i in lines:
+                            if i[0] != deleted_course:
+                                courses.append(lines)
+
+                    final = ",".join(str(courses[e]) for e in range(len(courses)))
+                f.close()
+
+                with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
+                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    for lines in reader:
+                        if lines[0] == id:
+                            writer.writerow(final.split(','))
+                            break
+                        else:
+                            writer.writerow(lines)
+                    writer.writerows(reader)
+
+                os.remove('data/courses.csv')
+                os.rename('data/courses_temp.csv', 'data/courses.csv')
+            elif course_choice.lower() == "ammend":
+                print(3)
+>>>>>>> 51319a548611d8dd4f54734b3de072fd6767f8a2
             else:
                 unknown_choice
             
@@ -608,6 +734,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 deleted_Program = input("Enter Program Name to be Removed: ")
                 with open('data/programs.csv', 'r+') as f:
                     reader = csv.reader(f)
+<<<<<<< HEAD
                     programs = []
                     for lines in reader:
                         if lines[0] != deleted_Program:
@@ -619,10 +746,33 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     for i in programs:
                         writer.writerow(i) #write the new programs list into a temp csv file
 
+=======
+                    final = ''
+                    programs = []
+                    for lines in reader:
+                        for i in lines:
+                            if i[0] != deleted_Program:
+                                programs.append(lines)
+
+                    final = ",".join(str(programs[e]) for e in range(len(programs)))
+                f.close()
+
+                with open('data/programs.csv', 'r') as inf, open('data/programs_temp.csv', 'w+', newline='') as outf:
+                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+                    for lines in reader:
+                        if lines[0] == id:
+                            writer.writerow(final.split(','))
+                            break
+                        else:
+                            writer.writerow(lines)
+                    writer.writerows(reader)
+>>>>>>> 51319a548611d8dd4f54734b3de072fd6767f8a2
 
                 os.remove('data/programs.csv')
                 os.rename('data/programs_temp.csv', 'data/programs.csv')
             elif program_choice.lower() == "ammend":
+<<<<<<< HEAD
                 # show admin what is currently in the programs.csv
                 with open("data/programs.csv", 'r') as f:
                     reader = csv.reader(f)
@@ -644,6 +794,10 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             else:
                                 print("Please Enter Valid Choice (Program Name)")
                 
+=======
+                #ammend student
+                print(9)
+>>>>>>> 51319a548611d8dd4f54734b3de072fd6767f8a2
             else:
                 unknown_choice
 
