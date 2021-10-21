@@ -10,11 +10,16 @@ def check_prereqs(id, course):
     with open('data/courses.csv', 'r') as cf:
         cfreader = csv.reader(cf)
         courses = []
+        course_prereqs = []
         for lines in cfreader:
             if lines[0] == course:
                 courses.append(lines[3]) #appends prereqs of course 
         for i in courses:
             course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+        
+        if courses is []:
+            print('empty')
+            return True
 
 
     with open('data/students.csv', 'r') as sf:
@@ -39,8 +44,15 @@ def check_prereqs(id, course):
             return False
         elif not z is None:
             if len(course_prereqs) == len(z):
-                return True
+                for i in stu_history:
+                    for x in course_prereqs:
+                        if str(i[0]) == str(x):
+                            if i[1] >= 50:
+                                return True
+                            else:
+                                return False
             else:
+                print('len false')
                 return False
 
 def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
@@ -340,52 +352,29 @@ def student_menu(id): # Student menu with choices and inner functions
             print()
             student_menu_option(id)
         elif choice == 3: # View current enrollments, add course
-                if not s.get_curr_enrol() is None:
-                    print('You are currently enrolled in: \n')
-                    for i in courses_list():
-                        if i[0] in s.get_curr_enrol():
-                            print(f'{i[0]}: {i[1]}')
-                    print()
-                    selection = str(input('Would you like to add a course? Y/N '))
-                    if selection.lower() == 'n':
-                        student_menu_option(id)
-                    elif selection.lower() == 'y':
-                        count = 1
-                        for i in courses_list():
-                            print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
-                            count += 1
-                        selection = int(input('Enter the index you would like to add. 0 to exit\n'))
-                        if selection == 0:
-                            return student_menu(id)
-                        else:
-                            for x, value in enumerate(sorted(courses_list()),1):
-                                if selection == int(x):
-                                    curr_enrolment = s.get_curr_enrol()
-                                    if check_prereqs(id, value) == True:
-                                        for i in curr_enrolment:
-                                            if str(i) != str(value[0]):
-                                                print(f'{value[0]} added.')
-                                                add_student_course(id, value[0])
-                                                return student_menu_option(id)
-                                            else:
-                                                print('Already Enrolled\n')
-                                                return student_menu(id)
-                                    elif check_prereqs(id, value) == False:
-                                        print('You do not meet the requirments')
-                                        return student_menu(id)
-                elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
-                    selection = int(input('Enter the index you would like to add. 0 to exit \n'))
+
+            if not s.get_curr_enrol() is None:
+                print('You are currently enrolled in: \n')
+                for i in courses_list():
+                    if i[0] in s.get_curr_enrol():
+                        print(f'{i[0]}: {i[1]}')
+                print()
+                selection = str(input('Would you like to add a course? Y/N \n'))
+                if selection.lower() == 'n':
+                    student_menu_option(id)
+                elif selection.lower() == 'y':
                     count = 1
                     for i in courses_list():
                         print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
                         count += 1
+                    selection = int(input('Enter the index you would like to add. 0 to exit\n'))
                     if selection == 0:
                         return student_menu(id)
                     else:
+                        curr_enrolment = s.get_curr_enrol()
                         for x, value in enumerate(sorted(courses_list()),1):
-                            if selection == int(x):
-                                curr_enrolment = s.get_curr_enrol()
-                                if check_prereqs(id, value) == True:
+                            if int(selection) == int(x):
+                                if check_prereqs(id, value[0]) == True:
                                     for i in curr_enrolment:
                                         if str(i) != str(value[0]):
                                             print(f'{value[0]} added.')
@@ -394,9 +383,35 @@ def student_menu(id): # Student menu with choices and inner functions
                                         else:
                                             print('Already Enrolled\n')
                                             return student_menu(id)
-                                elif check_prereqs(id, value) == False:
-                                        print('You do not meet the requirments')
-                                        return student_menu(id)
+                                elif check_prereqs(id, value[0]) == False:
+                                    print('You do not meet the requirments\n')
+                                    return student_menu(id)
+                                else:
+                                    print('error')
+            elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
+                selection = int(input('Enter the index you would like to add. 0 to exit \n'))
+                count = 1
+                for i in courses_list():
+                    print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
+                    count += 1
+                if selection == 0:
+                    return student_menu(id)
+                else:
+                    for x, value in enumerate(sorted(courses_list()),1):
+                        if selection == int(x):
+                            curr_enrolment = s.get_curr_enrol()
+                            if check_prereqs(id, value) == True:
+                                for i in curr_enrolment:
+                                    if str(i) != str(value[0]):
+                                        print(f'{value[0]} added.')
+                                        add_student_course(id, value[0])
+                                        student_menu_option(id)
+                                    else:
+                                        print('Already Enrolled\n')
+                                        student_menu(id)
+                            elif check_prereqs(id, value) == False:
+                                    print('You do not meet the requirments\n')
+                                    student_menu(id)
         elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
             count = 1
