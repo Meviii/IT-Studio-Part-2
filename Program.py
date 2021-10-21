@@ -1,6 +1,6 @@
 # TO DO: Confirm how to calculate Program Credit points
 
-import Course
+from Course import Course
 
 class UserInputError(Exception):
     def __init__(self, msg):
@@ -10,11 +10,12 @@ class UserInputError(Exception):
         return self.msg
 
 class Program:
-    def __init__(self, prg_code, prg_title, prg_credit_points, prg_courses):
+    def __init__(self, prg_code, prg_title):
         self.code = prg_code
         self.title = prg_title
-        self.credit_points = prg_credit_points
-        self.courses = []
+        self.credit_points = 0
+        self.courses_core = []
+        self.courses_elect = []
 
     def default(self, o):
         return o.__dict__  
@@ -49,54 +50,94 @@ class Program:
         return self.title
 
     # Program Credits Setters and Getters
-    # Confirm how to calculate Program Credit points
+
     def calc_credit_points(self):
-        pass
+        total_pts = 0
+        for i in range(len(self.courses)):
+            pts = int(self.courses[i].cred_points)
+            total_pts = total_pts + pts 
+        return total_pts
+        
+    def set_credit_points(self):
+        try:
+            if self.calc_credit_points() == 0:
+                raise UserInputError ('Error: Program contains no Courses. Unable to set Credit Points')
+            else:
+                self.credit_points = self.calc_credit_points()
+                
+        except UserInputError as error:
+            print(error)
 
-    # def set_credit(self, prg_credit_points):
-    #     pts = ['999', '24']
-    #     try:
-    #         if prg_credit_points not in pts:
-    #             raise UserInputError ('Error: Program Credit Points can either be 999 or 999 points')
-    #         else:
-    #             self.credit_points = prg_credit_points
-    #     except UserInputError as error:
-    #         print(error)
-
-    def get_credit(self):
-        return self.credit
+    def get_credit_points(self):
+        return self.credit_points
 
     def add_courses(self, course):
         try:
             if not isinstance(course, Course):
                 raise UserInputError ('Please add a valid Course. Course does not exist.')
-            else:
-                self.courses.append(course)
+            elif course.type.upper() == 'CORE':
+                self.courses_core.append(course)
+            elif course.type.upper() == 'ELECTIVE':
+                self.courses_elect.append(course)
+
         except UserInputError as error:
             print(error)    
         
     def remove_courses(self, course):
         try:
-            if course not in self.courses:
+            if course not in self.courses_core and self.courses_elect:
                 raise UserInputError ('Cannot remove course. Course does not exist.')
-            else:
-                self.courses.remove(course)
+            elif course in self.courses_core:
+                self.courses_core.remove(course)
+            elif course in self.courses_elect:
+                self.courses_elect.remove(course)
         except UserInputError as error:
-            print(error)    
+            print(error)   
 
+    def get_courses_core(self):
+        formatted_str = '\n'
+        for i in range(len(self.courses_core)):
+            formatted_str += '      - ' + str(self.courses_core[i].title) + '\n'
+        return formatted_str
+
+    def get_courses_elect(self):
+        formatted_str = '\n'
+        for i in range(len(self.courses_elect)):
+            formatted_str += '      - ' + str(self.courses_elect[i].title) + '\n'
+        return formatted_str
 
     def __eq__(self, other):
         return (self.code.lower() == other.code.lower())
       
-    # def __str__(self):
-    #     formatted_str = "Course Code: " + self.code + "\n"
-    #     if not self.title == '':
-    #         formatted_str += "Course Title: " + self.title + "\n"
-    #     if not self.cred_points == '':
-    #         formatted_str += "Credit Points: " + str(self.cred_points) + "\n"    
-    #     if not self.prereq == '':
-    #         # want to fix printing prerequisite courses not in list
-    #         formatted_str += "Prerequisite Courses: " + str(self.prereq) + "\n" 
-    #     if not self.avail == '':
-    #         formatted_str += "Availability: " + self.avail + "\n"
-    #     return formatted_str
+    def __str__(self):
+        formatted_str = "Program Code: " + self.code + "\n"
+        if not self.title == '':
+            formatted_str += "Program Title: " + self.title + "\n"
+        if not self.credit_points == 0:
+            formatted_str += "Credit Points: " + str(self.cred_points) + "\n"    
+        if not self.courses_core == []:
+            formatted_str += "\nCore Courses:" + str(self.get_courses_core()) + "\n" 
+        if not self.courses_core == []:
+            formatted_str += "Elective Courses:" + str(self.get_courses_elect()) + "\n" 
+        return formatted_str
+
+ProgB1 = Course('COSC2801','Programming Bootcamp 1','12','NA','S1 & S2','BP0924', 'Core')
+It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
+Math2411 = Course('MATH2411','Mathematics for Computing 1','12','NA','S1 & S2','BP0924','CORE')
+Studio1 = Course('COSC2803','Programming Studio 1','24','NA','S1','BP0924', 'CORE')
+Graphics = Course('COSC1187','Interactive 3D Graphics and Animation','12','NA','S1','BP0924', 'ELECTIVE')
+
+BA_CS = Program('BP094', 'Bachelor of Computer Science')
+BA_CS.add_courses(ProgB1)
+BA_CS.add_courses(It_Studio2)
+BA_CS.add_courses(Math2411)
+BA_CS.add_courses(Studio1)
+BA_CS.add_courses(Graphics)
+
+# print(BA_CS.get_courses())
+print(BA_CS)
+
+# print(BA_CS.calc_credit_points())
+# pts = BA_CS.calc_credit_points()
+# BA_CS.set_credit_points()
+# print(BA_CS.get_credit_points())
