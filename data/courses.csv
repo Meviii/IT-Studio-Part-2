@@ -1,5 +1,5 @@
-COSC2801,Programming Bootcamp 1,12,NA,S1 & S2,1500
-MATH2411,Mathematics for Computing 1,12,NA,S1 & S2,1500
-COSC2803,Programming Studio 1,24,[''],S1,2500
-COSC2703,Programming 1,12,NA,S1,5400
-SCIE2411,Science,12,NA,S1,12000
+COSC2801,Programming Bootcamp 1,12,['COSC2703'],S1 & S2,1500
+MATH2411,Mathematics for Computing 1,12,[],S1 & S2,1500
+COSC2803,Programming Studio 1,24,['MATH2411'],S1,2500
+COSC2703,Programming 1,12,[],S1,5400
+SCIE2411,Science,12,[],S1,12000
