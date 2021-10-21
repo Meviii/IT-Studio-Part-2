@@ -6,7 +6,7 @@ import csv
 from User import User, Student, Admin
 import os
 
-def check_prereqs(id, course):
+def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
     with open('data/courses.csv', 'r') as cf:
         cfreader = csv.reader(cf)
         courses = []
@@ -488,7 +488,7 @@ def student_menu(id): # Student menu with choices and inner functions
         else:
             return -1
     except ValueError:
-        print('Invalid selection') 
+        print('Invalid selection')
         return False
 
 def admin_menu(id): # Admin menu with choices and inner functions
