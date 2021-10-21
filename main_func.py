@@ -468,28 +468,19 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 f.close()
             elif student_choice.lower() == "remove":
                 deleted_studentID = input("Enter Student ID to be Removed: ")
-                with open('data/student.csv', 'r+') as f:
+                with open('data/students.csv', 'r+') as f:
                     reader = csv.reader(f)
-                    final = ''
                     students = []
                     for lines in reader:
-                        for i in lines:
-                            if i[0] != deleted_studentID:
-                                students.append(lines) #appends students in a list, exluding the specified one.
-
-                    final = ",".join(str(students[e]) for e in range(len(students)))
+                        if lines[0] != deleted_studentID:
+                            students.append(lines) #appends students to a list, excluding the specified one 
                 f.close()
 
-                with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
-                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    for lines in reader:
-                        if lines[0] == id:
-                            writer.writerow(final.split(','))
-                            break
-                        else:
-                            writer.writerow(lines)
-                    writer.writerows(reader)
+                with open('data/students_temp.csv', 'w+', newline='') as f:
+                    writer = csv.writer(f)
+                    for i in students:
+                        writer.writerow(i) #write the new students list into a temp csv file
+
 
                 #swap the outdated csv with the updated students.csv
                 os.remove('data/students.csv')
@@ -554,26 +545,17 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 deleted_course = input("Enter Course Code of Course to be deleted: ")
                 with open('data/courses.csv', 'r+') as f:
                     reader = csv.reader(f)
-                    final = ''
                     courses = []
                     for lines in reader:
-                        for i in lines:
-                            if i[0] != deleted_course:
-                                courses.append(lines) #appends courses to a list, excluding the specified one 
+                        if lines[0] != deleted_course:
+                            courses.append(lines) #appends courses to a list, excluding the specified one 
 
-                    final = ",".join(str(courses[e]) for e in range(len(courses)))
                 f.close()
 
-                with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
-                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    for lines in reader:
-                        if lines[0] == id:
-                            writer.writerow(final.split(','))
-                            break
-                        else:
-                            writer.writerow(lines)
-                    writer.writerows(reader)
+                with open('data/courses_temp.csv', 'w+', newline='') as f:
+                    writer = csv.writer(f)
+                    for i in courses:
+                        writer.writerow(i) #write the new course list into a temp csv file
 
                 #swaps the outdated courses.csv file with the updated one
                 os.remove('data/courses.csv')
@@ -626,26 +608,17 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 deleted_Program = input("Enter Program Name to be Removed: ")
                 with open('data/programs.csv', 'r+') as f:
                     reader = csv.reader(f)
-                    final = ''
                     programs = []
                     for lines in reader:
-                        for i in lines:
-                            if i[0] != deleted_Program:
-                                programs.append(lines)
-
-                    final = ",".join(str(programs[e]) for e in range(len(programs)))
+                        if lines[0] != deleted_Program:
+                            programs.append(lines) #appends programs to a list, excluding the specified one 
                 f.close()
 
-                with open('data/programs.csv', 'r') as inf, open('data/programs_temp.csv', 'w+', newline='') as outf:
-                    reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
-                    for lines in reader:
-                        if lines[0] == id:
-                            writer.writerow(final.split(','))
-                            break
-                        else:
-                            writer.writerow(lines)
-                    writer.writerows(reader)
+                with open('data/programs_temp.csv', 'w+', newline='') as f:
+                    writer = csv.writer(f)
+                    for i in programs:
+                        writer.writerow(i) #write the new programs list into a temp csv file
+
 
                 os.remove('data/programs.csv')
                 os.rename('data/programs_temp.csv', 'data/programs.csv')
