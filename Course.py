@@ -13,13 +13,14 @@ class UserInputError(Exception):
         return self.msg
 
 class Course:
-    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail, crs_program):
+    def __init__(self, crs_code, crs_title, crs_cred_points, crs_prereq, crs_avail, crs_program, crs_type):
         self.code = crs_code
         self.title = crs_title
         self.cred_points = crs_cred_points
         self.prereq = crs_prereq
         self.avail = crs_avail
         self.program = crs_program
+        self.type = crs_type
 
     def default(self, o):
         return o.__dict__  
@@ -121,7 +122,21 @@ class Course:
                 self.avail = 'Not available'
         except UserInputError as error:
             print(error)
-        
+
+    def set_type(self, crs_type):
+        # Course can be available in either be a core subject or elective subject
+        type = ['CORE', 'ELECTIVE']
+        try:
+            if crs_type.upper() not in type:
+                raise UserInputError ('Error: Please enter either \'Core\' or \'Elective\'')
+            else:
+                self.type = crs_type.upper()
+        except UserInputError as error:
+            print(error)
+
+    def get_type(self):
+        return self.type
+
 
     def __eq__(self, other):
         return (self.title.lower() == other.title.lower())
@@ -139,8 +154,8 @@ class Course:
             formatted_str += "Availability: " + self.avail + "\n"
         return formatted_str
 
-It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924' )
-#print(It_Studio2)
+# It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
+# print(It_Studio2)
 
 # # test set_title
 # crs_title = str(input("Name of Course Code. (Cannot be blank): "))
