@@ -153,7 +153,6 @@ class Course:
         if not self.avail == '':
             formatted_str += "Availability: " + self.avail + "\n"
         return formatted_str
-        
 
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
 # print(It_Studio2)
