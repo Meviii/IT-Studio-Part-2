@@ -1,6 +1,6 @@
 import Program as prg
 from Course import Course
-import Semester as sem
+from Semester import Semester
 import csv
 from User import User, Student, Admin
 import main_func
@@ -205,7 +205,71 @@ if __name__ == '__main__':
                 else:
                     return False
     #check_prereq_empty()
+    def courses_list(): # Returns all info from each line in courses.csv (Sorted)
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            course_lst = []
+            for lines in reader:
+                course_lst.append(lines)
+        f.close()
+        return sorted(course_lst)
+        print('Sem 1: ')
+        for i in courses_list():
+            if 'S1' in i[4]:
+                print(f'{i[1]}, {i[4]}')
+        print('Sem 2: ')
+        for i in courses_list():
+            if 'S2' in i[4]:
+                print(f'{i[1]}, {i[4]}')
+    def get_stu_program_courses(id, program):
+        with open('data/students.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                if lines[0] == id:
+                    student_program = lines[4]
+                else:
+                    continue
+            f.close()
+        with open('data/programs.csv', 'r') as f1:
+            reader1 = csv.reader(f1)
+            for lines in reader1:
+                print(lines)
     
+    def test(semester_code='SEM12021', course='COSC2801'):
+        with open('data/semesters.csv', 'r+') as f1:
+            reader1 = csv.reader(f1)
+            alist = []
+            final = ''
+            for lines in reader1:
+                if lines[0] == semester_code:
+                    sem_info = [i.strip() for i in lines]
+                    alist.append(lines[1])
+            for i in alist:
+                sem_courses = ast.literal_eval(i)
+            courses= []
+            for i in sem_courses:
+                if i[0] == course:
+                    final = f"('{i[0]}', {str(int(sem_courses[0][1]) + 1)}, {i[2]})"
+            # remove i[1][i] where i == course and append new final.
+
+    def course_info_list(id): # Returns all info of a specific line by id from students.csv
+        with open('data/semesters.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                if lines[0] == id:
+                    course_lst = [i.strip() for i in lines]
+                else:
+                    continue
+            f.close()
+            return course_lst
+
+    def sem_object(id): # Creates an Student object using per info from student_info_list(id)
+        sem = Semester(course_info_list(id)[0], course_info_list(id)[1],course_info_list(id)[2],course_info_list(id)[3])
+        return sem
+    
+
+    #sem = sem_object('SEM12021')
+    #print(sem.get_curr_student())
     main_func.login()
 
     # s123 COSC2703 > 50, MATH2411 < 50, wants to enroll into COSC2801, should allow, else:
