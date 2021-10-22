@@ -1,4 +1,3 @@
-from _typeshed import WriteableBuffer
 import ast
 import Program as prg
 from Course import Course
@@ -18,7 +17,7 @@ def check_prereqs(id, course): # Checks if prereq is completed(passed and in aca
         for i in courses:
             course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
         
-        if courses is []:
+        if courses is None:
             print('empty')
             return True
 
@@ -53,7 +52,20 @@ def check_prereqs(id, course): # Checks if prereq is completed(passed and in aca
                             else:
                                 return False
             else:
-                print('len false')
+                return False
+
+def check_prereq_empty(course): # Returns True if prereq list is empty meaning no prereq
+    with open('data/courses.csv', 'r') as cf:
+        cfreader = csv.reader(cf)
+        courses = []
+        course_prereqs = []
+        for lines in cfreader:
+            if lines[0] == course:
+                courses.append(lines[3]) #appends prereqs of course 
+        for i in courses:
+            if i == '[]':
+                return True
+            else:
                 return False
 
 def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
@@ -205,6 +217,7 @@ def add_student_course(id, stu_course): # Adds a course to a student line by id 
                 if not stu_course in lines[6]:
                     courses = ast.literal_eval(lines[6])
                     courses.append(str(stu_course))
+                    print(f'{stu_course} added')
                 else:
                     print('Already enrolled')
                     return student_menu(id)
@@ -393,14 +406,12 @@ def student_menu(id): # Student menu with choices and inner functions
                         curr_enrolment = s.get_curr_enrol()
                         for x, value in enumerate(sorted(courses_list()),1):
                             if int(selection) == int(x):
-                                if check_prereqs(id, value[0]) == True:
+                                if check_prereqs(id, value[0]) == True or check_prereq_empty(value[0]) == True:
                                     for i in curr_enrolment:
                                         if str(i) != str(value[0]):
-                                            print(f'{value[0]} added.')
                                             add_student_course(id, value[0])
                                             return student_menu_option(id)
                                         else:
-                                            print('Already Enrolled\n')
                                             return student_menu(id)
                                 elif check_prereqs(id, value[0]) == False:
                                     print('You do not meet the requirments\n')

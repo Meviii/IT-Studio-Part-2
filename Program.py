@@ -135,7 +135,7 @@ BA_CS.add_courses(Studio1)
 BA_CS.add_courses(Graphics)
 
 # print(BA_CS.get_courses())
-print(BA_CS)
+#print(BA_CS)
 
 # print(BA_CS.calc_credit_points())
 # pts = BA_CS.calc_credit_points()
