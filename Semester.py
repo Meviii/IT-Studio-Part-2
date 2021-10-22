@@ -3,7 +3,6 @@ import ast
 import os
 from main_func import add_student_course
 from main_func import remove_course
-from Semester import get_curr_student
 
 class UserInputError(Exception):
     def __init__(self, msg):
@@ -56,8 +55,6 @@ class Semester:
                             else:
                                 id = ast.literal_eval(lines[4])
                                 id.insert(0, str(sem_id))
-                            
-            
             final = str(str(course[0]) +','+ str(course[1])+','+ str(course[2])+',"'+ str(course[3])+'","'+ str(id)+'",'+ str(course[5]) +',' + '"'+str(course[6])+'"')
             print(final)
             f.close()
@@ -93,8 +90,6 @@ class Semester:
                     print(id)
           
             f.close()
-
-
         if len(id) == 2:
             print('This course is being offered during both semesters')
         else:
@@ -194,8 +189,6 @@ class Semester:
             print('This course has already reached the maximum number of students')
 
         print('Student ' + student_id + 'has been added to ' + crs_code + '.')
-
-
 
     def remove_student(self, student_id, crs_code):
         remove_course(student_id, crs_code)

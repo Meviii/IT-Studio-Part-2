@@ -191,6 +191,20 @@ if __name__ == '__main__':
 
     # Study plan = [COSC, SCIENCE, MATH]
     # Academic H = [(COSC, 58)]
+    def check_prereq_empty(course):
+        with open('data/courses.csv', 'r') as cf:
+            cfreader = csv.reader(cf)
+            courses = []
+            course_prereqs = []
+            for lines in cfreader:
+                if lines[0] == course:
+                    courses.append(lines[3]) #appends prereqs of course 
+            for i in courses:
+                if i == '[]':
+                    return True
+                else:
+                    return False
+    #check_prereq_empty()
     
     main_func.login()
 
