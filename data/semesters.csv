@@ -1,4 +1,4 @@
-SEM12021,"[(a_course, curr_students, max students)]"
-SEM22021
-SEM12022
-SEM22022
+SEM12021,"[('COSC2801', 0, 100), ('MATH2411', 0, 100)]"
+SEM22021,"[('COSC2801', 0, 100)]"
+SEM12022,"[('COSC2801', 0, 100)]"
+SEM22022,"[('COSC2801', 0, 100)]"
