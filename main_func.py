@@ -5,13 +5,160 @@ import Semester as sem
 import csv
 from User import User, Student, Admin
 import os
+def add_to_plan(id, course_code):
+    with open('data/students.csv', 'r+') as stuf:
+        stu_reader = csv.reader(stuf,skipinitialspace=True)
+        student =[]
+        final = ''
+        for lines in stu_reader:
+            if lines[0] == id:
+                student = [i.strip() for i in lines]
+                study_plan  = ast.literal_eval(lines[7])
+        
+        if not course_code in study_plan: 
+            study_plan.append(course_code)
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(study_plan)+'"')
+        else:
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"')
+    stuf.close()
 
+    with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[0] == id:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/students.csv')
+    os.rename('data/students_temp.csv', 'data/students.csv')
+
+def remove_from_plan(id, course_code):
+    with open('data/students.csv', 'r+') as stuf:
+        stu_reader = csv.reader(stuf,skipinitialspace=True)
+        student =[]
+        final = ''
+        for lines in stu_reader:
+            if lines[0] == id:
+                student = [i.strip() for i in lines]
+                study_plan  = ast.literal_eval(lines[7])
+        
+        if course_code in study_plan: 
+            study_plan.remove(course_code)
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(study_plan)+'"')
+        else:
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"')
+    stuf.close()
+
+    with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[0] == id:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/students.csv')
+    os.rename('data/students_temp.csv', 'data/students.csv')
+
+def sem_add_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+    with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
+        reader1 = csv.reader(stuf)
+        for lines in reader1:
+            if lines[0] == id:
+                stu_program = lines[4]
+                break
+
+        reader = csv.reader(f)
+        final = ''
+        semester = []
+        # read courses where stu_course == course, if course code in sem courses[1], stu_count in sem + 1
+        for lines in reader:
+            if str(lines[1]) == str(semester_code):
+                semester = [i.strip() for i in lines]
+                if lines[0] == stu_program:
+                    if stu_course in semester[2]:
+                        break
+                    else:
+                        print('Not in any semester')
+                        return False
+                else:
+                    print('Program does not exist')
+                    return False
+        #SEM12021,['COS2801'],0,1000
+        new_count = int(semester[3]) + 1
+        final = str(semester[0]+','+semester[1] +','+ '"'+ semester[2]+'",'+ str(new_count)+ ','+ semester[4])
+        f.close()
+
+    with open('data/semesters.csv', 'r') as inf, open('data/semesters_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[1] == semester_code:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/semesters.csv')
+    os.rename('data/semesters_temp.csv', 'data/semesters.csv')
+
+def sem_remove_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+    with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
+        reader1 = csv.reader(stuf)
+        for lines in reader1:
+            if lines[0] == id:
+                stu_program = lines[4]
+                break
+
+        reader = csv.reader(f)
+        final = ''
+        semester = []
+        # read courses where stu_course == course, if course code in sem courses[1], stu_count in sem + 1
+        for lines in reader:
+            if str(lines[1]) == str(semester_code):
+                semester = [i.strip() for i in lines]
+                if lines[0] == stu_program:
+                    if stu_course in semester[2]:
+                        break
+                    else:
+                        print('Not in any semester')
+                        return False
+                else:
+                    print('Program does not exist')
+                    return False
+        #SEM12021,['COS2801'],0,1000
+        new_count = int(semester[3]) - 1
+        final = str(semester[0]+','+semester[1] +','+ '"'+ semester[2]+'",'+ str(new_count)+ ','+ semester[4])
+        f.close()
+
+    with open('data/semesters.csv', 'r') as inf, open('data/semesters_temp.csv', 'w+', newline='') as outf:
+        reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+        writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+        for lines in reader:
+            if lines[1] == semester_code:
+                writer.writerow(final.split(','))
+                break
+            else:
+                writer.writerow(lines)
+        writer.writerows(reader)
+
+    os.remove('data/semesters.csv')
+    os.rename('data/semesters_temp.csv', 'data/semesters.csv')
 
 def course_list_by_sem(semid):
         with open('data/semesters.csv', 'r') as f:
             reader = csv.reader(f)
             sem_list = []
             specific_sem_course_name = []
+            course_info = []
             for lines in reader:
                 if lines[0] == semid:
                     sem_list.append(lines)
@@ -27,6 +174,42 @@ def course_list_by_sem(semid):
 
         sem_courses = set(course_name_lst).intersection(set(specific_sem_course_name))
         return sem_courses
+
+def filtered_courses_list(id): # Returns courses which are needed to be completed by the student
+    # need to return sorted course list of all courses of a program which are not completed by student
+    with open('data/courses.csv', 'r') as courf, open('data/programs.csv', 'r') as progf, open('data/students.csv', 'r') as stuf:
+        stu_reader = csv.reader(stuf)
+        stu_acad_history = []
+        stu_program = ''
+        stu_passed_courses = []
+        for lines in stu_reader:
+            if lines[0] == id:
+                stu_program = lines[4]
+                stu_acad_history = ast.literal_eval(lines[5])
+        
+        # need to remove the courses which student passed in acad history from avail courses
+        for i in stu_acad_history:
+            if i[1] >=50:
+                stu_passed_courses.append(i[0]) 
+        
+        prog_reader = csv.reader(progf, skipinitialspace=True)
+        core_prog_courses = []
+        elec_prog_courses = []
+        merged_courses = []
+        for lines in prog_reader:
+            if lines[0] == stu_program:
+                core_prog_courses = ast.literal_eval(lines[3])
+                elec_prog_courses = ast.literal_eval(lines[4])
+        merged_courses = core_prog_courses
+        merged_courses.extend(elec_prog_courses)
+
+        final_list = [x for x in merged_courses if x not in stu_passed_courses]
+
+        cour_reader = csv.reader(courf)
+        course_filtered_info = []
+        for i in cour_reader:
+            course_filtered_info = [x for x in cour_reader if x[0] in final_list]
+    return course_filtered_info
 
 def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
     with open('data/courses.csv', 'r') as cf:
@@ -158,6 +341,17 @@ def admin_info_list(id): # Returns all info of a specific line by id from admins
         f.close()
         return admin_lst
 
+def open_semester_for_id(sem_id): # Returns if id exists in students.csv
+    with open('data/semesters.csv', 'r') as f:
+        reader = csv.reader(f)
+        for lines in reader:
+            if str(lines[1]) == str(sem_id):
+                return True
+            else:
+                continue
+        f.close()
+        return False
+
 def open_students_for_id(id): # Returns if id exists in students.csv
     with open('data/students.csv', 'r') as f:
         reader = csv.reader(f)
@@ -226,7 +420,7 @@ def courses_list(): # Returns all info from each line in courses.csv (Sorted)
     f.close()
     return sorted(course_lst)
 
-def add_student_course(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+def add_student_course(id, stu_course, year_sem): # Adds a course to a student line by id in students.csv
 
     with open('data/students.csv', 'r+') as f:
         reader = csv.reader(f)
@@ -239,6 +433,7 @@ def add_student_course(id, stu_course, semester_code): # Adds a course to a stud
                 if not stu_course in lines[6]:
                     courses = ast.literal_eval(lines[6])
                     courses.append(str(stu_course))
+                    sem_add_count(id, stu_course, year_sem)
                     print(f'{stu_course} added')
                 else:
                     print('Already enrolled')
@@ -363,7 +558,7 @@ def student_menu(id): # Student menu with choices and inner functions
     print('     *STUDENT MENU*      ')
     print()
     print('1. View your Academic History')
-    print('2. View available courses')
+    print('2. View available courses') # should display courses which are not completed
     print('3. View and enrol in an offering')
     print('4. Un-enrol from an offering')
     print('5. Get all information')
@@ -404,18 +599,16 @@ def student_menu(id): # Student menu with choices and inner functions
             print('All available courses for you are: ')
             
             print('Sem 1: ')
-            for i in courses_list():
+            for i in filtered_courses_list(id):
                 if 'S1' in i[4]:
                     print(f'{i[1]}, Semester: {i[4]}')
             print('Sem 2: ')
-            for i in courses_list():
+            for i in filtered_courses_list(id):
                 if 'S2' in i[4]:
                     print(f'{i[1]}, Semester: {i[4]}')
             print()
             student_menu_option(id)
         elif choice == 3: # View current enrollments, add course
-
-            if not s.get_curr_enrol() is None:
                 print('You are currently enrolled in: \n')
                 for i in courses_list():
                     if i[0] in s.get_curr_enrol():
@@ -425,54 +618,31 @@ def student_menu(id): # Student menu with choices and inner functions
                 if selection.lower() == 'n':
                     student_menu_option(id)
                 elif selection.lower() == 'y':
-                    semester_sel = str(input('Please type the code of semester you want to enroll: SEM12021/SEM22021/SEM12022/SEM2022'))
-                    count = 1
-                    for i in courses_list():
-                        print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
-                        count += 1
-                    selection = int(input('Enter the index you would like to add. 0 to exit\n'))
-                    if selection == 0:
-                        return student_menu(id)
-                    else:
-                        curr_enrolment = s.get_curr_enrol()
-                        for x, value in enumerate(sorted(courses_list()),1):
-                            if int(selection) == int(x):
-                                if check_prereqs(id, value[0]) == True or check_prereq_empty(value[0]) == True:
-                                    for i in curr_enrolment:
-                                        if str(i) != str(value[0]):
-                                            add_student_course(id, value[0], semester_sel)
-                                            return student_menu_option(id)
-                                        else:
-                                            return student_menu(id)
-                                elif check_prereqs(id, value[0]) == False:
-                                    print('You do not meet the requirments\n')
-                                    return student_menu(id)
-                                else:
-                                    print('error')
-            elif s.get_curr_enrol() is None: # need to add a way to add course into student and possibly need if statement for Sem
-                selection = int(input('Enter the index you would like to add. 0 to exit \n'))
-                count = 1
-                for i in courses_list():
-                    print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
-                    count += 1
-                if selection == 0:
-                    return student_menu(id)
-                else:
-                    for x, value in enumerate(sorted(courses_list()),1):
-                        if selection == int(x):
+                    year_sem = str(input('Which sem would you like to enrol into? SEM12021/SEM22021/SEM12022/SEM22022\n'))
+                    if open_semester_for_id(year_sem) == True:
+                        count = 1
+                        for i in courses_list():
+                            print(f'{count}. {i[0]}: {i[1]}, Credit: {i[2]}\n')
+                            count += 1
+                        selection = int(input('Enter the index you would like to add. 0 to exit\n'))
+                        if selection == 0:
+                            return student_menu(id)
+                        else:
                             curr_enrolment = s.get_curr_enrol()
-                            if check_prereqs(id, value) == True:
-                                for i in curr_enrolment:
-                                    if str(i) != str(value[0]):
-                                        print(f'{value[0]} added.')
-                                        add_student_course(id, value[0])
-                                        student_menu_option(id)
+                            for x, value in enumerate(sorted(courses_list()),1):
+                                if int(selection) == int(x):
+                                    if check_prereqs(id, value[0]) == True or check_prereq_empty(value[0]) == True:
+                                        remove_from_plan(id, value[0])
+                                        add_student_course(id, value[0], year_sem)
+                                        return student_menu_option(id)
+                                    elif check_prereqs(id, value[0]) == False:
+                                        print('You do not meet the requirments\n')
+                                        return student_menu(id)
                                     else:
-                                        print('Already Enrolled\n')
-                                        student_menu(id)
-                            elif check_prereqs(id, value) == False:
-                                    print('You do not meet the requirments\n')
-                                    student_menu(id)
+                                        print('Uknown Error')
+                    else:
+                        print('Invalid Semester')
+                        return student_menu(id)
         elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
             count = 1
@@ -480,34 +650,48 @@ def student_menu(id): # Student menu with choices and inner functions
                 if i[0] in s.get_curr_enrol():
                     print(f'{count}. {i[0]}: {i[1]}')
                     count += 1
-            selection = int(input(("Enter the index you would like to drop. 0 to exit \n")))
-            for x, value in enumerate(sorted(stu_courses),1):
-                if selection == int(x):
-                    print(f'{value} dropped.')
-                    curr_enrolment = s.get_curr_enrol()
-                    for i in curr_enrolment:
-                        if str(i) == str(value):
-                            curr_enrolment.remove(i)
-                            remove_course(id, i)
-                            break
-                    student_menu_option(id)
-                elif selection == 0:
-                    return student_menu(id)
-                else:
-                    print('Error')
-                    return False
-                
-            print('You are corrently not enrolled into any courses')
+            year_sem = str(input('Which course sem would you like to drop? SEM12021/SEM22021/SEM12022/SEM22022\n'))
+            if open_semester_for_id(year_sem) == True:
+                selection = int(input(("Enter the index you would like to drop. 0 to exit \n")))
+                for x, value in enumerate(sorted(stu_courses),1):
+                    if selection == int(x):
+                        print(f'{value} dropped.')
+                        curr_enrolment = s.get_curr_enrol()
+                        for i in curr_enrolment:
+                            if str(i) == str(value):
+                                curr_enrolment.remove(i)
+                                sem_remove_count(id, i, year_sem)
+                                add_to_plan(id, i)
+                                remove_course(id, i)
+                                break
+                        student_menu_option(id)
+                    elif selection == 0:
+                        return student_menu(id)
+                    else:
+                        print('Error')
+                        return False
+            else:
+                print('Incorrect Semester')
+                return student_menu(id)
             print()            
         elif choice == 5: # View all personal information
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
             print()
             student_menu_option(id)
         elif choice == 6: # Update personal information
-            update_sel = str(input('Which detail would you like to update?'))
+            update_sel = int(input('Which detail would you like to update?\n'))
             print('Please enter one of the following: ')
-            print('1. Name\n2. Birth\n3. Gender')
-            student_menu_option(id)
+            print('1. Name\n2. Birth\n3. Gender\n')
+            if not update_sel.isdigit():
+                raise ValueError
+            else:
+                if update_sel == 1:
+                    pass
+                if update_sel == 2:
+                    pass
+                if update_sel == 3:
+                    pass
+            #student_menu_option(id)
         elif choice == 7: # View Fees
             print()
             print('The fees for your current enrollment is: \n')
