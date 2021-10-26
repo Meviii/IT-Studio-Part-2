@@ -130,7 +130,17 @@ class Program:
                 programs_lst.append(lines[0])
         f.close()
         return programs_lst
-
+        
+    def open_program_by_id(pro_id):
+        with open('data/programs.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                if str(lines[0]) == str(pro_id):
+                    return True
+                else:
+                    continue
+            f.close()
+            return False
 
 # ProgB1 = Course('COSC2801','Programming Bootcamp 1','12','NA','S1 & S2','BP0924', 'Core')
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')

@@ -333,36 +333,35 @@ class Student(User):
         os.rename('data/students_temp.csv', 'data/students.csv')
 
     def remove_stu_program(id): # Removed enrolled courses and study plan, changed program to 'NA'
-
-            with open('data/students.csv', 'r+') as f:
-                reader = csv.reader(f)
-                final = ''
-                student = []
-                for lines in reader:
-                    if lines[0] == id:
-                        student = [i.strip() for i in lines]
-                        if not lines[4] == 'NA':
-                            program = 'NA'
-                        else:
-                            print('You are not a part of any program')
-                            return False
-                print('You have been removed from your program.')
-                final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program)+',"'+ str(student[5]) +'",' + '"[]"'+','+ '"[]"'+ ','+str(student[8]))
-                f.close()
-
-            with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
-                reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
-                writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
-                for lines in reader:
-                    if lines[0] == id:
-                        writer.writerow(final.split(','))
-                        break
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            final = ''
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+                    if not lines[4] == 'NA':
+                        program = 'NA'
                     else:
-                        writer.writerow(lines)
-                writer.writerows(reader)
+                        print('You are not a part of any program')
+                        return False
+            print('You have been removed from your program.')
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program)+',"'+ str(student[5]) +'",' + '"[]"'+','+ '"[]"'+ ','+str(student[8]))
+            f.close()
 
-            os.remove('data/students.csv')
-            os.rename('data/students_temp.csv', 'data/students.csv')
+        with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/students.csv')
+        os.rename('data/students_temp.csv', 'data/students.csv')
     
     def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
         with open('data/courses.csv', 'r') as cf:
@@ -499,6 +498,59 @@ class Student(User):
 
             gpa = round((sum((gpv)) / (len(gpv))), 2)
             return gpa
+
+    def drop_stu_enrolment(id):
+
+        with open('data/students.csv', 'r+') as f:
+                reader = csv.reader(f)
+                final = ''
+                student = []
+                for lines in reader:
+                    if lines[0] == id:
+                        student = [i.strip() for i in lines]
+                final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"[]"'+',"'+ str(student[7]) +'",'+str(student[8]))
+                f.close()
+
+        with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/students.csv')
+        os.rename('data/students_temp.csv', 'data/students.csv')
+
+    def all_students():
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            students = []
+            for lines in reader:
+                students.append(lines)
+        f.close
+        return students
+
+    def stu_failed_couses(id):
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+            curr_courses = []
+            stu_history=[]
+            for i in student:
+                stu_history = ast.literal_eval(student[5])
+            for i in stu_history:
+                if i[1] < 50:
+                    curr_courses.append(i[0])
+
+            return curr_courses
+
 class Admin(User):
     def __init__(self, user_id, user_name, user_birth, user_gender, adm_role = 'Admin'):
         User.__init__(self, user_id, user_name, user_birth, user_gender)
@@ -547,3 +599,73 @@ class Admin(User):
         admin = Admin(Admin.admin_info_list(id)[0], Admin.admin_info_list(id)[1], Admin.admin_info_list(id)[2],
                 Admin.admin_info_list(id)[3])
         return admin
+
+    def absence_accept(id):
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            final = ''
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"'+ ','+f'Accepted: {student[8]}')
+            f.close()
+
+        with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/students.csv')
+        os.rename('data/students_temp.csv', 'data/students.csv')
+    
+    def absence_deny(id):
+
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            final = ''
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"'+ ','+f'NA')
+            f.close()
+
+        with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/students.csv')
+        os.rename('data/students_temp.csv', 'data/students.csv')
+
+    def achievement_by_course(course):
+        with open('data/students.csv', 'r') as stuf:
+            reader = csv.reader(stuf)
+            student=[]
+            stu_details = []
+            for lines in reader:
+                student.append(lines)
+
+            stu_history=[]
+            for i in student:
+                stu_history.append(ast.literal_eval(i[5]))
+                stu_details.append(i[0])
+
+            print(f'For course, {course}: ')
+            for i in stu_history:
+                for tup in i:
+                    if tup[0] == course:
+                        print(f'{tup[0]}, {tup[1]}')
