@@ -1,8 +1,7 @@
 import csv
 import ast
 import os
-from main_func import add_student_course
-from main_func import remove_course
+import main_func
 
 class UserInputError(Exception):
     def __init__(self, msg):
@@ -194,11 +193,124 @@ class Semester:
         remove_course(student_id, crs_code)
         print('Student ' + student_id + 'has been removed from ' + crs_code + '.')
 
-    def __str__(self):
-        # formatted_str = "Name: " + self.name + "\n"
-        # if not self.mobile == '':
-        #     formatted_str += "Mobile: " + self.mobile + "\n"
-        # if not self.landline == '':
-        #     formatted_str += "Landline: " + self.landline + "\n"
-        # return formatted_str
-        return None
+    def sem_add_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+
+        with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
+            reader1 = csv.reader(stuf)
+            for lines in reader1:
+                if lines[0] == id:
+                    stu_program = lines[4]
+                    break
+
+            reader = csv.reader(f)
+            final = ''
+            semester = []
+            # read courses where stu_course == course, if course code in sem courses[1], stu_count in sem + 1
+            for lines in reader:
+                if str(lines[1]) == str(semester_code):
+                    semester = [i.strip() for i in lines]
+                    if lines[0] == stu_program:
+                        if stu_course in semester[2]:
+                            break
+                        else:
+                            print('Not in any semester')
+                            return False
+                    else:
+                        print('Program does not exist')
+                        return False
+            #SEM12021,['COS2801'],0,1000
+            new_count = int(semester[3]) + 1
+            final = str(semester[0]+','+semester[1] +','+ '"'+ semester[2]+'",'+ str(new_count)+ ','+ semester[4])
+            f.close()
+
+        with open('data/semesters.csv', 'r') as inf, open('data/semesters_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[1] == semester_code:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/semesters.csv')
+        os.rename('data/semesters_temp.csv', 'data/semesters.csv')
+
+    def sem_remove_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+
+        with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
+            reader1 = csv.reader(stuf)
+            for lines in reader1:
+                if lines[0] == id:
+                    stu_program = lines[4]
+                    break
+
+            reader = csv.reader(f)
+            final = ''
+            semester = []
+            # read courses where stu_course == course, if course code in sem courses[1], stu_count in sem + 1
+            for lines in reader:
+                if str(lines[1]) == str(semester_code):
+                    semester = [i.strip() for i in lines]
+                    if lines[0] == stu_program:
+                        if stu_course in semester[2]:
+                            break
+                        else:
+                            print('Not in any semester')
+                            return False
+                    else:
+                        print('Program does not exist')
+                        return False
+            #SEM12021,['COS2801'],0,1000
+            new_count = int(semester[3]) - 1
+            final = str(semester[0]+','+semester[1] +','+ '"'+ semester[2]+'",'+ str(new_count)+ ','+ semester[4])
+            f.close()
+
+        with open('data/semesters.csv', 'r') as inf, open('data/semesters_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[1] == semester_code:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/semesters.csv')
+        os.rename('data/semesters_temp.csv', 'data/semesters.csv')
+
+    def course_list_by_sem(semid):
+        with open('data/semesters.csv', 'r') as f:
+            reader = csv.reader(f)
+            sem_list = []
+            specific_sem_course_name = []
+            course_info = []
+            for lines in reader:
+                if lines[0] == semid:
+                    sem_list.append(lines)
+            for i in sem_list:
+                course_info = ast.literal_eval(i[1])
+            for i in course_info:
+                specific_sem_course_name.append(i[0])
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            course_name_lst = []
+            for lines in reader:
+                course_name_lst.append(lines[0])
+
+        sem_courses = set(course_name_lst).intersection(set(specific_sem_course_name))
+        return sem_courses
+
+    def open_semester_for_id(sem_id): # Returns if id exists in students.csv
+        with open('data/semesters.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                if str(lines[1]) == str(sem_id):
+                    return True
+                else:
+                    continue
+            f.close()
+            return False
+

@@ -1,5 +1,6 @@
 # TO DO: Confirm how to calculate Program Credit points
 
+import csv
 from Course import Course
 
 class UserInputError(Exception):
@@ -121,18 +122,28 @@ class Program:
             formatted_str += "Elective Courses:" + str(self.get_courses_elect()) + "\n" 
         return formatted_str
 
-ProgB1 = Course('COSC2801','Programming Bootcamp 1','12','NA','S1 & S2','BP0924', 'Core')
-It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
-Math2411 = Course('MATH2411','Mathematics for Computing 1','12','NA','S1 & S2','BP0924','CORE')
-Studio1 = Course('COSC2803','Programming Studio 1','24','NA','S1','BP0924', 'CORE')
-Graphics = Course('COSC1187','Interactive 3D Graphics and Animation','12','NA','S1','BP0924', 'ELECTIVE')
+    def program_Id_list(): # Returns only course codes from all courses in courses.csv
+        with open('data/programs.csv', 'r') as f:
+            reader = csv.reader(f)
+            programs_lst = []
+            for lines in reader:
+                programs_lst.append(lines[0])
+        f.close()
+        return programs_lst
 
-BA_CS = Program('BP094', 'Bachelor of Computer Science')
-BA_CS.add_courses(ProgB1)
-BA_CS.add_courses(It_Studio2)
-BA_CS.add_courses(Math2411)
-BA_CS.add_courses(Studio1)
-BA_CS.add_courses(Graphics)
+
+# ProgB1 = Course('COSC2801','Programming Bootcamp 1','12','NA','S1 & S2','BP0924', 'Core')
+# It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
+# Math2411 = Course('MATH2411','Mathematics for Computing 1','12','NA','S1 & S2','BP0924','CORE')
+# Studio1 = Course('COSC2803','Programming Studio 1','24','NA','S1','BP0924', 'CORE')
+# Graphics = Course('COSC1187','Interactive 3D Graphics and Animation','12','NA','S1','BP0924', 'ELECTIVE')
+
+# BA_CS = Program('BP094', 'Bachelor of Computer Science')
+# BA_CS.add_courses(ProgB1)
+# BA_CS.add_courses(It_Studio2)
+# BA_CS.add_courses(Math2411)
+# BA_CS.add_courses(Studio1)
+# BA_CS.add_courses(Graphics)
 
 # print(BA_CS.get_courses())
 #print(BA_CS)

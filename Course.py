@@ -5,6 +5,11 @@
 # TO DO - want to fix printing prerequisite courses not in list
 # TO CONFIRM: set_code - Whether the system will check for 4 char then 4 ints
 
+import ast
+import csv
+import os
+import main_func
+
 class UserInputError(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -153,6 +158,169 @@ class Course:
         if not self.avail == '':
             formatted_str += "Availability: " + self.avail + "\n"
         return formatted_str
+    
+    def filtered_courses_list(id): # Returns courses which are needed to be completed by the student
+        # need to return sorted course list of all courses of a program which are not completed by student
+        with open('data/courses.csv', 'r') as courf, open('data/programs.csv', 'r') as progf, open('data/students.csv', 'r') as stuf:
+            stu_reader = csv.reader(stuf)
+            stu_acad_history = []
+            stu_program = ''
+            stu_passed_courses = []
+            for lines in stu_reader:
+                if lines[0] == id:
+                    stu_program = lines[4]
+                    stu_acad_history = ast.literal_eval(lines[5])
+            
+            # need to remove the courses which student passed in acad history from avail courses
+            for i in stu_acad_history:
+                if i[1] >=50:
+                    stu_passed_courses.append(i[0]) 
+            
+            prog_reader = csv.reader(progf, skipinitialspace=True)
+            core_prog_courses = []
+            elec_prog_courses = []
+            merged_courses = []
+            for lines in prog_reader:
+                if lines[0] == stu_program:
+                    core_prog_courses = ast.literal_eval(lines[3])
+                    elec_prog_courses = ast.literal_eval(lines[4])
+            merged_courses = core_prog_courses
+            merged_courses.extend(elec_prog_courses)
+
+            final_list = [x for x in merged_courses if x not in stu_passed_courses]
+
+            cour_reader = csv.reader(courf)
+            course_filtered_info = []
+            for i in cour_reader:
+                course_filtered_info = [x for x in cour_reader if x[0] in final_list]
+        return course_filtered_info
+
+    def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
+        with open('data/courses.csv', 'r') as cf:
+            cfreader = csv.reader(cf)
+            courses = []
+            course_prereqs = []
+            for lines in cfreader:
+                if lines[0] == course:
+                    courses.append(lines[3]) #appends prereqs of course 
+            for i in courses:
+                course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+            
+            if courses is None:
+                print('empty')
+                return True
+
+
+        with open('data/students.csv', 'r') as sf:
+            sfreader = csv.reader(sf)
+            stu_history = []
+            temp = []
+
+            for lines in sfreader:
+                if str(lines[0]) == str(id):
+                    temp.append(lines[5])
+                    
+            for i in temp:
+                stu_history = ast.literal_eval(i) # makes student academic history a list
+            
+            course_name_history = []
+            for i in stu_history:
+                course_name_history.append(i[0]) # makes a list for only names of courses in academic history
+
+            z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
+            
+            if z is None:
+                return False
+            elif not z is None:
+                if len(course_prereqs) == len(z):
+                    for i in stu_history:
+                        for x in course_prereqs:
+                            if str(i[0]) == str(x):
+                                if i[1] >= 50:
+                                    return True
+                                else:
+                                    return False
+                else:
+                    return False
+
+    def check_prereq_empty(course): # Returns True if prereq list is empty meaning no prereq
+        with open('data/courses.csv', 'r') as cf:
+            cfreader = csv.reader(cf)
+            courses = []
+            course_prereqs = []
+            for lines in cfreader:
+                if lines[0] == course:
+                    courses.append(lines[3]) #appends prereqs of course 
+            for i in courses:
+                if i == '[]':
+                    return True
+                else:
+                    return False
+
+    def add_course(code, title, credits, sem, fee, prereq=[]): # Adds a course to courses.csv
+        final = str(str(code) +','+ str(title) +','+ str(credits) +',' + '"'+str(prereq)+'"'+','+ str(sem) +','+ str(fee))
+            
+        with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+
+            writer.writerow(final.split(','))
+            writer.writerows(reader)
+
+        os.remove('data/courses.csv')
+        os.rename('data/courses_temp.csv', 'data/courses.csv')
+
+    def add_prereq(code, prereq): # Adds a prereq for a course in courses.csv
+        with open('data/courses.csv', 'r+') as f:
+            reader = csv.reader(f)
+            final = ''
+            prereq_courses = []
+            for lines in reader:
+                if str(lines[0]) == str(code):
+                    courses = [i.strip() for i in lines]
+                    if not prereq in lines[3]:
+                        prereq_courses = ast.literal_eval(lines[3])
+                        prereq_courses.append(str(prereq))
+                    else:
+                        print('Already a prereq')
+                        #return admin_menu(id)
+                        return False
+                        
+            final = str(str(courses[0]) +','+ str(courses[1]) +','+ str(courses[2]) +',' + '"'+str(prereq_courses)+'"'+','+ str(courses[4]) +','+ str(courses[5]))
+            f.close()
+
+        with open('data/courses.csv', 'r') as inf, open('data/courses_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == str(code):
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/courses.csv')
+        os.rename('data/courses_temp.csv', 'data/courses.csv')
+
+    def courses_name_list(): # Returns only course codes from all courses in courses.csv
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            course_name_lst = []
+            for lines in reader:
+                course_name_lst.append(lines[0])
+        f.close()
+        return course_name_lst
+
+    def courses_list(): # Returns all info from each line in courses.csv (Sorted)
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            course_lst = []
+            for lines in reader:
+                course_lst.append(lines)
+        f.close()
+        return sorted(course_lst)
+
 
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
 # print(It_Studio2)
