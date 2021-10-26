@@ -135,11 +135,11 @@ def student_menu(id): # Student menu with choices and inner functions
                             curr_enrolment = s.get_curr_enrol()
                             for x, value in enumerate(sorted(Course.courses_list()),1):
                                 if int(selection) == int(x):
-                                    if Course.check_prereqs(id, value[0]) == True or Course.check_prereq_empty(value[0]) == True:
+                                    if Student.check_prereqs(id, value[0]) == True or Course.check_prereq_empty(value[0]) == True:
                                         Student.remove_from_plan(id, value[0])
                                         Student.add_student_course(id, value[0], year_sem)
                                         return student_menu_option(id)
-                                    elif Course.check_prereqs(id, value[0]) == False:
+                                    elif Student.check_prereqs(id, value[0]) == False:
                                         print('You do not meet the requirments\n')
                                         return student_menu(id)
                                     else:
@@ -245,11 +245,23 @@ def student_menu(id): # Student menu with choices and inner functions
             if not s.get_stu_absence() == 'NA':
                 print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence}')
             elif s.get_stu_absence() == 'NA':
-                type_absence = str(input('Please select how long you would like to '))
+                type_absence = str(input('Please select how long you would like to leave for (semester or academic year): '))
+                print(f'Your application for leave has been processed. Pending for: {type_absence}')
+                Student.apply_for_absence(id, type_absence)
         elif choice == 10: # View course progress(Currently enrolled and academic history which are passed.)
-            pass
+            print('Current successfully completed courses: \n')
+            for i in Student.course_progress_stu(id):
+                print(i)
         elif choice == 11: # Calculate current GPA
-            pass
+            if s.get_acad_history() is None:
+                print('You do not have any previous course history')
+                return student_menu(id)
+            else:
+                print(f'Your current gpa is {Student.curr_gpa_stu(id)}\n')
+                history = ast.literal_eval(s.get_acad_history())
+                for i in history:
+                    print(f'Course: {i[0]} Mark: {i[1]}')
+                student_menu_option(id)
         elif choice == 12: # Cancel Program
             if student_program(id) == False:
                 print('You are currently not a student of any program.')

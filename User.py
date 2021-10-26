@@ -363,6 +363,54 @@ class Student(User):
 
             os.remove('data/students.csv')
             os.rename('data/students_temp.csv', 'data/students.csv')
+    
+    def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
+        with open('data/courses.csv', 'r') as cf:
+            cfreader = csv.reader(cf)
+            courses = []
+            course_prereqs = []
+            for lines in cfreader:
+                if lines[0] == course:
+                    courses.append(lines[3]) #appends prereqs of course 
+            for i in courses:
+                course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
+            
+            if courses is None:
+                print('empty')
+                return True
+
+
+        with open('data/students.csv', 'r') as sf:
+            sfreader = csv.reader(sf)
+            stu_history = []
+            temp = []
+
+            for lines in sfreader:
+                if str(lines[0]) == str(id):
+                    temp.append(lines[5])
+                    
+            for i in temp:
+                stu_history = ast.literal_eval(i) # makes student academic history a list
+            
+            course_name_history = []
+            for i in stu_history:
+                course_name_history.append(i[0]) # makes a list for only names of courses in academic history
+
+            z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
+            
+            if z is None:
+                return False
+            elif not z is None:
+                if len(course_prereqs) == len(z):
+                    for i in stu_history:
+                        for x in course_prereqs:
+                            if str(i[0]) == str(x):
+                                if i[1] >= 50:
+                                    return True
+                                else:
+                                    return False
+                else:
+                    return False
 
     def check_grad_eligility(id): # Returns True if study plan is empty, else False.
         with open('data/students.csv', 'r+') as f:
@@ -383,7 +431,7 @@ class Student(User):
             for lines in reader:
                 if lines[0] == id:
                     student = [i.strip() for i in lines]
-            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"'+ ','+str(f'PENDING:{type}'))
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"'+ ','+f'PENDING:{type}')
             f.close()
 
         with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
@@ -399,7 +447,58 @@ class Student(User):
 
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
-        
+
+    def course_progress_stu(id):
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+            curr_courses = []
+            stu_history=[]
+            for i in student:
+                stu_history = ast.literal_eval(student[5])
+                current_course = ast.literal_eval(student[6])
+
+            for i in stu_history:
+                if i[1] >= 50:
+                    curr_courses.append(i[0])
+            
+            curr_courses.extend(current_course)
+            return curr_courses
+
+    def curr_gpa_stu(id):
+        with open('data/students.csv', 'r+') as f:
+            reader = csv.reader(f)
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+
+            marks = []
+            stu_history=[]
+            for i in student:
+                stu_history = ast.literal_eval(student[5])
+            courses = []
+            for i in stu_history:
+                courses.append(i[0])
+                marks.append(i[1])
+            gpv = []
+            for i in marks:
+                if i >= 80:
+                    gpv.append(4)
+                elif 70 <= i <= 79:
+                    gpv.append(3)
+                elif 60 <= i <= 69:
+                    gpv.append(2)
+                elif 50 <= i <= 59:
+                    gpv.append(1)
+                else:
+                    gpv.append(0)
+
+            gpa = round((sum((gpv)) / (len(gpv))), 2)
+            return gpa
 class Admin(User):
     def __init__(self, user_id, user_name, user_birth, user_gender, adm_role = 'Admin'):
         User.__init__(self, user_id, user_name, user_birth, user_gender)

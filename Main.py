@@ -38,5 +38,5 @@ if __name__ == '__main__':
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    #Student.check_grad_eligility(id='s123')
+    #Student.curr_gpa_stu(id='s123')
     main_func.login()

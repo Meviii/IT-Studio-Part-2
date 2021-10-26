@@ -195,54 +195,6 @@ class Course:
                 course_filtered_info = [x for x in cour_reader if x[0] in final_list]
         return course_filtered_info
 
-    def check_prereqs(id, course): # Checks if prereq is completed(passed and in acad history) by student, and returns True, else False 
-        with open('data/courses.csv', 'r') as cf:
-            cfreader = csv.reader(cf)
-            courses = []
-            course_prereqs = []
-            for lines in cfreader:
-                if lines[0] == course:
-                    courses.append(lines[3]) #appends prereqs of course 
-            for i in courses:
-                course_prereqs = ast.literal_eval(i) #makes prereqs of course a list
-            
-            if courses is None:
-                print('empty')
-                return True
-
-
-        with open('data/students.csv', 'r') as sf:
-            sfreader = csv.reader(sf)
-            stu_history = []
-            temp = []
-
-            for lines in sfreader:
-                if str(lines[0]) == str(id):
-                    temp.append(lines[5])
-                    
-            for i in temp:
-                stu_history = ast.literal_eval(i) # makes student academic history a list
-            
-            course_name_history = []
-            for i in stu_history:
-                course_name_history.append(i[0]) # makes a list for only names of courses in academic history
-
-            z = set(course_name_history).intersection(set(course_prereqs)) # Set of intersection of course_prereqs and course_name
-            
-            if z is None:
-                return False
-            elif not z is None:
-                if len(course_prereqs) == len(z):
-                    for i in stu_history:
-                        for x in course_prereqs:
-                            if str(i[0]) == str(x):
-                                if i[1] >= 50:
-                                    return True
-                                else:
-                                    return False
-                else:
-                    return False
-
     def check_prereq_empty(course): # Returns True if prereq list is empty meaning no prereq
         with open('data/courses.csv', 'r') as cf:
             cfreader = csv.reader(cf)
