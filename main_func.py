@@ -15,7 +15,7 @@ def login(): # Login function for Admin or Student login BY ID
             print('==================================')
             if Admin.open_admins_for_id(id) == True:
                 admin = Admin.admin_object(id)
-                print(f'Welcome {admin.name}\n')
+                print(f'     *Welcome {admin.name}*      ')
                 admin_menu(id)
             else:
                 print('Incorrect Admin ID')
@@ -27,7 +27,7 @@ def login(): # Login function for Admin or Student login BY ID
             if Student.open_students_for_id(id) == True:
                 student = Student.student_object(id)
 
-                print(f'        Welcome {student.name} \n')
+                print(f'     *Welcome {student.name}*      ')
                 return student_menu(id)
             else:
                 print('Incorrect Student ID')
@@ -44,6 +44,13 @@ def student_menu_option(id): # Allows student to return to student_menu() withou
     else:
         return False
 
+def admin_menu_option(id): # Allows admin to return to student_menu() without ending program
+    return_main = str(input('Return to main menu? Y/N \n'))
+    if return_main.lower() == 'y':
+        return admin_menu(id)
+    else:
+        return False
+
 def student_program(id): # Returns True if student is in program, else, False
     with open('data/students.csv', 'r') as f:
             reader = csv.reader(f)
@@ -55,10 +62,9 @@ def student_program(id): # Returns True if student is in program, else, False
 
 def student_menu(id): # Student menu with choices and inner functions
 
-    print('     *STUDENT MENU*      ')
     print()
     print('1. View your Academic History')
-    print('2. View available courses') # should display courses which are not completed
+    print('2. View available courses') 
     print('3. View and enrol in an offering')
     print('4. Un-enrol from an offering')
     print('5. Get all information')
@@ -284,23 +290,25 @@ def student_menu(id): # Student menu with choices and inner functions
 
 def admin_menu(id): # Admin menu with choices and inner functions
 
-    print('     *ADMIN MENU*      ')
+    print()
     print('1. Add/Remove/Amend Student')
     print('2. Add/Remove/Amend Course')
     print('3. Add/Remove/Amend Program')
     print('4. Add/Remove/Amend Semester')
     print('5. View student information')
-    print('6. Amend Study plan for student')
+    print('6. Amend study plan for student')
     print('7. Validate student study plan')
-    print('8. Generate study plan for student')
+    print('8. Generate study plan for a student')
     print('9. View all students achievements of course')
+    print('10. Student leave of absence')
+    print('11. Set student program.')
     print('0. Exit')
     print('=======================')
     
     try:
         choice = int(input('Please pick by index: '))
-        unknown_choice = print("Please type 'Add', 'Remove' or 'Ammend' then hit Enter")
-        if 0 > choice > 5:
+        #unknown_choice = print("Please type 'Add', 'Remove' or 'Ammend' then hit Enter")
+        if 0 > choice > 11:
             raise ValueError
         elif choice == 1:
             print(choice)
@@ -848,8 +856,179 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 unknown_choice
     
         elif choice == 5:
-            s = student_object(id)
-            print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
+            student_id = str(input('Please enter a student id: '))
+            if Student.open_students_for_id(student_id) == True:
+                s = Student.student_object(student_id)
+                print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}\n')
+                print(s.get_acad_history())
+                print(s.get_study_plan())
+                print(s.get_stu_absence())
+        elif choice == 6: # Add or Remove from a student's study plan
+            print()
+            print('You can exit any time by entering 0.\n')
+            print('1. Add course to plan\n2. Remove course from plan\n')
+            plan_choice = int(input('Please enter the index you would like to amend for the student: \n'))
+            if plan_choice == 0:
+                return admin_menu(id)
+            if plan_choice == 1:
+                # should ignore the check if student passed the subject already as it should be able to be altered
+                print('Note: Adding a course to study plan which is enrolled by the student will drop that subject.\n')
+                student_choice = str(input('Please enter the student id you would like to amend for: '))
+                if str(student_choice) == str(0):
+                    return admin_menu(id)
+                if Student.open_students_for_id(student_choice) == True:
+                    course_choice = str(input('Please enter the course code of the course you would like to add: '))
+                    if str(course_choice) == str(0):
+                        return admin_menu(id)
+                    if Course.open_for_courseid(course_choice) == True:
+                        study_plan = ast.literal_eval(Student.student_info_list(student_choice)[7])
+                        stu_enrolment = ast.literal_eval(Student.student_info_list(student_choice)[6])
+                        if not course_choice in study_plan:
+                            if course_choice in stu_enrolment:
+                                print('Course added to plan and removed from enrollment.')
+                                Student.add_to_plan(student_choice, course_choice)
+                                Student.remove_course(student_choice, course_choice)
+                                return admin_menu_option(id)
+                            else:
+                                print('Course added to plan')
+                                Student.add_to_plan(student_choice, course_choice)
+                                return admin_menu_option(id)
+                        else:
+                            print('Course already in study plan')
+                            return admin_menu(id)
+                    else:
+                        print('Course does not exist')
+                        return admin_menu(id)
+                else:
+                    print('Student does not exist')
+                    return admin_menu(id)
+            elif plan_choice == 2:
+                print('Note: Removing a course to study plan which is enrolled by the student will drop that subject.\n')
+                student_choice = str(input('Please enter the student id you would like to amend for: '))
+                if int(student_choice) == 0:
+                    return admin_menu(id)
+                if Student.open_students_for_id(student_choice) == True:
+                    course_choice = str(input('Please enter the course code of the course you would like to remove: '))
+                    if int(course_choice) == 0:
+                        return admin_menu(id)
+                    if Course.open_for_courseid(course_choice) == True:
+                        study_plan = ast.literal_eval(Student.student_info_list(student_choice)[7])
+                        stu_enrolment = ast.literal_eval(Student.student_info_list(student_choice)[6])
+                        if course_choice in study_plan:
+                            if course_choice in stu_enrolment:
+                                print('Course removed from plan and enrollment')
+                                Student.remove_from_plan(student_choice, course_choice)
+                                Student.remove_course(student_choice, course_choice)
+                                return admin_menu_option(id)
+                            else:
+                                print('Course removed from plan')
+                                Student.remove_from_plan(student_choice, course_choice)
+                                return admin_menu_option(id)
+                        else:
+                            print('Course already in student plan.')
+                            return admin_menu(id)
+                    else:
+                        print('Course does not exist')
+                        return admin_menu(id)
+                else:
+                    print('Student does not exist')
+                    return admin_menu(id)
+            else:
+                raise ValueError
+        elif choice == 7: # Check if study plan is correct for student. Checks if student enroled into >5 courses
+            print('You can exit any time by entering 0.\n')
+            student_id = str(input('Please enter the student id you would like to validate: '))
+            if str(student_id) == str(0):
+                return admin_menu(id)
+            else:
+                if Student.open_students_for_id(student_id) == True:
+                    stu_cur_enrolment = ast.literal_eval(Student.student_info_list(student_id)[6])
+                    if len(stu_cur_enrolment) >4:
+                        val_choice = int(input('Please pick an index of what you would like to do: '))
+                        print('1. Drop all subjects of student\n0. Exit')
+                        print('')
+                        if val_choice == 0:
+                            return admin_menu(id)
+                        elif val_choice == 1:
+                            print('All enrollments have been dropped.')
+                            Student.drop_stu_enrolment(student_id)
+                            return admin_menu_option(id)
+                        else:
+                            print('Invalid choice')
+                            return admin_menu(id)
+                    else:
+                        print('Student enrollment is correct.')
+                        return admin_menu_option(id)
+        elif choice == 8: # Remove courses from study plan if passed in academic history else if failed, re add
+            stu_id = str(input('Please enter the student id of the student: '))
+            if Student.open_students_for_id(stu_id) == True:
+                study_plan = ast.literal_eval(Student.student_info_list(stu_id)[7])
+                print()
+                for i in Student.stu_failed_couses(stu_id):
+                    if i in study_plan:
+                        print('Already in study plan.')
+                        break
+                    else:
+                        print(f'{i} added to study plan.')
+                        Student.add_to_plan(stu_id, i)
+                study_plan_new = ast.literal_eval(Student.student_info_list(stu_id)[7])
+                print()
+                print('Student needs to complete the following to graduate: ')
+                for i in study_plan_new:
+                    print(i)
+                return admin_menu_option(id)
+            else:
+                print('Invalid student')
+                return admin_menu(id)
+        elif choice == 9: # Student academic history of a course for all students who completed a specific course
+            pass
+        elif choice == 10: # Leave of absence of student
+            print('Current students who applied for a leave of absence: \n')
+            #print a for loop of all students who do not have NA in stu[8]
+            for i in Student.all_students():
+                if not i[8] == 'NA':
+                    print(f'Stu ID: {i[0]}, Name: {i[1]}, Reason: {i[8]}')
+
+            print()
+            stu_id = str(input('Please enter the student id of which you want to validate leave of absence.'))
+
+            if Student.open_students_for_id(stu_id) == True:
+                option = str(input('Would you like to accept or deny the leave of absence? accept/deny '))
+                if option.lower() == 'accept':
+                    print('Student application accepted.')
+                    Admin.absence_accept(stu_id)
+                    return admin_menu_option(id)
+                elif option.lower() == 'deny':
+                    print('Student application denied.')
+                    Admin.absence_deny(stu_id)
+                    return admin_menu_option(id)
+                else:
+                    print('Invalid option')
+                    return admin_menu(id)
+            else:
+                print('Invalid student id')
+                return admin_menu(id)
+        elif choice == 11: # Set a students program
+            print('You can exit anytim by entering 0')
+            print()
+            stu_id_prog = str(input('Please enter the id of the student: '))
+            if stu_id_prog == str(0):
+                return admin_menu(id)
+            if Student.open_students_for_id(stu_id_prog) == True:
+                program_set = str(input('Please enter the program code to set to: '))
+                if program_set == str(0):
+                    return admin_menu(id)
+                if Program.open_program_by_id(program_set) == True:
+                    #check if student already has program, ask if override which resets study plan.
+                    #add to student program
+                    #give study plan of program to student
+                    pass
+                else:
+                    print('Invalid program')
+                    return admin_menu(id)
+            else:
+                print('Invalid student')
+                return admin_menu(id)
         else:
             return -1
     except ValueError:

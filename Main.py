@@ -7,6 +7,7 @@ from Program import *
 from Semester import *
 if __name__ == '__main__':
 
+
     def remove_program(id='s123'): # Removed enrolled courses and study plan, changed program to 'NA'
 
         with open('data/students.csv', 'r+') as f:
@@ -38,5 +39,6 @@ if __name__ == '__main__':
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    #Student.curr_gpa_stu(id='s123')
-    main_func.login()
+    #Student.stu_failed_couses(id='s123')
+    Admin.achievement_by_course(course='COSC2703')
+    #main_func.login()

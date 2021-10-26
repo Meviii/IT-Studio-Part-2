@@ -273,6 +273,16 @@ class Course:
         f.close()
         return sorted(course_lst)
 
+    def open_for_courseid(course):
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                if str(lines[0]) == str(course):
+                    return True
+                else:
+                    continue
+            f.close()
+            return False
 
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
 # print(It_Studio2)
