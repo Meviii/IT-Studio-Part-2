@@ -317,9 +317,15 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif student_choice == 1:
                 with open('data/students.csv', 'a') as f, open('data/programs.csv', 'r') as rf:
                     new_studentID = input("Enter Student ID: ")
-                    if new_studentID in Student.studentId_list():
-                        print('Student ID already exists', end = ' ')
-                        new_studentID
+                    while new_studentID in Student.studentId_list():
+                        stuExists = int(input('Student ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if stuExists == 0:
+                            return admin_menu(id)
+                        elif stuExists == 1:
+                            new_studentID = input("Enter Student ID: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+                       
                     new_studentName = input("Enter Student Name: ")
                     new_studentDOB = input("Enter Student Date of Birth: ")
                     new_studentGender = input("Enter Student Gender: ")
@@ -567,7 +573,25 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif course_choice == 1:
                 with open('data/courses.csv', 'a') as f:
                     new_courseID = input("Enter New Course ID: ")
+                    while new_courseID in Course.coursesId_list(): #makes sure that new course ID does not match with a course Id that already exists.
+                        courseExists = int(input('Course ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if courseExists == 0:
+                            return admin_menu(id)
+                        elif courseExists == 1:
+                            new_courseID = input("Enter New Course ID: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+
                     new_courseName = input("Enter New Course Name: ")
+                    while new_courseName.lower() in Course.courses_name_list(): #makes sure that new course ID does not match with a course Id that already exists.
+                        courseNameExists = int(input('Course Name already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if courseNameExists == 0:
+                            return admin_menu(id)
+                        elif courseNameExists == 1:
+                            new_courseID = input("Enter New Course Name: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+
                     new_CourseCred = input("Enter Course Credit: ")
                     new_CoursePrereq = input("Enter Course Prerequisites: ")
                     new_CourseAvail = input("Enter Course Availability: ")
@@ -746,7 +770,25 @@ def admin_menu(id): # Admin menu with choices and inner functions
             if program_choice == 1:
                 with open('data/programs.csv', 'a') as f:
                     new_progID = input("Enter New Program ID: ")
+                    while new_progID in Program.programId_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                        progIdExists = int(input('Program ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if progIdExists == 0:
+                            return admin_menu(id)
+                        elif progIdExists == 1:
+                            new_progID = input("Enter New Program ID: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+
                     new_progName = input("Enter New Program Name: ")
+                    while new_progName.lower() in Program.programId_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                        progNameExists = int(input('Program Name already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if progNameExists == 0:
+                            return admin_menu(id)
+                        elif progNameExists == 1:
+                            new_progName = input("Enter New Program Name: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+
                     new_progCred = input("Enter Program Credit Points: ")
                     new_progCourse = input("Enter Program Courses: ")
                     writer = csv.writer(f)
@@ -905,6 +947,15 @@ def admin_menu(id): # Admin menu with choices and inner functions
             if semester_choice == 1:
                 with open('data/semesters.csv', 'a') as f:
                     new_semID = input("Enter New Semester ID: ")
+                    while new_semID in Semester.semesterID_list:
+                        semIdExists = int(input('Semester ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
+                        if semIdExists == 0:
+                            return admin_menu(id)
+                        elif semIdExists == 1:
+                            new_semID = input("Enter New Semester ID: ")
+                        else:
+                            input('Please enter a Valid Index (0-1)')
+
                     new_semOffer = input("Enter New Semester Offers: ")
                     new_semMaxStu = input("Enter Max Students for Semester: ")
                     new_semCurStu = input("Enter Current Enrolled Students for Semester: ")
@@ -1041,9 +1092,38 @@ def admin_menu(id): # Admin menu with choices and inner functions
             if Student.open_students_for_id(student_id) == True:
                 s = Student.student_object(student_id)
                 print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}\n')
-                print(s.get_acad_history())
-                print(s.get_study_plan())
-                print(s.get_stu_absence())
+                
+                print("Academic Hisory:")
+                with open("data/students.csv", 'r') as f:
+                    reader = csv.reader(f)
+                    for lines in reader:
+                        if lines[0] == student_id:
+                            AHlst = ast.literal_eval(lines[5])
+                    for i in AHlst:
+                        print("   - Course:",i[0], "Mark:",i[1] )
+                f.close()
+
+                print("\nCurrent Enrolments:")
+                with open("data/students.csv", 'r') as f:
+                    reader = csv.reader(f)
+                    for lines in reader:
+                        if lines[0] == student_id:
+                            CElst = ast.literal_eval(lines[6])
+                    for i in range(len(CElst)):
+                        print("   -",CElst[i])
+                f.close()
+
+                print("\nStudy Plan:")
+                with open("data/students.csv", 'r') as f:
+                    reader = csv.reader(f)
+                    for lines in reader:
+                        if lines[0] == student_id:
+                            SPlst = ast.literal_eval(lines[7])
+                    for i in range(len(SPlst)):
+                        print("   -",SPlst[i])
+                f.close()
+
+                print(f"\nAbsence: {s.get_stu_absence()}")
         elif choice == 6: # Add or Remove from a student's study plan
             print()
             print('You can exit any time by entering 0.\n')
