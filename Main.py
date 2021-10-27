@@ -9,4 +9,5 @@ if __name__ == '__main__':
 
     #Student.stu_failed_couses(id='s123')
     #Admin.achievement_by_course(course='MATH2411')
+    #print(Course.courses_name_list())
     main_func.login()

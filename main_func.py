@@ -32,7 +32,8 @@ def login(): # Login function for Admin or Student login BY ID
             else:
                 print('Incorrect Student ID')
         else:
-            raise ValueError
+            print('Invalid login type')
+            return login()
     except ValueError:
         print('Incorrect selection')
         return False
@@ -121,7 +122,7 @@ def student_menu(id): # Student menu with choices and inner functions
         elif choice == 3: # View current enrollments, add course
                 print('You are currently enrolled in: \n')
                 for i in Course.courses_list():
-                    if i[0] in s.get_curr_enrol():
+                    if i[0] in Student.student_info_list(id)[6]:
                         print(f'{i[0]}: {i[1]}')
                 print()
                 selection = str(input('Would you like to add a course? Y/N \n'))
@@ -1124,6 +1125,11 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 f.close()
 
                 print(f"\nAbsence: {s.get_stu_absence()}")
+                print()
+                return admin_menu_option(id)
+            else:
+                print('Invalid student id')
+                return admin_menu(id)
         elif choice == 6: # Add or Remove from a student's study plan
             print()
             print('You can exit any time by entering 0.\n')
