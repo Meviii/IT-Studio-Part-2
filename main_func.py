@@ -574,10 +574,13 @@ def admin_menu(id): # Admin menu with choices and inner functions
             raise ValueError
         elif choice == 1:
             print(choice)
-            student_choice = input("Would you like to Add, Remove or Ammend Student")
+            student_choice = input("Would you like to Add, Remove or Ammend Student?: ")
             if student_choice.lower() == "add":
                 with open('data/students.csv', 'a') as f:
                     new_studentID = input("Enter Student ID: ")
+                    if new_studentID in studentId_list():
+                        print('Student ID already exists', end = ' ')
+                        new_studentID
                     new_studentName = input("Enter Student Name: ")
                     new_studentDOB = input("Enter Student Date of Birth: ")
                     new_studentGender = input("Enter Student Gender: ")
@@ -620,9 +623,9 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
                     for lines in reader:
                         if ammend_student not in studentId_list(): #if trying to ammend a student that is not already in the file
-                            print("Please Enter a Valid Student ID: ")
+                            input("Please Enter a Valid Student ID: ")
                         else:
-                            ammend_choice = input("What would you like to change? (Student ID / Student Name / Student DOB / Student Gender / Student Program / Student History / Student Enrolled Course / Student Study Plan)")
+                            ammend_choice = input("What would you like to change? (Student ID / Student Name / Student DOB / Student Gender / Student Program / Student History / Student Enrolled Course / Student Study Plan) ")
                             if ammend_choice.lower() == "student id":
                                 upd_StudentID = input("What would you like to change this Student's Student ID to? ") 
                                 with open("data/students.csv", 'r') as f:
@@ -642,7 +645,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                                     os.remove('data/students.csv')
                                     os.rename('data/students_temp.csv', 'data/students.csv')
-
+                                
                             elif ammend_choice.lower() == "student name":
                                 upd_stuName = input("What would you like to change this Student's Name to? ") 
                                 with open("data/students.csv", 'r') as f:
@@ -784,7 +787,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                                     os.rename('data/students_temp.csv', 'data/students.csv')
 
                             else:
-                                print("Please Enter Valid Choice (Student ID / Student Name / Student DOB / Student Gender / Student Program / Student History / Student Enrolled Course / Student Study Plan)")
+                                input("Please Enter Valid Choice (Student ID / Student Name / Student DOB / Student Gender / Student Program / Student History / Student Enrolled Course / Student Study Plan)")
 
 
             else:
@@ -961,7 +964,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                                     os.rename('data/courses_temp.csv', 'data/courses.csv') 
                                     
                             else:
-                                print("Please Enter Valid Choice (Course Code / Course Name / Course Credit / Course Prerequisites / Course Availability / Course Fees)")
+                                input("Please Enter Valid Choice (Course Code / Course Name / Course Credit / Course Prerequisites / Course Availability / Course Fees)")
 
             else:
                 unknown_choice

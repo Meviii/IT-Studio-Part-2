@@ -274,3 +274,4 @@ if __name__ == '__main__':
 
     # s123 COSC2703 > 50, MATH2411 < 50, wants to enroll into COSC2801, should allow, else:
     # wants to enroll into COSC2803, with prereq MATH2411, shouldnt allow
+
