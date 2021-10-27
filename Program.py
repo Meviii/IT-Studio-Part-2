@@ -122,7 +122,7 @@ class Program:
             formatted_str += "Elective Courses:" + str(self.get_courses_elect()) + "\n" 
         return formatted_str
 
-    def program_Id_list(): # Returns only course codes from all courses in courses.csv
+    def programId_list(): # Returns only prgram id from all programs in programs.csv
         with open('data/programs.csv', 'r') as f:
             reader = csv.reader(f)
             programs_lst = []
@@ -130,7 +130,22 @@ class Program:
                 programs_lst.append(lines[0])
         f.close()
         return programs_lst
-        
+
+    def program_name_list(): # Returns only prgram name in lowercase (for case insensitive comparisons) from all programs in programs.csv
+        with open('data/programs.csv', 'r') as f:
+            reader = csv.reader(f)
+            programs_lst = []
+            for lines in reader:
+                programs_lst.append(lines[1].lower())
+        f.close()
+        return programs_lst
+    
+    def is_program_true(self):
+        if self.get_program() != '':
+            return True
+        else:
+            return False
+            
     def open_program_by_id(pro_id):
         with open('data/programs.csv', 'r') as f:
             reader = csv.reader(f)
