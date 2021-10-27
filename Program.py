@@ -130,6 +130,15 @@ class Program:
                 programs_lst.append(lines[0])
         f.close()
         return programs_lst
+
+    def program_name_list(): # Returns only prgram name in lowercase (for case insensitive comparisons) from all programs in programs.csv
+        with open('data/programs.csv', 'r') as f:
+            reader = csv.reader(f)
+            programs_lst = []
+            for lines in reader:
+                programs_lst.append(lines[1].lower())
+        f.close()
+        return programs_lst
     
     def is_program_true(self):
         if self.get_program() != '':

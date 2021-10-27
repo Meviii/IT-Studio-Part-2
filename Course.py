@@ -255,12 +255,21 @@ class Course:
         os.remove('data/courses.csv')
         os.rename('data/courses_temp.csv', 'data/courses.csv')
 
-    def courses_name_list(): # Returns only course codes from all courses in courses.csv
+    def coursesId_list(): # Returns only course codes from all courses in courses.csv
+        with open('data/courses.csv', 'r') as f:
+            reader = csv.reader(f)
+            coursesId_list = []
+            for lines in reader:
+                coursesId_list.append(lines[0])
+        f.close()
+        return coursesId_list
+
+    def courses_name_list(): # Returns only course names from all courses in courses.csv
         with open('data/courses.csv', 'r') as f:
             reader = csv.reader(f)
             course_name_lst = []
             for lines in reader:
-                course_name_lst.append(lines[0])
+                course_name_lst.append(lines[1].lower())
         f.close()
         return course_name_lst
 
