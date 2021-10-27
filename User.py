@@ -416,7 +416,7 @@ class Student(User):
                         return False
         f.close
 
-    def apply_for_absence(id, type):
+    def apply_for_absence(id, type): # Changes student[8] to PENDING application with set days
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             final = ''
@@ -441,7 +441,7 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def course_progress_stu(id):
+    def course_progress_stu(id): # Returns the course progress(passed courses in acad history and curr enrollments) in a list
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             student = []
@@ -461,7 +461,7 @@ class Student(User):
             curr_courses.extend(current_course)
             return curr_courses
 
-    def curr_gpa_stu(id):
+    def curr_gpa_stu(id): # Returns gpa grade of student calculated by courses in academic history
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             student = []
@@ -493,7 +493,7 @@ class Student(User):
             gpa = round((sum((gpv)) / (len(gpv))), 2)
             return gpa
 
-    def drop_stu_enrolment(id):
+    def drop_stu_enrolment(id): # Drops all currently enrollments of a student
 
         with open('data/students.csv', 'r+') as f:
                 reader = csv.reader(f)
@@ -519,7 +519,8 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def all_students():
+    def all_students(): # returns list of all lines in students.csv
+
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             students = []
@@ -528,7 +529,7 @@ class Student(User):
         f.close
         return students
 
-    def stu_failed_couses(id):
+    def stu_failed_couses(id): # returns list of failed courses by student
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             student = []
@@ -594,7 +595,7 @@ class Admin(User):
                 Admin.admin_info_list(id)[3])
         return admin
 
-    def absence_accept(id):
+    def absence_accept(id): # Edits student[8] to accepted and drops all currently enrolled courses
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
             final = ''
@@ -602,7 +603,7 @@ class Admin(User):
             for lines in reader:
                 if lines[0] == id:
                     student = [i.strip() for i in lines]
-            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"'+str(student[6])+'"'+','+ '"' +str(student[7])+'"'+ ','+f'Accepted: {student[8]}')
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(student[4])+',"'+ str(student[5]) +'",' + '"[]"'+','+ '"' +str(student[7])+'"'+ ','+f'Accepted: {student[8]}')
             f.close()
 
         with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
@@ -619,7 +620,7 @@ class Admin(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
     
-    def absence_deny(id):
+    def absence_deny(id): # Edits student[8] to NA meaning application is denied
 
         with open('data/students.csv', 'r+') as f:
             reader = csv.reader(f)
@@ -645,7 +646,7 @@ class Admin(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def achievement_by_course(course):
+    def achievement_by_course(course): # Returns all student and mark of a course by each student who completed it
         with open('data/students.csv', 'r') as stuf:
             reader = csv.reader(stuf)
             student=[]
