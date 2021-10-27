@@ -939,7 +939,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 
             else:
                 input("Please Enter Valid Index (0-3), then hit Enter")
-        elif choice == 4: # Add/Remove or amend a student
+        elif choice == 4: # Add/Remove or amend a semester
             print(choice)
             semester_choice = int(input("Would you like to: \n1. Add Semester\n2. Remove Semester \n3. Ammend Semester \n0. Return to Admin Menu\n"))
             if semester_choice == 0:
