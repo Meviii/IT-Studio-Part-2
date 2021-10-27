@@ -981,7 +981,14 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print('Invalid student')
                 return admin_menu(id)
         elif choice == 9: # Student academic history of a course for all students who completed a specific course
-            pass
+            course_code = str(input('Please enter the course code: '))
+            if Course.open_for_courseid(course_code) == True:
+                print(f'The current achievements for each student for course {course_code}: \n')
+                Admin.achievement_by_course(course_code)
+                print()
+            else:
+                print('Course not found')
+                return admin_menu(id)
         elif choice == 10: # Leave of absence of student
             print('Current students who applied for a leave of absence: \n')
             #print a for loop of all students who do not have NA in stu[8]

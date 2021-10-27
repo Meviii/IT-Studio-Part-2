@@ -40,5 +40,5 @@ if __name__ == '__main__':
         os.rename('data/students_temp.csv', 'data/students.csv')
 
     #Student.stu_failed_couses(id='s123')
-    Admin.achievement_by_course(course='COSC2703')
-    #main_func.login()
+    #Admin.achievement_by_course(course='MATH2411')
+    main_func.login()
