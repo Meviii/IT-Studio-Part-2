@@ -86,12 +86,6 @@ class Student(User):
 
     def __eq__(self, other):
         return (self.id == other.id)
-
-    def is_program_true(self):
-        if self.get_program() != '':
-            return True
-        else:
-            return False
       
     def __str__(self):
         formatted_str = "Student ID: " + str(self.id) + "\n"
@@ -101,7 +95,7 @@ class Student(User):
             formatted_str += "Program: " + str(self.program) + "\n"
         return formatted_str
 
-    def change_student_name(id, name):
+    def change_student_name(id, name): # Will overwrite student current name
         with open('data/students.csv', 'r') as stuf:
             reader = csv.reader(stuf)
             for lines in reader:
@@ -124,7 +118,7 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def change_student_gender(id, gender):
+    def change_student_gender(id, gender): # Will overwrite student current gender
         with open('data/students.csv', 'r') as stuf:
             reader = csv.reader(stuf)
             for lines in reader:
@@ -147,7 +141,7 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def change_student_birth(id, birth):
+    def change_student_birth(id, birth): # Will overwrite student current birth
         with open('data/students.csv', 'r') as stuf:
             reader = csv.reader(stuf)
             for lines in reader:
@@ -170,7 +164,7 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def add_to_plan(id, course_code):
+    def add_to_plan(id, course_code): # Adds a course to student study plan
         with open('data/students.csv', 'r+') as stuf:
             stu_reader = csv.reader(stuf,skipinitialspace=True)
             student =[]
@@ -201,7 +195,7 @@ class Student(User):
         os.remove('data/students.csv')
         os.rename('data/students_temp.csv', 'data/students.csv')
 
-    def remove_from_plan(id, course_code):
+    def remove_from_plan(id, course_code): # Removes a course from student study plan
         with open('data/students.csv', 'r+') as stuf:
             stu_reader = csv.reader(stuf,skipinitialspace=True)
             student =[]
@@ -659,13 +653,8 @@ class Admin(User):
             for lines in reader:
                 student.append(lines)
 
-            stu_history=[]
             for i in student:
-                stu_history.append(ast.literal_eval(i[5]))
-                stu_details.append(i[0])
-
-            print(f'For course, {course}: ')
-            for i in stu_history:
-                for tup in i:
-                    if tup[0] == course:
-                        print(f'{tup[0]}, {tup[1]}')
+                stu_history = ast.literal_eval(i[5])
+                for history in stu_history:
+                    if course in history[0]:
+                        print(f'Student: {i[0]}, Mark: {history[1]}')

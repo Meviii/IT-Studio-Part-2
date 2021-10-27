@@ -130,7 +130,13 @@ class Program:
                 programs_lst.append(lines[0])
         f.close()
         return programs_lst
-        
+    
+    def is_program_true(self):
+        if self.get_program() != '':
+            return True
+        else:
+            return False
+            
     def open_program_by_id(pro_id):
         with open('data/programs.csv', 'r') as f:
             reader = csv.reader(f)

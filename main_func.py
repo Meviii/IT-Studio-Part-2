@@ -225,7 +225,7 @@ def student_menu(id): # Student menu with choices and inner functions
             print('The fees for your current enrollment is: \n')
             if not s.get_curr_enrol() is None:
                 fees_total = 0
-                for i in courses_list():
+                for i in Course.courses_list():
                     if i[0] in s.get_curr_enrol():
                         print(f'{i[0]}: {i[1]} Fee: ${i[5]}')
                         fees_total += int(i[5])
@@ -309,7 +309,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
         choice = int(input('Please pick by index: '))
         if 0 > choice > 11:
             raise ValueError
-        elif choice == 1:
+        elif choice == 1: # Add/Remove or amend a student
             print(choice)
             student_choice = int(input("Would you like to: \n1. Add Student\n2. Remove Student \n3. Ammend Student \n0. Return to Admin Menu\n"))
             if student_choice == 0:
@@ -559,8 +559,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
             else:
                 input("Please Enter Valid Index (0-3), then hit Enter")
-
-        elif choice == 2:
+        elif choice == 2: # Add/Remove or amend a course
             print(choice)
             course_choice = int(input("Would you like to: \n1. Add Course\n2. Remove Course \n3. Ammend Course \n0. Return to Admin Menu\n"))
             if course_choice == 0:
@@ -738,9 +737,8 @@ def admin_menu(id): # Admin menu with choices and inner functions
                                 input("Please Enter Valid Index (0-6)")
 
             else:
-                input("Please Enter Valid Index (0-3), then hit Enter")
-            
-        elif choice == 3:
+                input("Please Enter Valid Index (0-3), then hit Enter")      
+        elif choice == 3: # Add/Remove or amend a program
             print(choice)
             program_choice = int(input("Would you like to: \n1. Add Program\n2. Remove Program \n3. Ammend Program \n0. Return to Admin Menu\n"))
             if program_choice == 0:
@@ -899,8 +897,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 
             else:
                 input("Please Enter Valid Index (0-3), then hit Enter")
-
-        elif choice == 4:
+        elif choice == 4: # Add/Remove or amend a student
             print(choice)
             semester_choice = int(input("Would you like to: \n1. Add Semester\n2. Remove Semester \n3. Ammend Semester \n0. Return to Admin Menu\n"))
             if semester_choice == 0:
@@ -1039,9 +1036,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 
             else:
                 input("Please Enter Valid Index (0-3), then hit Enter")
-
-    
-        elif choice == 5:
+        elif choice == 5: # View information of a student
             student_id = str(input('Please enter a student id: '))
             if Student.open_students_for_id(student_id) == True:
                 s = Student.student_object(student_id)
@@ -1167,7 +1162,14 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print('Invalid student')
                 return admin_menu(id)
         elif choice == 9: # Student academic history of a course for all students who completed a specific course
-            pass
+            course_code = str(input('Please enter the course code: '))
+            if Course.open_for_courseid(course_code) == True:
+                print(f'The current achievements for each student for course {course_code}: \n')
+                Admin.achievement_by_course(course_code)
+                print()
+            else:
+                print('Course not found')
+                return admin_menu(id)
         elif choice == 10: # Leave of absence of student
             print('Current students who applied for a leave of absence: \n')
             #print a for loop of all students who do not have NA in stu[8]
