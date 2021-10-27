@@ -316,7 +316,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 return admin_menu(id)
 
             elif student_choice == 1:
-                with open('data/students.csv', 'a', newline="\n") as f:
+                with open('data/students.csv', 'a') as f:
                     new_studentID = input("Enter Student ID: ")
                     while new_studentID in Student.studentId_list():
                         stuExists = int(input('Student ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
