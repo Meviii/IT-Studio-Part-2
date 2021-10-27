@@ -314,3 +314,11 @@ class Semester:
             f.close()
             return False
 
+    def semesterID_list(): # Returns only studentID from all students in students.csv
+        with open('data/semesters.csv', 'r') as f:
+            reader = csv.reader(f)
+            semesterID_lst = []
+            for lines in reader:
+                semesterID_lst.append(lines[0])
+        f.close()
+        return semesterID_lst
