@@ -225,7 +225,7 @@ def student_menu(id): # Student menu with choices and inner functions
             print('The fees for your current enrollment is: \n')
             if not s.get_curr_enrol() is None:
                 fees_total = 0
-                for i in courses_list():
+                for i in Course.courses_list():
                     if i[0] in s.get_curr_enrol():
                         print(f'{i[0]}: {i[1]} Fee: ${i[5]}')
                         fees_total += int(i[5])
