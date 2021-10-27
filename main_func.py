@@ -378,7 +378,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
 
                 while_counter = 3
-                while ammend_student not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
+                while ammend_student not in Student.studentId_list(): #if trying to ammend a student that is not already in the file
                     ammend_student = input("Please Enter a Valid Student ID: ")
                     while_counter -= 1
                     if while_counter == 0:
@@ -671,7 +671,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_course = input("Select which Course you would like to Ammend by entering the Course Code: ")
 
                 while_counter = 3
-                while ammend_course not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
+                while ammend_course not in Course.coursesId_list(): #if trying to ammend a student that is not already in the file
                     ammend_course = input("Please Enter a Valid Course Code: ")
                     while_counter -= 1
                     if while_counter == 0:
@@ -903,8 +903,9 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_programs = input("Select which Program you would like to Ammend by entering the Program Code: ")
                 
                 while_counter = 3
-                while ammend_programs not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
+                while ammend_programs not in Program.program_name_list(): #if trying to ammend a student that is not already in the file
                     ammend_programs = input("Please Enter a Valid Program Code: ")
+                    
                     while_counter -= 1
                     if while_counter == 0:
                         cont = int(input("Would you like to :\n1. Try Again\n2. Exit\n0. Return to Admin Menu\n"))
