@@ -545,6 +545,15 @@ class Student(User):
 
             return curr_courses
 
+    def show_studentID_list():
+        print("============\nStudent IDs:")
+        with open("data/students.csv", 'r') as f:
+            reader =csv.reader(f)
+            for lines in reader:
+                print("-", lines[0])
+        f.close()
+        print("============")
+
 class Admin(User):
     def __init__(self, user_id, user_name, user_birth, user_gender, adm_role = 'Admin'):
         User.__init__(self, user_id, user_name, user_birth, user_gender)
@@ -658,3 +667,4 @@ class Admin(User):
                 for history in stu_history:
                     if course in history[0]:
                         print(f'Student: {i[0]}, Mark: {history[1]}')
+    

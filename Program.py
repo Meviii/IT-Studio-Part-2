@@ -131,6 +131,15 @@ class Program:
         f.close()
         return programs_lst
 
+    def show_programsID_list():
+        print("============\nProgram IDs:")
+        with open("data/programs.csv", 'r') as f:
+            reader =csv.reader(f)
+            for lines in reader:
+                print("-", lines[0])
+        f.close()
+        print("============")
+
     def program_name_list(): # Returns only prgram name in lowercase (for case insensitive comparisons) from all programs in programs.csv
         with open('data/programs.csv', 'r') as f:
             reader = csv.reader(f)

@@ -303,6 +303,15 @@ class Semester:
         sem_courses = set(course_name_lst).intersection(set(specific_sem_course_name))
         return sem_courses
 
+    def show_semesterID_list():
+        print("============\nSemesters IDs:")
+        with open("data/semesters.csv", 'r') as f:
+            reader =csv.reader(f)
+            for lines in reader:
+                print("-", lines[0])
+        f.close()
+        print("============")
+
     def open_semester_for_id(sem_id): # Returns if id exists in students.csv
         with open('data/semesters.csv', 'r') as f:
             reader = csv.reader(f)

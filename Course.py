@@ -293,6 +293,15 @@ class Course:
             f.close()
             return False
 
+    def show_courseID_list():
+        print("============\nCourse IDs:")
+        with open("data/courses.csv", 'r') as f:
+            reader =csv.reader(f)
+            for lines in reader:
+                print("-", lines[0])
+        f.close()
+        print("============")
+
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
 # print(It_Studio2)
 
