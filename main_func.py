@@ -1043,17 +1043,8 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 return admin_menu(id)
             if semester_choice == 1:
                 with open('data/semesters.csv', 'a') as f:
-                    new_semProg = input("Enter New Semester Program Code")
+                    new_semProg = input("Enter New Semester Program Code: ")
                     new_semID = input("Enter New Semester ID: ")
-                    while new_semID in Semester.semesterID_list:
-                        semIdExists = int(input('Semester ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
-                        if semIdExists == 0:
-                            return admin_menu(id)
-                        elif semIdExists == 1:
-                            new_semID = input("Enter New Semester ID: ")
-                        else:
-                            input('Please enter a Valid Index (0-1)')
-
                     new_semOffer = input("Enter New Semester Offers: ")
                     new_semMaxStu = input("Enter Max Students for Semester: ")
                     new_semCurStu = input("Enter Current Enrolled Students for Semester: ")
