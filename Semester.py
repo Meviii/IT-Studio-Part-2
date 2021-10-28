@@ -190,6 +190,14 @@ class Semester:
 
         print('Student ' + student_id + 'has been added to ' + crs_code + '.')
 
+    def show_semesterID_list(): #prints list of Semester ID
+        print("Program Codes:\n=============")
+        with open("data/semesters.csv", "r") as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                print('- Program Code:', lines[0], ' Semester ID:', lines[1])
+        print("=============")
+
     def remove_student(self, student_id, crs_code):
         Student.remove_course(student_id, crs_code)
         print('Student ' + student_id + 'has been removed from ' + crs_code + '.')

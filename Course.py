@@ -273,6 +273,13 @@ class Course:
         f.close()
         return course_name_lst
 
+    def show_courseID_list(): #prints list of Course Codes
+        print("Course Codes:\n=============")
+        with open("data/courses.csv", "r") as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                print('-', lines[0])
+        print("=============")
     def courses_list(): # Returns all info from each line in courses.csv (Sorted)
         with open('data/courses.csv', 'r') as f:
             reader = csv.reader(f)

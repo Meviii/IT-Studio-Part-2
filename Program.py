@@ -146,6 +146,14 @@ class Program:
         else:
             return False
 
+    def show_programsID_list(): #prints list of programID
+        print("Program IDs:\n=============")
+        with open("data/programs.csv", "r") as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                print('-',lines[0])
+        print("=============")
+
     def open_program_by_id(pro_id): # Returns True if program is existing in programs.csv
         with open('data/programs.csv', 'r') as f:
             reader = csv.reader(f)
