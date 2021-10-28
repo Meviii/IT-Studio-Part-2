@@ -8,7 +8,7 @@ from Semester import *
 
 def login(): # Login function for Admin or Student login BY ID
     try:
-        login_type = str(input('Login as Admin or Student? ')).lower()
+        login_type = str(input('Login as Admin or Student 0 to exit? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
             id = str(input('Please enter your Admin ID: '))
@@ -31,6 +31,8 @@ def login(): # Login function for Admin or Student login BY ID
                 return student_menu(id)
             else:
                 print('Incorrect Student ID')
+        elif login_type == '0':
+            return False
         else:
             print('Invalid login type')
             return login()
@@ -83,7 +85,7 @@ def student_menu(id): # Student menu with choices and inner functions
         s = Student.student_object(id)
         choice = int(input('Please pick by index: '))
         res = set(ast.literal_eval(s.get_curr_enrol()))
-        all_courses = set(Course.courses_name_list())
+        all_courses = set(Course.coursesId_list())
         stu_courses = sorted(res.intersection(all_courses))
         s.set_curr_enrol(stu_courses)
 
@@ -109,11 +111,11 @@ def student_menu(id): # Student menu with choices and inner functions
         elif choice == 2: # Available Courses to enroll into
             print('All available courses for you are: ')
             
-            print('Sem 1: ')
+            print('Sem 1: \n')
             for i in Course.filtered_courses_list(id):
                 if 'S1' in i[4]:
                     print(f'{i[1]}, Semester: {i[4]}')
-            print('Sem 2: ')
+            print('Sem 2: \n')
             for i in Course.filtered_courses_list(id):
                 if 'S2' in i[4]:
                     print(f'{i[1]}, Semester: {i[4]}')
@@ -124,6 +126,7 @@ def student_menu(id): # Student menu with choices and inner functions
                 for i in Course.courses_list():
                     if i[0] in Student.student_info_list(id)[6]:
                         print(f'{i[0]}: {i[1]}')
+                print()
                 print()
                 selection = str(input('Would you like to add a course? Y/N \n'))
                 if selection.lower() == 'n':
@@ -154,6 +157,8 @@ def student_menu(id): # Student menu with choices and inner functions
                     else:
                         print('Invalid Semester')
                         return student_menu(id)
+                else:
+                    raise ValueError
         elif choice == 4: # View current enrollments, drop course
             print('Enrolled courses: \n')
             count = 1
@@ -179,14 +184,44 @@ def student_menu(id): # Student menu with choices and inner functions
                     elif selection == 0:
                         return student_menu(id)
                     else:
-                        print('Error')
-                        return False
+                        continue
             else:
                 print('Incorrect Semester')
                 return student_menu(id)
             print()            
         elif choice == 5: # View all personal information
             print(f'ID: {s.id}\nName: {s.name}\nBirth: {s.birth}\nGender: {s.gender}\nProgram: {s.program}')
+            print("Academic Hisory:")
+            with open("data/students.csv", 'r') as f:
+                reader = csv.reader(f)
+                for lines in reader:
+                    if lines[0] == id:
+                        AHlst = ast.literal_eval(lines[5])
+                for i in AHlst:
+                    print("   - Course:",i[0], "Mark:",i[1] )
+            f.close()
+
+            print("\nCurrent Enrolments:")
+            with open("data/students.csv", 'r') as f:
+                reader = csv.reader(f)
+                for lines in reader:
+                    if lines[0] == id:
+                        CElst = ast.literal_eval(lines[6])
+                for i in range(len(CElst)):
+                    print("   -",CElst[i])
+            f.close()
+
+            print("\nStudy Plan:")
+            with open("data/students.csv", 'r') as f:
+                reader = csv.reader(f)
+                for lines in reader:
+                    if lines[0] == id:
+                        SPlst = ast.literal_eval(lines[7])
+                for i in range(len(SPlst)):
+                    print("   -",SPlst[i])
+            f.close()
+
+            print(f"\nAbsence: {s.get_stu_absence()}")
             print()
             student_menu_option(id)
         elif choice == 6: # Update personal information
@@ -237,7 +272,7 @@ def student_menu(id): # Student menu with choices and inner functions
             else:
                 return student_menu(id)
         elif choice == 8: # Check eligibilty to graduate 
-            print(s.get_program())
+            print(f'Program: {s.get_program()}')
             if Student.check_grad_eligility(id) == True and not s.get_program() == 'NA':
                 print('You can graduate!')
                 student_menu_option(id)
@@ -246,28 +281,42 @@ def student_menu(id): # Student menu with choices and inner functions
                 student_menu_option(id)
             elif Student.check_grad_eligility(id) == False:
                 print('You cannot graduate yet.')
+                student_menu_option(id)
             else:
                 raise ValueError
         elif choice == 9: # Apply for leave of absence
             if not s.get_stu_absence() == 'NA':
-                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence}')
+                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence()}')
             elif s.get_stu_absence() == 'NA':
+                print('Enter 0 anytime to return to main menu.')
                 type_absence = str(input('Please select how long you would like to leave for (semester or academic year): '))
-                print(f'Your application for leave has been processed. Pending for: {type_absence}')
-                Student.apply_for_absence(id, type_absence)
+                if type_absence == str(0):
+                    return student_menu(id)
+                elif type_absence == '':
+                    print('Invalid time\n')
+                    return student_menu(id)
+                else:
+                    print()
+                    print(f'Your application for leave has been processed. Pending for: {type_absence}')
+                    Student.apply_for_absence(id, type_absence)
+                    return student_menu_option(id)
         elif choice == 10: # View course progress(Currently enrolled and academic history which are passed.)
-            print('Current successfully completed courses: \n')
+            print('Current enrolled and successfully passed courses: \n')
             for i in Student.course_progress_stu(id):
                 print(i)
+            print()
+            return student_menu_option(id)
         elif choice == 11: # Calculate current GPA
             if s.get_acad_history() is None:
                 print('You do not have any previous course history')
+                print()
                 return student_menu(id)
             else:
                 print(f'Your current gpa is {Student.curr_gpa_stu(id)}\n')
                 history = ast.literal_eval(s.get_acad_history())
                 for i in history:
                     print(f'Course: {i[0]} Mark: {i[1]}')
+                print()
                 student_menu_option(id)
         elif choice == 12: # Cancel Program
             if student_program(id) == False:
