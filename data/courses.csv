@@ -1,13 +1,13 @@
-COSC2801,Programming Bootcamp 1,12,"[]","['S1']",1500
-MATH2411,Mathematics for Computing 1,12,"[]","['S1']",1500
-COSC2803,Programming Studio 1,24,"[]",['S1'],2500
-COSC2802,Programming Bootcamp 2,12,"['COSC2801']","['S2']",1500
-MATH2412,Mathematics for Computing 2,12,"['MATH2411']","['S2']",1500
-COSC2804,Programming Studio 2,24,"['COSC2803']","['S2']",2500
-COSC1107,Computing Theory,12,"[]","['S1','S2']",1500
-ISYS1118,Software Engineering Fundamentals,12,"[]","['S1','S2']",1500
-COSC1076,Advanced Programming Techniques,12,"[]","['S1','S2']",1500
-COSC2299,Software Engineering: Process and Tools,12,"[]","['S1','S2']",1500
-COSC2123,Algorithms and Analysis,12,"[]","['S1','S2']",1500
-COSC1114,Operating Systems Principles,12,"[]","['S1','S2']",1500
-COSC1147,Professional Computing Practice,12,"[]","['S1','S2']",1500
+COSC2801,Programming Bootcamp 1,12,[],['S1'],1500
+MATH2411,Mathematics for Computing 1,12,[],['S1'],1500
+COSC2803,Programming Studio 1,24,[],['S1'],2500
+COSC2802,Programming Bootcamp 2,12,['COSC2801'],['S2'],1500
+MATH2412,Mathematics for Computing 2,12,['MATH2411'],['S2'],1500
+COSC2804,Programming Studio 2,24,['COSC2803'],['S2'],2500
+COSC1107,Computing Theory,12,[],"['S1','S2']",1500
+ISYS1118,Software Engineering Fundamentals,12,[],"['S1','S2']",1500
+COSC1076,Advanced Programming Techniques,12,[],"['S1','S2']",1500
+COSC2299,Software Engineering: Process and Tools,12,[],"['S1','S2']",1500
+COSC2123,Algorithms and Analysis,12,[],"['S1','S2']",1500
+COSC1114,Operating Systems Principles,12,[],"['S1','S2']",1500
+COSC1147,Professional Computing Practice,12,[],"['S1','S2']",1500

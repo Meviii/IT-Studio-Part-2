@@ -365,7 +365,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             if student_choice == 0:
                 return admin_menu(id)
 
-            elif student_choice == 1:
+            elif student_choice == 1: #adding student
                 with open('data/students.csv', 'a+', newline="") as f:
                     new_studentID = input("Enter Student ID: ")
                     while new_studentID in Student.studentId_list():
@@ -393,7 +393,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     return True
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
-            elif student_choice == 2:
+            elif student_choice == 2: #Removing Student
                 Student.show_studentID_list()
                 deleted_studentID = input("Enter Student ID to be Removed: ")
                 with open('data/students.csv', 'r+') as f:
@@ -409,7 +409,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     for i in students:
                         writer.writerow(i) #write the new students list into a temp csv file
 
-
+                f.close()
                 #swap the outdated csv with the updated students.csv
                 os.remove('data/students.csv')
                 os.rename('data/students_temp.csv', 'data/students.csv') 
@@ -423,7 +423,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif student_choice == 3:
+            elif student_choice == 3: #Ammending Student
                 Student.show_studentID_list()
 
                 ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
@@ -446,7 +446,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             cont = int(input("Please enter a Valid Index (0-2)"))
                     
                     
-                ammend_choice = int(input("What would you like to change?\n1. Student Name \n2. Student Gender \n3. Student Program \n4. Student History \n5. Student Enrolled Course \n6. Student Study Plan \n7. Student Absence \n0. Return to Admin Menu \n "))
+                ammend_choice = int(input("What would you like to change?\n1. Student Name \n2. Student Gender \n0. Return to Admin Menu \n "))
                 if ammend_choice == 0:
                     return admin_menu(id)
      
@@ -490,106 +490,6 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     os.remove('data/students.csv')
                     os.rename('data/students_temp.csv', 'data/students.csv')
 
-                elif ammend_choice == 3:
-                    upd_stuProg = input("What would you like to change this Student's Programs to? ") 
-                    with open("data/students.csv", 'r') as f:
-                        reader = csv.reader(f)
-                        upd_stuProg_lst = []
-                        for lines in reader:
-                            if lines[0] != ammend_student:
-                                upd_stuProg_lst.append(lines)
-                            else:
-                                lines[4] = upd_stuProg
-                                upd_stuProg_lst.append(lines)
-                        
-                        with open('data/students_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
-                            for i in upd_stuProg_lst:
-                                writer.writerow(i) #write the new students list into a temp csv file
-                    f.close()
-                    os.remove('data/students.csv')
-                    os.rename('data/students_temp.csv', 'data/students.csv')
-
-                elif ammend_choice == 4:
-                    upd_stuHist = input("What would you like to change this Student's Academic History to? ") 
-                    with open("data/students.csv", 'r') as f:
-                        reader = csv.reader(f)
-                        upd_stuHist_lst = []
-                        for lines in reader:
-                            if lines[0] != ammend_student:
-                                upd_stuHist_lst.append(lines)
-                            else:
-                                lines[5] = upd_stuHist
-                                upd_stuHist_lst.append(lines)
-                        
-                        with open('data/students_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
-                            for i in upd_stuHist_lst:
-                                writer.writerow(i) #write the new students list into a temp csv file
-                    f.close()
-                    os.remove('data/students.csv')
-                    os.rename('data/students_temp.csv', 'data/students.csv')
-
-                elif ammend_choice == 5:
-                    upd_stuEnrol = input("What would you like to change this Student's Enrolled Courses to? ") 
-                    with open("data/students.csv", 'r') as f:
-                        reader = csv.reader(f)
-                        upd_stuEnrol_lst = []
-                        for lines in reader:
-                            if lines[0] != ammend_student:
-                                upd_stuEnrol_lst.append(lines)
-                            else:
-                                lines[6] = upd_stuEnrol
-                                upd_stuEnrol_lst.append(lines)
-                        
-                        with open('data/students_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
-                            for i in upd_stuEnrol_lst:
-                                writer.writerow(i) #write the new students list into a temp csv file
-                    f.close()
-                    os.remove('data/students.csv')
-                    os.rename('data/students_temp.csv', 'data/students.csv')
-
-                elif ammend_choice == 6:
-                    upd_stuStudPlan = input("What would you like to change this Student's Study Plan to? ") 
-                    with open("data/students.csv", 'r') as f:
-                        reader = csv.reader(f)
-                        upd_stuStudPlan_lst = []
-                        for lines in reader:
-                            if lines[0] != ammend_student:
-                                upd_stuStudPlan_lst.append(lines)
-                            else:
-                                lines[7] = upd_stuStudPlan
-                                upd_stuStudPlan_lst.append(lines)
-                        
-                        with open('data/students_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
-                            for i in upd_stuStudPlan_lst:
-                                writer.writerow(i) #write the new students list into a temp csv file
-                    f.close()
-                    os.remove('data/students.csv')
-                    os.rename('data/students_temp.csv', 'data/students.csv')
-
-                elif ammend_choice == 7:
-                    upd_stuAbs = input("What would you like to change this Student's Absence to? ") 
-                    with open("data/students.csv", 'r') as f:
-                        reader = csv.reader(f)
-                        upd_stuAbs_lst = []
-                        for lines in reader:
-                            if lines[0] != ammend_student:
-                                upd_stuAbs_lst.append(lines)
-                            else:
-                                lines[8] = upd_stuAbs
-                                upd_stuAbs_lst.append(lines)
-                        
-                        with open('data/students_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
-                            for i in upd_stuAbs_lst:
-                                writer.writerow(i) #write the new students list into a temp csv file
-                    f.close()
-                    os.remove('data/students.csv')
-                    os.rename('data/students_temp.csv', 'data/students.csv')
-
                 else:
                     input("Please Enter Valid Index (0-7)")
 
@@ -609,7 +509,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             course_choice = int(input("Would you like to: \n1. Add Course\n2. Remove Course \n3. Ammend Course \n0. Return to Admin Menu\n"))
             if course_choice == 0:
                 return admin_menu(id)
-            elif course_choice == 1:
+            elif course_choice == 1: #Adding Course
                 with open('data/courses.csv', 'a+', newline="") as f:
                     new_courseID = input("Enter New Course ID: ")
                     while new_courseID in Course.coursesId_list(): #makes sure that new course ID does not match with a course Id that already exists.
@@ -631,12 +531,37 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         else:
                             input('Please enter a Valid Index (0-1)')
 
-                    new_CourseCred = input("Enter Course Credit: ")
-                    new_CoursePrereq = input("Enter Course Prerequisites: ")
-                    new_CourseAvail = input("Enter Course Availability: ")
+                    new_CourseCred = int(input("Enter Course Credit: "))
+                    while (new_CourseCred != (12 or 24)): #checks validity of input
+                        new_CourseCred = int(input("Please enter a valid Credit Score (12 or 24): "))
+
+                    print("Enter Course Prerequisites: ") #prerequisite input code
+                    new_CoursePrereq_amount = int(input("How Many Prerequisites would you like to add? "))
+                    new_CoursePrereq_lst = []
+                    for i in range(0, new_CoursePrereq_amount):
+                        prereq_input = input("Enter the Course Code of Prerequisite: ")
+                        while prereq_input not in Course.coursesId_list():
+                            prereq_input = input("Please enter a valid Course Code: ")
+
+                        new_CoursePrereq_lst.append(prereq_input)
+                    print("New Prerequisites:", new_CoursePrereq_lst)
+
+                    print("Enter Course Availability: ") #availability input code
+                    new_CourseAvail_amount = int(input("Is the course available for 1 or 2 Semesters "))
+                    while new_CourseAvail_amount != (1 or 2):
+                        new_CourseAvail_amount = int(input("Please enter 1 or 2: "))
+                    new_CourseAvail_lst = []
+                    if new_CourseAvail_amount == 2:
+                        new_CourseAvail_lst.append("S1")
+                        new_CourseAvail_lst.append("S2")
+                    else:
+                        avail_input = input("Enter the Semester this Course is available for: ")        
+                        new_CourseAvail_lst.append(avail_input)
+                    print("New Course Availabilities:", new_CourseAvail_lst)
+
                     new_CourseFee = input("Enter Course Fees: ")
                     writer = csv.writer(f)
-                    final =  str(str(new_courseID) +','+ str(new_courseName)+','+ str(new_CourseCred)+','+ str(new_CoursePrereq)+','+ str(new_CourseAvail)+','+ str(new_CourseFee))
+                    final =  str(str(new_courseID).upper() +','+ str(new_courseName)+','+ str(new_CourseCred)+','+ str(new_CoursePrereq_lst)+','+ str(new_CourseAvail_lst)+','+ str(new_CourseFee))
                     writer.writerow(final.split(','))
                 f.close()
                 print("\nCourse Successfully Added!\n===========================")
@@ -648,7 +573,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif course_choice == 2:
+            elif course_choice == 2: #Removing Course
                 Course.show_courseID_list()
 
                 deleted_course = input("Enter Course Code of Course to be deleted: ")
@@ -665,6 +590,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     for i in courses:
                         writer.writerow(i) #write the new course list into a temp csv file
 
+                f.close()
                 #swaps the outdated courses.csv file with the updated one
                 os.remove('data/courses.csv')
                 os.rename('data/courses_temp.csv', 'data/courses.csv')
@@ -678,7 +604,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif course_choice == 3:
+            elif course_choice == 3: #Ammending Course
                 Course.show_courseID_list()
 
                 ammend_course = input("Select which Course you would like to Ammend by entering the Course Code: ")
@@ -707,7 +633,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                 elif ammend_choice == 1:
                     changed_credit = int(input("What would you like to change the Course Credit to? "))
-                    while changed_credit != 12 or changed_credit != 24:
+                    while changed_credit != (12 or 24):
                         changed_credit = int(input("Please enter a valid Credit Score (12 or 24): "))
 
                     with open("data/courses.csv", 'r') as f:
@@ -807,7 +733,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             program_choice = int(input("Would you like to: \n1. Add Program\n2. Remove Program \n3. Ammend Program \n0. Return to Admin Menu\n"))
             if program_choice == 0:
                 return admin_menu(id)
-            elif program_choice == 1:
+            elif program_choice == 1: #Adding Program
                 with open('data/programs.csv', 'a') as f:
                     new_progID = input("Enter New Program ID: ")
                     while new_progID in Program.programId_list(): #makes sure that new program ID does not match with a program Id that already exists.
@@ -843,7 +769,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)")) 
 
-            elif program_choice == 2:
+            elif program_choice == 2: #Removing Program
                 Program.show_programsID_list()
 
                 deleted_Program = input("Enter Program Name to be Removed: ")
@@ -860,7 +786,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     for i in programs:
                         writer.writerow(i) #write the new students list into a temp csv file
 
-
+                f.close()
                 #swap the outdated csv with the updated students.csv
                 os.remove('data/programs.csv')
                 os.rename('data/programs_temp.csv', 'data/programs.csv') 
@@ -874,7 +800,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif program_choice == 3:
+            elif program_choice == 3: #Ammeding Program
                 Program.show_programsID_list()
                 ammend_programs = input("Select which Program you would like to Ammend by entering the Program Code: ")
                 
@@ -978,7 +904,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             semester_choice = int(input("Would you like to: \n1. Add Semester\n2. Remove Semester \n3. Ammend Semester \n0. Return to Admin Menu\n"))
             if semester_choice == 0:
                 return admin_menu(id)
-            elif semester_choice == 1:
+            elif semester_choice == 1: #Adding Semester
                 with open('data/semesters.csv', 'a') as f:
                     new_semProg = input("Enter New Semester Program Code")
                     new_semID = input("Enter New Semester ID: ")
@@ -1006,7 +932,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif semester_choice == 2:
+            elif semester_choice == 2: #Removing Semester
                 Semester.show_semesterID_list()
 
                 deleted_semester1 = input("Enter Program Code of Semester to be Removed: ")
@@ -1024,7 +950,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     for i in semesters:
                         writer.writerow(i) #write the new students list into a temp csv file
 
-
+                f.close()
                 #swap the outdated csv with the updated students.csv
                 os.remove('data/semesters.csv')
                 os.rename('data/semesters_temp.csv', 'data/semesters.csv') 
@@ -1038,7 +964,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif semester_choice == 3:
+            elif semester_choice == 3: #Ammending Semester
                 Semester.show_semesterID_list()
                 
                 ammend_semester = input("Select which Semester you would like to Ammend by entering the Semester ID: ")
