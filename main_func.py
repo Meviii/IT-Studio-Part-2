@@ -581,7 +581,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                     courses = []
                     for lines in reader:
-                        if lines[0] != deleted_course:
+                        if lines[0] != deleted_course.upper():
                             courses.append(lines) #appends courses to a list, excluding the specified one 
 
                 f.close()
@@ -640,7 +640,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         ccredit_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_course:
+                            if lines[0] != ammend_course.upper():
                                 ccredit_lst.append(lines)
                             else:
                                 lines[2] = changed_credit
@@ -670,7 +670,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cprereq_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_course:
+                            if lines[0] != ammend_course.upper():
                                 cprereq_lst.append(lines)
                             else:
                                 lines[3] = changed_prereq
@@ -690,7 +690,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cavail_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_course:
+                            if lines[0] != ammend_course.upper():
                                 cavail_lst.append(lines)
                             else:
                                 lines[4] = changed_avail
@@ -710,7 +710,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cfees_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_course:
+                            if lines[0] != ammend_course.upper():
                                 cfees_lst.append(lines)
                             else:
                                 lines[5] = changed_fee
@@ -783,12 +783,12 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif program_choice == 2: #Removing Program
                 Program.show_programsID_list()
 
-                deleted_Program = input("Enter Program Name to be Removed: ")
+                deleted_Program = input("Enter Program ID to be Removed: ")
                 with open('data/programs.csv', 'r+') as f:
                     reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                     programs = []
                     for lines in reader:
-                        if lines[0] != deleted_Program:
+                        if lines[0] != deleted_Program.upper():
                             programs.append(lines) #appends students to a list, excluding the specified one 
                 f.close()
 
@@ -842,7 +842,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cprogCred_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_programs:
+                            if lines[0] != ammend_programs.upper():
                                 cprogCred_lst.append(lines)
                             else:
                                 lines[2] = changed_progCred
@@ -862,7 +862,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cprogCourse_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_programs:
+                            if lines[0] != ammend_programs.upper():
                                 cprogCourse_lst.append(lines)
                             else:
                                 lines[3] = changed_progCourse 
@@ -882,7 +882,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                         cprogElecCourse_lst = []
                         for lines in reader:
-                            if lines[0] != ammend_programs:
+                            if lines[0] != ammend_programs.upper():
                                 cprogElecCourse_lst.append(lines)
                             else:
                                 lines[4] = changed_progElecCourse 
@@ -960,7 +960,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                     semesters = []
                     for lines in reader:
-                        if (lines[0].lower(), lines[1].lower()) != (deleted_semester1.lower(), deleted_semester2.lower()):
+                        if (lines[0], lines[1]) != (deleted_semester1.upper(), deleted_semester2.upper()):
                             semesters.append(lines) #appends students to a list, excluding the specified one 
                 f.close()
 
@@ -1027,8 +1027,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     reader = csv.reader(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                     cmaxStu_lst = []
                     for lines in reader:
-                        print((lines[0].lower(), lines[1].lower()) , "+", (ammend_semester1.lower(), ammend_semester2.lower()))
-                        if (lines[0].lower(), lines[1].lower()) != (ammend_semester1.lower(), ammend_semester2.lower()):
+                        if (lines[0], lines[1]) != (ammend_semester1.upper(), ammend_semester2.upper()):
                             cmaxStu_lst.append(lines)
                         else:
                             lines[4] = changed_maxStu
