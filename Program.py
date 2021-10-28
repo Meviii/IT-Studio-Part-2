@@ -165,6 +165,14 @@ class Program:
             f.close()
             return False
 
+    def student_program(id): # Returns True if student is in program, else, False
+        with open('data/students.csv', 'r') as f:
+                reader = csv.reader(f)
+                for lines in reader:
+                    if lines[0] == id:
+                        if lines[4] == 'NA':
+                            return False
+                    return True
 # ProgB1 = Course('COSC2801','Programming Bootcamp 1','12','NA','S1 & S2','BP0924', 'Core')
 # It_Studio2 = Course('COSC2800', 'IT STUDIO 2', '24', 'NA', 'S1 & S2','BP0924', 'Core')
 # Math2411 = Course('MATH2411','Mathematics for Computing 1','12','NA','S1 & S2','BP0924','CORE')

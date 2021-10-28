@@ -463,11 +463,11 @@ class Student(User):
                 current_course = ast.literal_eval(student[6])
 
             for i in stu_history:
-                if i[1] >= 50:
+                if int(i[1]) >= 50:
                     curr_courses.append(i[0])
             
-            curr_courses.extend(current_course)
-            return curr_courses
+            new_list = curr_courses + current_course
+            return new_list
 
     def curr_gpa_stu(id): # Returns gpa grade of student calculated by courses in academic history
         with open('data/students.csv', 'r+') as f:
