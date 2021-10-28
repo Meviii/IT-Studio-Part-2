@@ -367,22 +367,22 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
             elif student_choice == 1: #adding student
                 with open('data/students.csv', 'a+', newline="") as f:
-                    new_studentID = input("Enter Student ID: ")
+                    new_studentID = input("Enter Student ID (s...): ")
                     while new_studentID in Student.studentId_list():
                         stuExists = int(input('Student ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if stuExists == 0:
                             return admin_menu(id)
                         elif stuExists == 1:
-                            new_studentID = input("Enter Student ID: ")
+                            new_studentID = input("Enter Student ID (s...): ")
                         else:
                             input('Please enter a Valid Index (0-1)')
                        
                     new_studentName = input("Enter Student Name: ")
-                    new_studentDOB = input("Enter Student Date of Birth: ")
+                    new_studentDOB = input("Enter Student Date of Birth (Day/Month/Year): ")
                     new_studentGender = input("Enter Student Gender: ")
 
-                    writer = csv.writer(f)
-                    final =  str(str(new_studentID) +','+ str(new_studentName)+','+ str(new_studentDOB)+','+ str(new_studentGender)+','+ "NA"+','+ "[]" +',' + "[]"+','+ "[]"+ ','+"NA")
+                    writer = csv.writer(f, quoting = csv.QUOTE_NONE, quotechar = None)
+                    final =  str(str(new_studentID) +','+ str(new_studentName)+','+ str(new_studentDOB)+','+str(new_studentGender)+','+ "NA"+',' +'"'+"[]"+'"' +',' +'"'+"[]"+'"'+','+ '"'+"[]"+'"'+ ','+"NA")
                     writer.writerow(final.split(','))
                 f.close()
                 print("\nStudent Successfully Added!\n===========================")
@@ -491,7 +491,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     os.rename('data/students_temp.csv', 'data/students.csv')
 
                 else:
-                    input("Please Enter Valid Index (0-7)")
+                    input("Please Enter Valid Index (0-2)")
 
                 print("\nStudent Successfully Ammended!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
@@ -532,7 +532,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             input('Please enter a Valid Index (0-1)')
 
                     new_CourseCred = int(input("Enter Course Credit: "))
-                    while (new_CourseCred != (12 or 24)): #checks validity of input
+                    while not (new_CourseCred == 12 or new_CourseCred ==24): #checks validity of input
                         new_CourseCred = int(input("Please enter a valid Credit Score (12 or 24): "))
 
                     print("Enter Course Prerequisites: ") #prerequisite input code
@@ -548,20 +548,20 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                     print("Enter Course Availability: ") #availability input code
                     new_CourseAvail_amount = int(input("Is the course available for 1 or 2 Semesters "))
-                    while new_CourseAvail_amount != (1 or 2):
+                    while not (new_CourseAvail_amount == 1 or new_CourseAvail_amount == 2):
                         new_CourseAvail_amount = int(input("Please enter 1 or 2: "))
                     new_CourseAvail_lst = []
                     if new_CourseAvail_amount == 2:
                         new_CourseAvail_lst.append("S1")
                         new_CourseAvail_lst.append("S2")
                     else:
-                        avail_input = input("Enter the Semester this Course is available for: ")        
+                        avail_input = input("Enter the Semester this Course is available for (S1 / S2): ")        
                         new_CourseAvail_lst.append(avail_input)
                     print("New Course Availabilities:", new_CourseAvail_lst)
 
                     new_CourseFee = input("Enter Course Fees: ")
-                    writer = csv.writer(f)
-                    final =  str(str(new_courseID).upper() +','+ str(new_courseName)+','+ str(new_CourseCred)+','+ str(new_CoursePrereq_lst)+','+ str(new_CourseAvail_lst)+','+ str(new_CourseFee))
+                    writer = csv.writer(f,quoting = csv.QUOTE_NONE, quotechar = None)
+                    final =  str(str(new_courseID).upper() +','+ str(new_courseName)+','+ str(new_CourseCred)+',' +'"'+str(new_CoursePrereq_lst)+'"'+','+'"'+ str(new_CourseAvail_lst)+'"'+','+ str(new_CourseFee))
                     writer.writerow(final.split(','))
                 f.close()
                 print("\nCourse Successfully Added!\n===========================")
@@ -633,7 +633,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                 elif ammend_choice == 1:
                     changed_credit = int(input("What would you like to change the Course Credit to? "))
-                    while changed_credit != (12 or 24):
+                    while not (changed_credit == 12 or changed_credit == 24):
                         changed_credit = int(input("Please enter a valid Credit Score (12 or 24): "))
 
                     with open("data/courses.csv", 'r') as f:
@@ -655,7 +655,17 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     os.rename('data/courses_temp.csv', 'data/courses.csv') 
                         
                 elif ammend_choice == 2:
-                    changed_prereq = input("What would you like to change the Prerequisites to? ")
+                    print("Enter Course Prerequisites: ") #prerequisite input code
+                    ammend_CoursePrereq_amount = int(input("How many prerequisites would you like the Course to have? "))
+                    ammend_CoursePrereq_lst = []
+                    for i in range(0, ammend_CoursePrereq_amount):
+                        ammendprereq_input = input("Enter the Course Code of Prerequisite: ")
+                        while ammendprereq_input not in Course.coursesId_list():
+                            ammendprereq_input = input("Please enter a valid Course Code: ")
+                        ammend_CoursePrereq_lst.append(ammendprereq_input)
+                    print("New Prerequisites:", ammend_CoursePrereq_lst)
+                    changed_prereq = ('"'+ str(ammend_CoursePrereq_lst)+'"')
+                    
                     with open("data/courses.csv", 'r') as f:
                         reader = csv.reader(f)
                         cprereq_lst = []
@@ -667,7 +677,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                                 cprereq_lst.append(lines)
                         
                         with open('data/courses_temp.csv', 'w+', newline='') as f:
-                            writer = csv.writer(f)
+                            writer = csv.writer(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                             for i in cprereq_lst:
                                 writer.writerow(i) #write the new students list into a temp csv file
                     f.close()
@@ -736,7 +746,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif program_choice == 1: #Adding Program
                 with open('data/programs.csv', 'a') as f:
                     new_progID = input("Enter New Program ID: ")
-                    while new_progID in Program.programId_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                    while new_progID in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
                         progIdExists = int(input('Program ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if progIdExists == 0:
                             return admin_menu(id)
@@ -746,7 +756,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             input('Please enter a Valid Index (0-1)')
 
                     new_progName = input("Enter New Program Name: ")
-                    while new_progName.lower() in Program.programId_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                    while new_progName.lower() in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
                         progNameExists = int(input('Program Name already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if progNameExists == 0:
                             return admin_menu(id)
@@ -757,8 +767,9 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                     new_progCred = input("Enter Program Credit Points: ")
                     new_progCourse = input("Enter Program Courses: ")
-                    writer = csv.writer(f)
-                    writer.writerow([new_progID, new_progName, new_progCred, new_progCourse])
+                    new_progElecCourse = input("Enter Program Courses: ")
+                    writer = csv.writer(f, quoting = csv.QUOTE_NONE, quotechar = None)
+                    writer.writerow([new_progID, new_progName, new_progCred, '"'+ new_progCourse+'"', '"'+ new_progElecCourse+'"'])
                 f.close()
                 print("\nProgram Successfully Added!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
@@ -917,11 +928,19 @@ def admin_menu(id): # Admin menu with choices and inner functions
                         else:
                             input('Please enter a Valid Index (0-1)')
 
-                    new_semOffer = input("Enter New Semester Offers: ")
+                    print("Enter New Semester Offers: ")
+                    new_semOffer_amount = int(input("How many courses would you like to add"))
+                    new_semOffer_lst =[]
+                    for i in range(0, new_semOffer_amount):
+                        sem_input = input("Enter Course Code of Course you would like to add: ")
+                        while sem_input not in Course.coursesId_list():
+                            sem_input = input("Please enter a valid Course Code: ")
+                        new_semOffer_lst.append(sem_input)
+                    
                     new_semMaxStu = input("Enter Max Students for Semester: ")
                     new_semCurStu = input("Enter Current Enrolled Students for Semester: ")
                     writer = csv.writer(f)
-                    writer.writerow([new_semProg, new_semID, new_semOffer, new_semMaxStu, new_semCurStu])
+                    writer.writerow([new_semProg, new_semID, '"'+ new_semOffer_lst+ '"', new_semMaxStu , new_semCurStu])
                 f.close()
                 print("\nSemester Successfully Added!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
