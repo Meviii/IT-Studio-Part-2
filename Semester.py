@@ -2,6 +2,7 @@ import csv
 import ast
 import os
 import main_func
+from User import *
 
 class UserInputError(Exception):
     def __init__(self, msg):
@@ -183,17 +184,17 @@ class Semester:
  
     def add_student(self, crs_code, student_id):
         if self.curr_student < self.max_student:
-            add_student_course(student_id, crs_code)
+            Student.add_student_course(student_id, crs_code)
         else:
             print('This course has already reached the maximum number of students')
 
         print('Student ' + student_id + 'has been added to ' + crs_code + '.')
 
     def remove_student(self, student_id, crs_code):
-        remove_course(student_id, crs_code)
+        Student.remove_course(student_id, crs_code)
         print('Student ' + student_id + 'has been removed from ' + crs_code + '.')
 
-    def sem_add_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+    def sem_add_count(id, stu_course, semester_code): # Adds a student count in semesters.csv
 
         with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
             reader1 = csv.reader(stuf)
@@ -237,7 +238,7 @@ class Semester:
         os.remove('data/semesters.csv')
         os.rename('data/semesters_temp.csv', 'data/semesters.csv')
 
-    def sem_remove_count(id, stu_course, semester_code): # Adds a course to a student line by id in students.csv
+    def sem_remove_count(id, stu_course, semester_code): # Removes a student count in semesters.csv
 
         with open('data/semesters.csv', 'r+') as f, open('data/students.csv', 'r') as stuf:
             reader1 = csv.reader(stuf)
@@ -281,7 +282,7 @@ class Semester:
         os.remove('data/semesters.csv')
         os.rename('data/semesters_temp.csv', 'data/semesters.csv')
 
-    def course_list_by_sem(semid):
+    def course_list_by_sem(semid): # Returns courses in a certain semester as list
         with open('data/semesters.csv', 'r') as f:
             reader = csv.reader(f)
             sem_list = []
@@ -323,7 +324,7 @@ class Semester:
             f.close()
             return False
 
-    def semesterID_list(): # Returns only studentID from all students in students.csv
+    def semesterID_list(): # Returns only semesterID from all semesters in semesters.csv
         with open('data/semesters.csv', 'r') as f:
             reader = csv.reader(f)
             semesterID_lst = []
