@@ -237,6 +237,14 @@ class Student(User):
             f.close()
             return False
 
+    def show_studentID_list(): #prints list of studentID
+        print("Student IDs:\n=============")
+        with open("data/students.csv", "r") as f:
+            reader = csv.reader(f)
+            for lines in reader:
+                print('-', lines[0])
+        print("=============")
+
     def student_info_list(id): # Returns all info of a specific line by id from students.csv
         with open('data/students.csv', 'r') as f:
             reader = csv.reader(f)
