@@ -1,14 +1,14 @@
-
-# Course Class: 
-# Constructor, string methods, getter and setters, methods to add or remove prereqs and available sems
-# UserInputError(Exception) class used
-# TO DO - want to fix printing prerequisite courses not in list
-# TO CONFIRM: set_code - Whether the system will check for 4 char then 4 ints
-
 import ast
 import csv
 import os
 import main_func
+
+# Project start date - end date: 04/10/2021 - 30/10/2021
+# Mevlut Saluk, S3717696
+# Alexander Tan, S3849729
+# Dion Tartaglione, S3239216
+# Cesar Jude Quitazol, S3844561
+# Haotian Shen, S3770488
 
 class UserInputError(Exception):
     def __init__(self, msg):
