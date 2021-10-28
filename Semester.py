@@ -323,11 +323,20 @@ class Semester:
             f.close()
             return False
 
+    def programCode_list(): # Returns only semesterID from all semesters in semesters.csv
+        with open('data/semesters.csv', 'r') as f:
+            reader = csv.reader(f)
+            semesterID_lst = []
+            for lines in reader:
+                semesterID_lst.append(lines[0].lower())
+        f.close()
+        return semesterID_lst
+ 
     def semesterID_list(): # Returns only semesterID from all semesters in semesters.csv
         with open('data/semesters.csv', 'r') as f:
             reader = csv.reader(f)
             semesterID_lst = []
             for lines in reader:
-                semesterID_lst.append(lines[0])
+                semesterID_lst.append(lines[1].lower())
         f.close()
         return semesterID_lst
