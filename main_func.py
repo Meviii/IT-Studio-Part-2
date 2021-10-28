@@ -405,7 +405,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 f.close()
 
                 with open('data/students_temp.csv', 'w+', newline='') as f:
-                    writer = csv.writer(f)
+                    writer = csv.writer(f,quoting = csv.QUOTE_NONE, quotechar = None, escapechar='\\')
                     for i in students:
                         writer.writerow(i) #write the new students list into a temp csv file
 
