@@ -667,3 +667,40 @@ class Admin(User):
                 for history in stu_history:
                     if course in history[0]:
                         print(f'Student: {i[0]}, Mark: {history[1]}')
+    
+    def add_stu_program(id, program): # assigns a student to a new program, drops curr enrollments, adds program study plan
+        with open('data/students.csv', 'r+') as f, open('data/programs.csv', 'r+') as f2:
+            reader2 = csv.reader(f2)
+            program_details_core = []
+            program_details_elective = []
+            for lines in reader2:
+                if lines[0] == program:
+                    program_details = [i.strip() for i in lines]
+            
+            program_details_core = ast.literal_eval(program_details[3])
+            program_details_elective = ast.literal_eval(program_details[4])
+
+            total_courses = program_details_core + program_details_elective
+
+            reader = csv.reader(f)
+            final = ''
+            student = []
+            for lines in reader:
+                if lines[0] == id:
+                    student = [i.strip() for i in lines]
+            final = str(str(student[0]) +','+ str(student[1])+','+ str(student[2])+','+ str(student[3])+','+ str(program) +',"'+ str(student[5]) +'",' + '"[]"'+','+ '"' +str(total_courses)+'"'+ ','+str(student[8]))
+            f.close()
+
+        with open('data/students.csv', 'r') as inf, open('data/students_temp.csv', 'w+', newline='') as outf:
+            reader = csv.reader(inf, quoting=csv.QUOTE_NONE, quotechar=None)
+            writer = csv.writer(outf, quoting=csv.QUOTE_NONE, quotechar=None)
+            for lines in reader:
+                if lines[0] == id:
+                    writer.writerow(final.split(','))
+                    break
+                else:
+                    writer.writerow(lines)
+            writer.writerows(reader)
+
+        os.remove('data/students.csv')
+        os.rename('data/students_temp.csv', 'data/students.csv')
