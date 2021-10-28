@@ -347,7 +347,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
     print('8. Generate study plan for a student')
     print('9. View all students achievements of course')
     print('10. Student leave of absence')
-    print('11. Set student program.')
+    print('11. Set or Remove student program.')
     print('0. Exit')
     print('=======================')
     
@@ -1248,35 +1248,44 @@ def admin_menu(id): # Admin menu with choices and inner functions
             else:
                 print('Invalid student id')
                 return admin_menu(id)
-        elif choice == 11: # Set a students program
+        elif choice == 11: # Set a students program or remove.
             print('You can exit anytim by entering 0')
             print()
             stu_id_prog = str(input('Please enter the id of the student: '))
             if stu_id_prog == str(0):
                 return admin_menu(id)
             if Student.open_students_for_id(stu_id_prog) == True:
-                program_set = str(input('Please enter the program code to set to: '))
-                if program_set == str(0):
-                    return admin_menu(id)
-                if Program.open_program_by_id(program_set) == True:
-                    if not Student.student_info_list(stu_id_prog)[4] == 'NA':
-                        print('Program set for ' + stu_id_prog)
-                        Admin.add_stu_program(stu_id_prog, program_set)
-                        print()
-                        return admin_menu_option(id)
-                    else:
-                        print('Student already a part of a program.\n')
-                        choice = str(input('Would you like to remove and add a new program? Y/N'))
-                        if choice.lower() == 'y':
+                remove_program_choice = str(input('Would you like to remove the students program? Y/N'))
+                if remove_program_choice.lower() == 'y':
+                    print('Student removed from program.')
+                    Student.remove_stu_program(stu_id_prog)
+                    admin_menu_option(id)
+                elif remove_program_choice.lower() == 'n':
+                    program_set = str(input('Please enter the program code to set to: '))
+                    if program_set == str(0):
+                        return admin_menu(id)
+                    if Program.open_program_by_id(program_set) == True:
+                        if not Student.student_info_list(stu_id_prog)[4] == 'NA':
                             print('Program set for ' + stu_id_prog)
                             Admin.add_stu_program(stu_id_prog, program_set)
                             print()
                             return admin_menu_option(id)
-                        elif choice.lower() == 'n':
-                            return admin_menu(id)
                         else:
-                            print('Invalid choice')
-                            return admin_menu(id)
+                            print('Student already a part of a program.\n')
+                            choice = str(input('Would you like to remove and add a new program? Y/N'))
+                            if choice.lower() == 'y':
+                                print('Program set for ' + stu_id_prog)
+                                Admin.add_stu_program(stu_id_prog, program_set)
+                                print()
+                                return admin_menu_option(id)
+                            elif choice.lower() == 'n':
+                                return admin_menu(id)
+                            else:
+                                print('Invalid choice')
+                                return admin_menu(id)
+                    else:
+                        print('Invalid choice')
+                        return admin_menu(id)
                 else:
                     print('Invalid program')
                     return admin_menu(id)
