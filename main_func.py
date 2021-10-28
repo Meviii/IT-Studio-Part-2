@@ -368,7 +368,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif student_choice == 1: #adding student
                 with open('data/students.csv', 'a+', newline="") as f:
                     new_studentID = input("Enter Student ID (s...): ")
-                    while new_studentID in Student.studentId_list():
+                    while new_studentID.lower() in Student.studentId_list():
                         stuExists = int(input('Student ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if stuExists == 0:
                             return admin_menu(id)
@@ -429,7 +429,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
 
                 while_counter = 3
-                while ammend_student not in Student.studentId_list(): #if trying to ammend a student that is not already in the file
+                while ammend_student.lower() not in Student.studentId_list(): #if trying to ammend a student that is not already in the file
                     ammend_student = input("Please Enter a Valid Student ID: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -512,7 +512,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif course_choice == 1: #Adding Course
                 with open('data/courses.csv', 'a+', newline="") as f:
                     new_courseID = input("Enter New Course ID: ")
-                    while new_courseID in Course.coursesId_list(): #makes sure that new course ID does not match with a course Id that already exists.
+                    while new_courseID.upper() in Course.coursesId_list(): #makes sure that new course ID does not match with a course Id that already exists.
                         courseExists = int(input('Course ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if courseExists == 0:
                             return admin_menu(id)
@@ -540,7 +540,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     new_CoursePrereq_lst = []
                     for i in range(0, new_CoursePrereq_amount):
                         prereq_input = input("Enter the Course Code of Prerequisite: ")
-                        while prereq_input not in Course.coursesId_list():
+                        while prereq_input.upper() not in Course.coursesId_list():
                             prereq_input = input("Please enter a valid Course Code: ")
 
                         new_CoursePrereq_lst.append(prereq_input)
@@ -610,7 +610,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_course = input("Select which Course you would like to Ammend by entering the Course Code: ")
 
                 while_counter = 3
-                while ammend_course not in Course.coursesId_list(): #if trying to ammend a student that is not already in the file
+                while ammend_course.upper() not in Course.coursesId_list(): #if trying to ammend a student that is not already in the file
                     ammend_course = input("Please Enter a Valid Course Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -660,7 +660,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     ammend_CoursePrereq_lst = []
                     for i in range(0, ammend_CoursePrereq_amount):
                         ammendprereq_input = input("Enter the Course Code of Prerequisite: ")
-                        while ammendprereq_input not in Course.coursesId_list():
+                        while ammendprereq_input.upper() not in Course.coursesId_list():
                             ammendprereq_input = input("Please enter a valid Course Code: ")
                         ammend_CoursePrereq_lst.append(ammendprereq_input)
                     print("New Prerequisites:", ammend_CoursePrereq_lst)
@@ -746,7 +746,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             elif program_choice == 1: #Adding Program
                 with open('data/programs.csv', 'a') as f:
                     new_progID = input("Enter New Program ID: ")
-                    while new_progID in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                    while new_progID.upper() in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
                         progIdExists = int(input('Program ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if progIdExists == 0:
                             return admin_menu(id)
@@ -756,7 +756,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             input('Please enter a Valid Index (0-1)')
 
                     new_progName = input("Enter New Program Name: ")
-                    while new_progName in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
+                    while new_progName.upper() in Program.program_Id_list(): #makes sure that new program ID does not match with a program Id that already exists.
                         progNameExists = int(input('Program Name already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if progNameExists == 0:
                             return admin_menu(id)
@@ -769,7 +769,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     new_progCourse = input("Enter Program Courses: ")
                     new_progElecCourse = input("Enter Program Courses: ")
                     writer = csv.writer(f, quoting = csv.QUOTE_NONE, quotechar = None)
-                    writer.writerow([new_progID, new_progName, new_progCred, '"'+ new_progCourse+'"', '"'+ new_progElecCourse+'"'])
+                    writer.writerow([new_progID.upper(), new_progName, new_progCred, '"'+ new_progCourse+'"', '"'+ new_progElecCourse+'"'])
                 f.close()
                 print("\nProgram Successfully Added!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
@@ -816,7 +816,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 ammend_programs = input("Select which Program you would like to Ammend by entering the Program Code: ")
                 
                 while_counter = 3 
-                while ammend_programs not in Program.program_Id_list(): #if trying to ammend a student that is not already in the file
+                while ammend_programs.upper() not in Program.program_Id_list(): #if trying to ammend a student that is not already in the file
                     ammend_programs = input("Please Enter a Valid Program Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -919,7 +919,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 with open('data/semesters.csv', 'a') as f:
                     new_semProg = input("Enter New Semester Program Code")
                     new_semID = input("Enter New Semester ID: ")
-                    while new_semID in Semester.semesterID_list:
+                    while new_semID.upper() in Semester.semesterID_list:
                         semIdExists = int(input('Semester ID already exists. Would you like to \n1. Try Again \n0. Return to Admin Menu \n'))
                         if semIdExists == 0:
                             return admin_menu(id)
@@ -933,14 +933,14 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     new_semOffer_lst =[]
                     for i in range(0, new_semOffer_amount):
                         sem_input = input("Enter Course Code of Course you would like to add: ")
-                        while sem_input not in Course.coursesId_list():
+                        while sem_input.upper() not in Course.coursesId_list():
                             sem_input = input("Please enter a valid Course Code: ")
                         new_semOffer_lst.append(sem_input)
                     
                     new_semMaxStu = input("Enter Max Students for Semester: ")
                     new_semCurStu = input("Enter Current Enrolled Students for Semester: ")
                     writer = csv.writer(f)
-                    writer.writerow([new_semProg, new_semID, '"'+ new_semOffer_lst+ '"', new_semMaxStu , new_semCurStu])
+                    writer.writerow([new_semProg.upper(), new_semID.upper(), '"'+ new_semOffer_lst+ '"', new_semMaxStu , new_semCurStu])
                 f.close()
                 print("\nSemester Successfully Added!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
@@ -988,7 +988,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 
                 ammend_semester1 = input("Select which Program you would like to Ammend by entering the Program Code: ")  
                 while_counter = 3
-                while ammend_semester1.lower() not in Semester.programCode_list(): #if trying to ammend a student that is not already in the file
+                while ammend_semester1.upper() not in Semester.programCode_list(): #if trying to ammend a student that is not already in the file
                     ammend_semester1 = input("Please Enter a valid Program Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -1006,7 +1006,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
                 ammend_semester2 = input("Select which Semester you would like to Ammend by entering the Semester ID: ")   
                 while_counter = 3
-                while ammend_semester2.lower() not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
+                while ammend_semester2.upper() not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
                     ammend_semester2 = input("Please Enter a valid Semester ID: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
