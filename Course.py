@@ -269,7 +269,7 @@ class Course:
             reader = csv.reader(f)
             course_name_lst = []
             for lines in reader:
-                course_name_lst.append(lines[1])
+                course_name_lst.append(lines[1].lower())
         f.close()
         return course_name_lst
 

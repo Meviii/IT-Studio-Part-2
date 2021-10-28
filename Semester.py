@@ -328,7 +328,7 @@ class Semester:
             reader = csv.reader(f)
             semesterID_lst = []
             for lines in reader:
-                semesterID_lst.append(lines[0].lower())
+                semesterID_lst.append(lines[0])
         f.close()
         return semesterID_lst
  
@@ -337,6 +337,6 @@ class Semester:
             reader = csv.reader(f)
             semesterID_lst = []
             for lines in reader:
-                semesterID_lst.append(lines[1].lower())
+                semesterID_lst.append(lines[1])
         f.close()
         return semesterID_lst
