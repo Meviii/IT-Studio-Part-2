@@ -8,7 +8,7 @@ from Semester import *
 
 def login(): # Login function for Admin or Student login BY ID
     try:
-        login_type = str(input('Login as Admin or Student 0 to exit? ')).lower()
+        login_type = str(input('Login as Admin or Student(0 to exit)? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
             id = str(input('Please enter your Admin ID: '))
@@ -80,8 +80,12 @@ def student_menu(id): # Student menu with choices and inner functions
         stu_courses = sorted(res.intersection(all_courses))
         s.set_curr_enrol(stu_courses)
 
-        if 0 > choice > 12:
-            raise ValueError
+        if 1 >= choice >= 13:
+            print('Invalid Choice')
+            print()
+            return student_menu(id)
+        elif choice == 0:
+            return False
         elif choice == 1: # Academic History
             with open('data/students.csv', 'r') as f:
                 reader = csv.reader(f)
@@ -324,7 +328,8 @@ def student_menu(id): # Student menu with choices and inner functions
                 else:
                     raise ValueError
         else:
-            return False
+            print('Invalid choice')
+            return student_menu(id)
     except ValueError:
         print('Invalid selection')
         return False
@@ -348,8 +353,12 @@ def admin_menu(id): # Admin menu with choices and inner functions
     
     try:
         choice = int(input('Please pick by index: '))
-        if 0 > choice > 11:
-            raise ValueError
+        if 1 >= choice >= 12:
+            print('Invalid Choice')
+            print()
+            return admin_menu(id)
+        elif choice == 0:
+            return False
         elif choice == 1: # Add/Remove or amend a student
             print(choice)
             student_choice = int(input("Would you like to: \n1. Add Student\n2. Remove Student \n3. Ammend Student \n0. Return to Admin Menu\n"))
@@ -1467,10 +1476,24 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 if program_set == str(0):
                     return admin_menu(id)
                 if Program.open_program_by_id(program_set) == True:
-                    #check if student already has program, ask if override which resets study plan.
-                    #add to student program
-                    #give study plan of program to student
-                    pass
+                    if not Student.student_info_list(stu_id_prog)[4] == 'NA':
+                        print('Program set for ' + stu_id_prog)
+                        Admin.add_stu_program(stu_id_prog, program_set)
+                        print()
+                        return admin_menu_option(id)
+                    else:
+                        print('Student already a part of a program.\n')
+                        choice = str(input('Would you like to remove and add a new program? Y/N'))
+                        if choice.lower() == 'y':
+                            print('Program set for ' + stu_id_prog)
+                            Admin.add_stu_program(stu_id_prog, program_set)
+                            print()
+                            return admin_menu_option(id)
+                        elif choice.lower() == 'n':
+                            return admin_menu(id)
+                        else:
+                            print('Invalid choice')
+                            return admin_menu(id)
                 else:
                     print('Invalid program')
                     return admin_menu(id)
@@ -1478,7 +1501,8 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print('Invalid student')
                 return admin_menu(id)
         else:
-            return -1
+            print('Invalid choice')
+            return admin_menu(id)
     except ValueError:
         print('Invalid index')
 
