@@ -54,15 +54,6 @@ def admin_menu_option(id): # Allows admin to return to student_menu() without en
     else:
         return False
 
-def student_program(id): # Returns True if student is in program, else, False
-    with open('data/students.csv', 'r') as f:
-            reader = csv.reader(f)
-            for lines in reader:
-                if lines[0] == id:
-                   if lines[4] == 'NA':
-                       return False
-            return True
-
 def student_menu(id): # Student menu with choices and inner functions
 
     print()
@@ -319,7 +310,7 @@ def student_menu(id): # Student menu with choices and inner functions
                 print()
                 student_menu_option(id)
         elif choice == 12: # Cancel Program
-            if student_program(id) == False:
+            if Program.student_program(id) == False:
                 print('You are currently not a student of any program.')
                 return student_menu(id)
             else:
