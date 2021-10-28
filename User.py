@@ -4,6 +4,14 @@ import os
 from Semester import *
 import main_func
 
+# Project start date - end date: 04/10/2021 - 30/10/2021
+# Mevlut Saluk, S3717696
+# Alexander Tan, S3849729
+# Dion Tartaglione, S3239216
+# Cesar Jude Quitazol, S3844561
+# Haotian Shen, S3770488
+
+
 class User:
     def __init__(self, user_id, user_name, user_birth, user_gender):
         self.id = user_id
