@@ -1228,7 +1228,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print(f'The current achievements for each student for course {course_code}: \n')
                 Admin.achievement_by_course(course_code)
                 print()
-                return admin_menu(id)
+                return admin_menu_option(id)
             else:
                 print('Course not found')
                 return admin_menu(id)
@@ -1259,7 +1259,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print('Invalid student id')
                 return admin_menu(id)
         elif choice == 11: # Set a students program or remove.
-            print('You can exit anytim by entering 0')
+            print('You can exit anytime by entering 0')
             print()
             stu_id_prog = str(input('Please enter the id of the student: '))
             if stu_id_prog == str(0):
