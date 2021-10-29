@@ -1275,7 +1275,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                     if program_set == str(0):
                         return admin_menu(id)
                     if Program.open_program_by_id(program_set) == True:
-                        if not Student.student_info_list(stu_id_prog)[4] == 'NA':
+                        if Student.student_info_list(stu_id_prog)[4] == 'NA':
                             print('Program set for ' + stu_id_prog)
                             Admin.add_stu_program(stu_id_prog, program_set)
                             print()
