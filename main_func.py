@@ -73,7 +73,7 @@ def student_menu(id): # Student menu with choices and inner functions
     print('5. Get all information')
     print('6. Update your Information')
     print('7. Fees')
-    print('8. Check elgibility to graduate')
+    print('8. Check eligibility to graduate')
     print('9. Apply for Leave of Absence')
     print('10. Course Progress')
     print('11. Current GPA')
