@@ -14,9 +14,12 @@ from Semester import *
 # Haotian Shen, S3770488
 
 # Program Description: Enrollment system with 3 menus: Login, Student, Admin. Each menu has its own features.
+# Video: https://youtu.be/fjaIVcREm5w
 
 def login(): # Login function for Admin or Student login BY ID
     try:
+        print('Demo Link: https://youtu.be/fjaIVcREm5w')
+        print()
         login_type = str(input('Login as Admin or Student(0 to exit)? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
