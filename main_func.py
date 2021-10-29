@@ -1228,6 +1228,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print(f'The current achievements for each student for course {course_code}: \n')
                 Admin.achievement_by_course(course_code)
                 print()
+                return admin_menu(id)
             else:
                 print('Course not found')
                 return admin_menu(id)
