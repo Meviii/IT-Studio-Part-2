@@ -1,7 +1,12 @@
-# TO DO: Confirm how to calculate Program Credit points
-
 import csv
 from Course import Course
+
+# Project start date - end date: 04/10/2021 - 30/10/2021
+# Mevlut Saluk, S3717696
+# Alexander Tan, S3849729
+# Dion Tartaglione, S3239216
+# Cesar Jude Quitazol, S3844561
+# Haotian Shen, S3770488
 
 class UserInputError(Exception):
     def __init__(self, msg):

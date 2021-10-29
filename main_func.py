@@ -6,8 +6,20 @@ from Program import *
 from Course import *
 from Semester import *
 
+# Project start date - end date: 04/10/2021 - 30/10/2021
+# Mevlut Saluk, S3717696
+# Alexander Tan, S3849729
+# Dion Tartaglione, S3239216
+# Cesar Jude Quitazol, S3844561
+# Haotian Shen, S3770488
+
+# Program Description: Enrollment system with 3 menus: Login, Student, Admin. Each menu has its own features.
+# Video: https://youtu.be/fjaIVcREm5w
+
 def login(): # Login function for Admin or Student login BY ID
     try:
+        print('Demo Link: https://youtu.be/fjaIVcREm5w')
+        print()
         login_type = str(input('Login as Admin or Student(0 to exit)? ')).lower()
 
         if login_type == 'Admin'.lower(): # Needs implementation
@@ -64,7 +76,7 @@ def student_menu(id): # Student menu with choices and inner functions
     print('5. Get all information')
     print('6. Update your Information')
     print('7. Fees')
-    print('8. Check elgibility to graduate')
+    print('8. Check eligibility to graduate')
     print('9. Apply for Leave of Absence')
     print('10. Course Progress')
     print('11. Current GPA')
@@ -281,7 +293,8 @@ def student_menu(id): # Student menu with choices and inner functions
                 raise ValueError
         elif choice == 9: # Apply for leave of absence
             if not s.get_stu_absence() == 'NA':
-                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence()}')
+                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence()}\n')
+                return student_menu(id)
             elif s.get_stu_absence() == 'NA':
                 print('Enter 0 anytime to return to main menu.')
                 type_absence = str(input('Please select how long you would like to leave for (semester or academic year): '))
@@ -347,7 +360,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
     print('8. Generate study plan for a student')
     print('9. View all students achievements of course')
     print('10. Student leave of absence')
-    print('11. Set student program.')
+    print('11. Set or Remove student program.')
     print('0. Exit')
     print('=======================')
     
@@ -361,7 +374,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
             return False
         elif choice == 1: # Add/Remove or amend a student
             print(choice)
-            student_choice = int(input("Would you like to: \n1. Add Student\n2. Remove Student \n3. Ammend Student \n0. Return to Admin Menu\n"))
+            student_choice = int(input("Would you like to: \n1. Add Student\n2. Remove Student \n3. Amend Student \n0. Return to Admin Menu\n"))
             if student_choice == 0:
                 return admin_menu(id)
 
@@ -423,13 +436,13 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif student_choice == 3: #Ammending Student
+            elif student_choice == 3: #Amending Student
                 Student.show_studentID_list()
 
-                ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
+                ammend_student = input("Select which Student you would like to Amend by entering the Student ID: ")
 
                 while_counter = 3
-                while ammend_student.lower() not in Student.studentId_list(): #if trying to ammend a student that is not already in the file
+                while ammend_student.lower() not in Student.studentId_list(): #if trying to amend a student that is not already in the file
                     ammend_student = input("Please Enter a Valid Student ID: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -438,7 +451,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             return admin_menu(id)
                         elif cont == 1:
                             Student.show_studentID_list()
-                            ammend_student = input("Select which Student you would like to Ammend by entering the Student ID: ")
+                            ammend_student = input("Select which Student you would like to Amend by entering the Student ID: ")
                             while_counter = 3
                         elif cont ==2:
                             return True
@@ -493,7 +506,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     input("Please Enter Valid Index (0-2)")
 
-                print("\nStudent Successfully Ammended!\n===========================")
+                print("\nStudent Successfully Amended!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
                 if close_input == 0:
                     return admin_menu(id)
@@ -506,7 +519,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 input("Please Enter Valid Index (0-3), then hit Enter")
         elif choice == 2: # Add/Remove or amend a course
             print(choice)
-            course_choice = int(input("Would you like to: \n1. Add Course\n2. Remove Course \n3. Ammend Course \n0. Return to Admin Menu\n"))
+            course_choice = int(input("Would you like to: \n1. Add Course\n2. Remove Course \n3. Amend Course \n0. Return to Admin Menu\n"))
             if course_choice == 0:
                 return admin_menu(id)
             elif course_choice == 1: #Adding Course
@@ -604,13 +617,13 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif course_choice == 3: #Ammending Course
+            elif course_choice == 3: #Amending Course
                 Course.show_courseID_list()
 
-                ammend_course = input("Select which Course you would like to Ammend by entering the Course Code: ")
+                ammend_course = input("Select which Course you would like to Amend by entering the Course Code: ")
 
                 while_counter = 3
-                while ammend_course.upper() not in Course.coursesId_list(): #if trying to ammend a student that is not already in the file
+                while ammend_course.upper() not in Course.coursesId_list(): #if trying to amend a student that is not already in the file
                     ammend_course = input("Please Enter a Valid Course Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -619,7 +632,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             return admin_menu(id)
                         elif cont == 1:
                             Course.show_courseID_list()
-                            ammend_course = input("Select which Course you would like to Ammend by entering the Course Code: ")
+                            ammend_course = input("Select which Course you would like to Amend by entering the Course Code: ")
                             while_counter = 3
                         elif cont ==2:
                             return True
@@ -740,7 +753,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     input("Please Enter Valid Index (0-4)")
 
-                print("\nCourse Successfully Ammended!\n===========================")
+                print("\nCourse Successfully Amended!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
                 if close_input == 0:
                     return admin_menu(id)
@@ -753,7 +766,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 input("Please Enter Valid Index (0-3), then hit Enter")
         elif choice == 3: # Add/Remove or amend a program
             print(choice)
-            program_choice = int(input("Would you like to: \n1. Add Program\n2. Remove Program \n3. Ammend Program \n0. Return to Admin Menu\n"))
+            program_choice = int(input("Would you like to: \n1. Add Program\n2. Remove Program \n3. Amend Program \n0. Return to Admin Menu\n"))
             if program_choice == 0:
                 return admin_menu(id)
             elif program_choice == 1: #Adding Program
@@ -844,10 +857,10 @@ def admin_menu(id): # Admin menu with choices and inner functions
 
             elif program_choice == 3: #Ammeding Program
                 Program.show_programsID_list()
-                ammend_programs = input("Select which Program you would like to Ammend by entering the Program Code: ")
+                ammend_programs = input("Select which Program you would like to Amend by entering the Program Code: ")
                 
                 while_counter = 3 
-                while ammend_programs.upper() not in Program.program_Id_list(): #if trying to ammend a student that is not already in the file
+                while ammend_programs.upper() not in Program.program_Id_list(): #if trying to amend a student that is not already in the file
                     ammend_programs = input("Please Enter a Valid Program Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -856,7 +869,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             return admin_menu(id)
                         elif cont == 1:
                             Program.show_programsID_list()
-                            ammend_programs = input("Select which Program you would like to Ammend by entering the Program Code: ")
+                            ammend_programs = input("Select which Program you would like to Amend by entering the Program Code: ")
                             while_counter = 3
                         elif cont ==2:
                             return True
@@ -930,7 +943,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     input("Please Enter Valid Index (0-3)")
 
-                print("\nProgram Successfully Ammended!\n===========================")
+                print("\nProgram Successfully Amended!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
                 if close_input == 0:
                     return admin_menu(id)
@@ -943,7 +956,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 input("Please Enter Valid Index (0-3), then hit Enter")
         elif choice == 4: # Add/Remove or amend a semester
             print(choice)
-            semester_choice = int(input("Would you like to: \n1. Add Semester\n2. Remove Semester \n3. Ammend Semester \n0. Return to Admin Menu\n"))
+            semester_choice = int(input("Would you like to: \n1. Add Semester\n2. Remove Semester \n3. Amend Semester \n0. Return to Admin Menu\n"))
             if semester_choice == 0:
                 return admin_menu(id)
             elif semester_choice == 1: #Adding Semester
@@ -1015,12 +1028,12 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 else:
                     close_input = int(input("Please enter a Valid Index (0-1)"))
 
-            elif semester_choice == 3: #Ammending Semester
+            elif semester_choice == 3: #Amending Semester
                 Semester.show_semesterID_list()
                 
-                ammend_semester1 = input("Select which Program you would like to Ammend by entering the Program Code: ")  
+                ammend_semester1 = input("Select which Program you would like to Amend by entering the Program Code: ")  
                 while_counter = 3
-                while ammend_semester1.upper() not in Semester.programCode_list(): #if trying to ammend a student that is not already in the file
+                while ammend_semester1.upper() not in Semester.programCode_list(): #if trying to amend a student that is not already in the file
                     ammend_semester1 = input("Please Enter a valid Program Code: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -1029,16 +1042,16 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             return admin_menu(id)
                         elif cont == 1:
                             Semester.show_semesterID_list()
-                            ammend_semester1 = input("Select which Program you would like to Ammend by entering the Program Code: ")
+                            ammend_semester1 = input("Select which Program you would like to Amend by entering the Program Code: ")
                             while_counter = 3
                         elif cont ==2:
                             return True
                         else:
                             cont = int(input("Please enter a Valid Index (0-2)"))
 
-                ammend_semester2 = input("Select which Semester you would like to Ammend by entering the Semester ID: ")   
+                ammend_semester2 = input("Select which Semester you would like to Amend by entering the Semester ID: ")   
                 while_counter = 3
-                while ammend_semester2.upper() not in Semester.semesterID_list(): #if trying to ammend a student that is not already in the file
+                while ammend_semester2.upper() not in Semester.semesterID_list(): #if trying to amend a student that is not already in the file
                     ammend_semester2 = input("Please Enter a valid Semester ID: ")
                     while_counter -= 1
                     if while_counter == 0: #3 attempts before being asked to exit or try again.
@@ -1047,7 +1060,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                             return admin_menu(id)
                         elif cont == 1:
                             Semester.show_semesterID_list()
-                            ammend_semester2 = input("Select which Semester you would like to Ammend by entering the Semester ID: ")
+                            ammend_semester2 = input("Select which Semester you would like to Amend by entering the Semester ID: ")
                             while_counter = 3
                         elif cont ==2:
                             return True
@@ -1074,7 +1087,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 os.rename('data/semesters_temp.csv', 'data/semesters.csv') 
 
 
-                print("\nSemester Successfully Ammended!\n===========================")
+                print("\nSemester Successfully Amended!\n===========================")
                 close_input = int(input("What would you like to do next?:\n1. Exit\n0. Return to Admin Menu\n"))
                 if close_input == 0:
                     return admin_menu(id)
@@ -1250,6 +1263,7 @@ def admin_menu(id): # Admin menu with choices and inner functions
                 print(f'The current achievements for each student for course {course_code}: \n')
                 Admin.achievement_by_course(course_code)
                 print()
+                return admin_menu_option(id)
             else:
                 print('Course not found')
                 return admin_menu(id)
@@ -1279,35 +1293,44 @@ def admin_menu(id): # Admin menu with choices and inner functions
             else:
                 print('Invalid student id')
                 return admin_menu(id)
-        elif choice == 11: # Set a students program
-            print('You can exit anytim by entering 0')
+        elif choice == 11: # Set a students program or remove.
+            print('You can exit anytime by entering 0')
             print()
             stu_id_prog = str(input('Please enter the id of the student: '))
             if stu_id_prog == str(0):
                 return admin_menu(id)
             if Student.open_students_for_id(stu_id_prog) == True:
-                program_set = str(input('Please enter the program code to set to: '))
-                if program_set == str(0):
-                    return admin_menu(id)
-                if Program.open_program_by_id(program_set) == True:
-                    if not Student.student_info_list(stu_id_prog)[4] == 'NA':
-                        print('Program set for ' + stu_id_prog)
-                        Admin.add_stu_program(stu_id_prog, program_set)
-                        print()
-                        return admin_menu_option(id)
-                    else:
-                        print('Student already a part of a program.\n')
-                        choice = str(input('Would you like to remove and add a new program? Y/N'))
-                        if choice.lower() == 'y':
+                remove_program_choice = str(input('Would you like to remove the students program? Y/N'))
+                if remove_program_choice.lower() == 'y':
+                    print('Student removed from program.')
+                    Student.remove_stu_program(stu_id_prog)
+                    admin_menu_option(id)
+                elif remove_program_choice.lower() == 'n':
+                    program_set = str(input('Please enter the program code to set to: '))
+                    if program_set == str(0):
+                        return admin_menu(id)
+                    if Program.open_program_by_id(program_set) == True:
+                        if Student.student_info_list(stu_id_prog)[4] == 'NA':
                             print('Program set for ' + stu_id_prog)
                             Admin.add_stu_program(stu_id_prog, program_set)
                             print()
                             return admin_menu_option(id)
-                        elif choice.lower() == 'n':
-                            return admin_menu(id)
                         else:
-                            print('Invalid choice')
-                            return admin_menu(id)
+                            print('Student already a part of a program.\n')
+                            choice = str(input('Would you like to remove and add a new program? Y/N'))
+                            if choice.lower() == 'y':
+                                print('Program set for ' + stu_id_prog)
+                                Admin.add_stu_program(stu_id_prog, program_set)
+                                print()
+                                return admin_menu_option(id)
+                            elif choice.lower() == 'n':
+                                return admin_menu(id)
+                            else:
+                                print('Invalid choice')
+                                return admin_menu(id)
+                    else:
+                        print('Invalid choice')
+                        return admin_menu(id)
                 else:
                     print('Invalid program')
                     return admin_menu(id)
