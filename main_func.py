@@ -290,7 +290,8 @@ def student_menu(id): # Student menu with choices and inner functions
                 raise ValueError
         elif choice == 9: # Apply for leave of absence
             if not s.get_stu_absence() == 'NA':
-                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence()}')
+                print(f'You have already applied or accepted for leave of absence. \n Current Status: {s.get_stu_absence()}\n')
+                return student_menu(id)
             elif s.get_stu_absence() == 'NA':
                 print('Enter 0 anytime to return to main menu.')
                 type_absence = str(input('Please select how long you would like to leave for (semester or academic year): '))
